@@ -1,8 +1,38 @@
+import { createHash } from 'node:crypto';
 import express from 'express';
-import { createLabContextOSRuntime } from './factory';
+import { createLabContextOSRuntime, type LabRuntimeOverrides } from './factory';
+
+/**
+ * Semilla de laboratorio: con `CONTEXTOS_LAB_SEED` el runtime emite
+ * identificadores y marcas de tiempo derivados de la semilla, de modo que dos
+ * corridas del gate E2E produzcan un reporte idéntico byte a byte.
+ *
+ * Sólo se activa con la variable presente. Sin ella el runtime se comporta
+ * exactamente como antes: `randomUUID` y reloj del sistema. No debe usarse
+ * fuera del laboratorio — identificadores previsibles no son aceptables donde
+ * la evidencia tenga que distinguir solicitudes reales.
+ */
+function laboratorioDeterminista(seed: string): LabRuntimeOverrides {
+  let contador = 0;
+  return {
+    now: () => new Date('2026-01-01T00:00:00.000Z'),
+    idFactory: () => {
+      contador += 1;
+      const hex = createHash('sha256').update(`${seed}:${contador}`).digest('hex');
+      return [
+        hex.slice(0, 8),
+        hex.slice(8, 12),
+        hex.slice(12, 16),
+        hex.slice(16, 20),
+        hex.slice(20, 32),
+      ].join('-');
+    },
+  };
+}
 
 const app = express();
-const runtime = createLabContextOSRuntime();
+const seed = process.env.CONTEXTOS_LAB_SEED;
+const runtime = createLabContextOSRuntime(seed ? laboratorioDeterminista(seed) : {});
 const port = Number(process.env.CONTEXTOS_PORT ?? 3011);
 const host = process.env.CONTEXTOS_HOST ?? '127.0.0.1';
 const allowedOrigins = new Set(
