@@ -1,5 +1,9 @@
 # 🏛️ Gabinete Digital de Especialistas — Nayarit Digital v1.1
 
+> **⏳ Documento sin revisión desde el 30 de julio de 2026.**
+> Describe la cámara de trabajo y su conocimiento de dominio. No es registro de
+> estado: para saber en qué va el trabajo hoy, `docs/marco/ESTADO.md`.
+
 > **Arquitectura de gobernanza IA en dos cámaras:**
 > - **Parlamento de las Sillas** (5 sillas: GROQ, Gemini, Claude, Kimi, Jules) → cámara de DECISIÓN. Ver `docs/PARLAMENTO_PROMPT.md`. *(Ampliado de 3 a 5 en Acta 004: número impar que elimina empates y suma redundancia de proveedores.)*
 > - **Gabinete de Especialistas** (15 agentes de dominio) → cámara de TRABAJO. Revisan, proponen y respaldan mejoras a la aplicación desde su área de expertise.
