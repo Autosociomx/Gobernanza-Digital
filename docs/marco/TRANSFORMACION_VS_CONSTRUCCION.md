@@ -104,8 +104,8 @@ uno.
 | Salud con expediente y bitácora de accesos | No | **Sí — sobre Firestore real** (`salud`, `real`) |
 | Predial / catastro (Art. 115 fr. IV) | No | Sí (`tesoreria`, `maqueta`) |
 | Licencias (Art. 115 fr. VI) | No | Sí (`maqueta`) |
-| Lenguas originarias (náayeri / wixárika) | No observado | Operativo parcial |
-| Accesibilidad auditada | No observada | Lighthouse Accessibility 100 verificado |
+| Lenguas originarias (náayeri / wixárika) | No observado | **En disputa interna** — `MARCO_CUMPLIMIENTO_LNETB.md` dice "operativo parcial"; `presentacion-tepic/06_EVIDENCIA_TECNICA/LIMITACIONES_CONOCIDAS.md` dice "sin traducción de interfaz". Ver §10 |
+| Accesibilidad auditada | No observada | **En disputa interna** — `MARCO_CUMPLIMIENTO_LNETB.md` declara Lighthouse Accessibility 100; `LIMITACIONES_CONOCIDAS.md` declara que nunca hubo auditoría WCAG. Ver §10 |
 | Código abierto y reutilizable por otros municipios | No | Sí (AGPL-3.0, `ESTRATEGIA_ESTANDAR_ABIERTO.md`) |
 
 **Conclusión del eje A:** la afirmación *"lo construido del lado del SOATM es
@@ -294,6 +294,13 @@ Forma recomendada, coherente con la tesis SOATM del `GLOSARIO_OFICIAL.md` §2:
       pero sin ficha propia con estatus).
 - [ ] Confirmar si el canal vigente publica su aviso de privacidad a nombre del
       municipio en algún punto no observado del flujo.
+- [ ] **Resolver la contradicción interna de estados** entre
+      `MARCO_CUMPLIMIENTO_LNETB.md` (accesibilidad "Verificado", lenguas
+      originarias "Operativo parcial") y
+      `presentacion-tepic/06_EVIDENCIA_TECNICA/LIMITACIONES_CONOCIDAS.md`
+      ("nunca se realizó auditoría de accesibilidad", "sin traducción de
+      interfaz"). Mientras no se resuelva, **ninguna de las dos se afirma en
+      público**: una afirmación desmentible tira las verdaderas.
 - [ ] Conocer, si el municipio lo autoriza, el panel interno de atención y el
       tiempo de respuesta real — es el dato que falta para medir la cadena
       completa, y hoy **nadie de los dos lados lo tiene publicado**.

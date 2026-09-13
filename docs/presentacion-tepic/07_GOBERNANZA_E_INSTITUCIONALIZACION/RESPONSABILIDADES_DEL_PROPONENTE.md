@@ -47,7 +47,7 @@
 |---|---|---|
 | B01 | Minuta AIR / exención (Arts. 35-36 LNETB) | 🟢 `11_INSTRUMENTOS/FICHA_AIR_O_EXENCION.md` |
 | B02 | Lista de autorizaciones requeridas del Ayuntamiento | 🟢 `07_GOBERNANZA/RESPONSABILIDADES_DEL_AYUNTAMIENTO.md` |
-| B03 | Modelo de convenio Ayuntamiento-Proponente | 🔴 Por redactar |
+| B03 | Modelo de convenio Ayuntamiento-Proponente | 🟡 Aportación, figura jurídica y cláusulas en `11_INSTRUMENTOS/APORTACION_Y_MODELO_DE_CONVENIO.md` — falta el articulado |
 | B04 | Borrador de punto de acuerdo de Cabildo | 🔴 Por redactar |
 | B05 | Minuta de aviso de privacidad | 🟡 Contenido en `05_MARCO_JURIDICO/05.07_PROTECCION_DE_DATOS.md` |
 
