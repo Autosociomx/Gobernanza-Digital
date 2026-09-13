@@ -112,6 +112,13 @@ Referencia normativa: `docs/marco/PROTOCOLO_SEGURIDAD.md`.
     ha revisado se muestra etiquetado como `SIN VERIFICAR` o se repliega a
     español; nunca se presenta como traducción validada. Ver
     `docs/marco/PROTOCOLO_LENGUAS_ORIGINARIAS.md`.
+11. **El asistente nunca genera lengua originaria.** `server.ts` compone su
+    prompt con `componerPromptDelSistema()`; esa restricción se adjunta en el
+    servidor justamente para que no pueda retirarse editando
+    `public/CONNECTX_SYSTEM_PROMPT.md`. La lengua de la interfaz que viaja en el
+    contexto describe la pantalla, **no es una instrucción de idioma**. El léxico
+    estático pasa por la guardia; una respuesta generada no puede, así que no se
+    produce.
 
 ### Archivos protegidos
 
@@ -304,7 +311,7 @@ endpoints del servidor o el lazy loading: es una regresión, no una mejora.
 ├── firestore.rules             Roles + perfiles_salud por código de personal
 ├── storage.rules
 ├── scripts/
-│   ├── verificar-regresiones.mjs   La Guardia (R1–R8)
+│   ├── verificar-regresiones.mjs   La Guardia (R1–R10)
 │   └── test-firestore-rules.mjs    Pruebas de reglas contra el emulador
 ├── src/
 │   ├── App.tsx                 Ruteo por useState + enlaces profundos

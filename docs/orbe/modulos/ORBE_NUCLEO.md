@@ -3,9 +3,13 @@
 ## Qué es
 
 El centro del ecosistema: **Aura**, el agente unificado con voz y conciencia
-de página. Es la única interfaz conversacional de todos los círculos (24/7,
-español y lenguas originarias) y el orquestador de eventos entre módulos:
-enruta, no almacena.
+de página. Es la única interfaz conversacional de todos los círculos (24/7, **en
+español**) y el orquestador de eventos entre módulos: enruta, no almacena.
+
+Aura **no** responde en lenguas originarias y el servidor se lo impide: no tiene
+competencia verificada en náayeri ni wixárika, y una respuesta generada no puede
+pasar por la guardia que sí revisa el léxico estático. Estado y alcance reales en
+`docs/marco/PROTOCOLO_LENGUAS_ORIGINARIAS.md`.
 
 ## Estado
 

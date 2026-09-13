@@ -191,7 +191,13 @@ se construye a mano o se queda en `PERFIL_NEUTRO`; regla dura 9.
   corrección gramatical ni pertinencia cultural.
 - No da voz sintética en lengua originaria. Ni náayeri ni wixárika tienen voz en
   ningún navegador: la síntesis sigue en `es-MX` y así se declara en pantalla.
-- No traduce el contenido dinámico del asistente. Aura responde en español.
+- No traduce el contenido dinámico del asistente. Aura responde en español, y
+  eso ahora está **aplicado, no solo declarado**: `server.ts` compone su prompt
+  con `componerPromptDelSistema()` (`shared/traduccion/asistente.ts`), que
+  prohíbe generar náayeri o wixárika —ni una palabra suelta, ni aunque el
+  ciudadano lo pida— y manda ofrecer atención humana en su lugar. La restricción
+  se adjunta en el servidor para que editar `public/CONNECTX_SYSTEM_PROMPT.md` no
+  pueda retirarla, y la regla R10 de la Guardia falla el build si desaparece.
 
 ## 7. Base normativa
 
@@ -201,13 +207,18 @@ afirmar en público lo que esté en estatus VERIFICADO. Por eso este documento n
 artículos: incorporarlos a la biblioteca legal, con verificación de fuente oficial,
 es el siguiente paso de este expediente.
 
-## 8. Regla de la Guardia (R9)
+## 8. Reglas de la Guardia (R9 y R10)
 
 `scripts/verificar-regresiones.mjs` falla el build si:
 
-- falta `shared/traduccion/lexico.ts`, o
-- aparece en `src/` una clave de objeto `cora:`, `wixarika:` o `nayeri:` — el patrón
-  exacto con el que llegaron las cadenas originales.
+**R9 — el léxico no vuelve a incrustarse.** Falta `shared/traduccion/lexico.ts`, o
+aparece en `src/` una clave de objeto `cora:`, `wixarika:` o `nayeri:` — el patrón
+exacto con el que llegaron las cadenas originales.
+
+**R10 — el asistente no vuelve a intentar hablar la lengua.** Falta
+`shared/traduccion/asistente.ts`, o `server.ts` deja de componer su prompt con
+`componerPromptDelSistema()`, o reaparece la instrucción "usa el idioma
+solicitado" que hacía que el modelo contestara en wixárika sin anclaje.
 
 Es la misma lógica que las otras ocho reglas: cada una corresponde a un incidente
 que ya ocurrió.

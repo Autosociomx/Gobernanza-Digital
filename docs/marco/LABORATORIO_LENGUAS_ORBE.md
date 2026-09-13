@@ -241,7 +241,9 @@ Satisfacción no es comprensión, y nada simulado se presenta como evidencia.
 Registro con estado, origen, fuente y fecha · guardia pre-envío determinística, independiente
 de todo embedding · repliegue a español con constancia · etiqueta SIN VERIFICAR en la interfaz
 · `aptoParaPublicacion: false` garantizado por el compilador · lengua destino, norma y variante
-en la instrucción de traducción · regla R9 de la Guardia · 93 pruebas · límite del filtro
+en la instrucción de traducción · **el asistente no genera lengua originaria**, restricción
+compuesta en el servidor e imposible de retirar editando el prompt público · reglas R9 y R10
+de la Guardia · 100 pruebas · límite del filtro
 medido y fijado.
 
 ### 🟡 Pendiente de validar
@@ -250,7 +252,7 @@ Cobertura real: 0 verificadas de 14 en ambas lenguas · pertinencia del recorrid
 formato del registro sirve a otra lengua distinta de estas dos.
 
 ### 🔴 Pendiente de construir
-Cierre del camino generativo · Taller de nuestra lengua · corpus de expresiones espontáneas ·
+Taller de nuestra lengua · corpus de expresiones espontáneas ·
 circuito de dos revisiones con mediación · vía de apoyo humano · cuaderno de fuentes con
 referencia a documento y ubicación · exportación de datos, versiones y permisos · derecho
 lingüístico en la biblioteca legal · acuerdos comunitarios · CodeLens (no existe).
@@ -259,15 +261,22 @@ lingüístico en la biblioteca legal · acuerdos comunitarios · CodeLens (no ex
 
 ## 10. Las tres siguientes tareas
 
-**1. Cerrar el camino generativo.** Mientras `server.ts` ordene "usa el idioma solicitado" y
-la interfaz mande `Idioma de interfaz: wixarika`, todo lo demás de este documento se apoya en
-un sistema que puede emitir lengua inventada. Es código, es acotado y no depende de ningún
-acuerdo. Va primero.
+*(La tarea que encabezaba esta lista —cerrar el camino generativo— quedó hecha:
+`shared/traduccion/asistente.ts`, compuesta en `server.ts`, protegida por R10.)*
 
-**2. Llevar la pregunta de pertinencia y jurisdicción a la comunidad, antes de programar.**
-O1 y O2 deciden si el MVP tiene caso de uso. Escribir el Taller antes de esa conversación es
-construir sobre un supuesto.
+**1. Llevar la pregunta de pertinencia y jurisdicción a la comunidad, antes de
+programar.** O1 y O2 deciden si el MVP tiene caso de uso: el recorrido
+bache/luminaria es urbano y el runtime está fijado a Tepic con un invariante
+probado. Escribir el Taller antes de esa conversación es construir sobre un
+supuesto, y es la única tarea que no depende de nosotros.
 
-**3. Incorporar el derecho lingüístico a `BIBLIOTECA_LEGAL.md` con verificación de fuente
-oficial.** Sin eso, ni este documento ni el protocolo pueden citar un artículo, y el
-argumento que sostiene al resto del proyecto —la ley ya lo ordena— no aplica aquí todavía.
+**2. Incorporar el derecho lingüístico a `BIBLIOTECA_LEGAL.md` con verificación
+de fuente oficial.** Sin eso, ni este documento ni el protocolo pueden citar un
+artículo, y el argumento que sostiene al resto del proyecto —la ley ya lo
+ordena— todavía no aplica aquí.
+
+**3. Añadir `normaOrtografica` y `variante` a `UnidadTraducida`.** La consola de
+dictamen ya los captura y el grafo ya los transporta, pero el registro todavía no
+puede guardarlos: hoy una cadena verificada no diría bajo qué norma se verificó.
+Es el último eslabón que falta para que la primera ronda de dictamen sea
+registrable, y cuesta poco con 14 entradas.
