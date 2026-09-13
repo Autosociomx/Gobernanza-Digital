@@ -1,0 +1,196 @@
+{
+  "$schema_nota": "Registro canónico del estado de trabajo del repositorio. Es la parte que CLAUDE.md deliberadamente no carga (las reglas no cambian; el estado sí) y la que más rápido se pudre. Cada sesión de trabajo lo lee al arrancar y lo actualiza al cerrar. Verificado por scripts/verificar-estado.mjs, que falla si el archivo caduca, si una evidencia no existe o si ESTADO.md deja de mencionar una entrada. No reemplaza a docs/marco/modulos/INDICE.json (completitud de código por módulo) ni a docs/orbe/modulos.json (madurez conceptual): esos miden módulos, este mide trabajo.",
+  "version": 1,
+  "actualizado": "2026-09-13",
+  "verificado_contra": "d5a78aaca3b11c1d459acab154d66b3db87ef4f5",
+  "vigencia_dias": 21,
+  "tipos_validos": ["bloqueo", "pendiente", "decision"],
+  "estados_validos": ["abierto", "en_curso", "bloqueado", "resuelto"],
+  "prioridades_validas": ["P0", "P1", "P2"],
+  "decide_validos": ["director", "sesion"],
+  "entradas": [
+    {
+      "id": "CI-01",
+      "titulo": "La Guardia no puede pasar en un clon limpio: src/firebase.ts importa un archivo gitignoreado",
+      "tipo": "bloqueo",
+      "estado": "en_curso",
+      "prioridad": "P0",
+      "decide": "sesion",
+      "evidencia": [
+        "src/firebase.ts",
+        ".gitignore",
+        ".github/workflows/guardia-regresiones.yml",
+        "netlify.toml"
+      ],
+      "bloquea": ["CI-02", "PR-01"],
+      "nota": "Desde c6dbb03 (2026-08-13) firebase-applet-config.json está gitignoreado y src/firebase.ts lo importa directo. En un checkout limpio `npm run lint` falla con TS2307 y `vite build` con «Could not resolve». El workflow ejecuta ambos y no materializa el archivo, así que el job no puede terminar en verde aunque el runner arranque. Verificado localmente: con el archivo ausente tsc falla y vite build aborta; copiando firebase-applet-config.example.json, tsc sale 0 y el build compila 2208 módulos con el bundle limpio de GEMINI. Se corrige en el workflow, no en src/firebase.ts (CLAUDE.md §2 lo prohíbe expresamente)."
+    },
+    {
+      "id": "CI-02",
+      "titulo": "Los jobs de GitHub Actions terminan en 3–5 s sin producir logs",
+      "tipo": "bloqueo",
+      "estado": "abierto",
+      "prioridad": "P0",
+      "decide": "director",
+      "evidencia": [".github/workflows/guardia-regresiones.yml"],
+      "bloquea": ["PR-01"],
+      "nota": "Las 30 corridas más recientes de «Guardia de regresiones» (10-sep hacia atrás) fallan, incluidas tres sobre main. Los jobs se crean y se completan en 3–5 s y la descarga de logs devuelve 404 incluso para corridas de hace tres días: un job que llegara a `npm ci` tardaría decenas de segundos y dejaría logs. El patrón corresponde a un runner que nunca ejecuta sus pasos. Causa a confirmar por el director en Settings → Actions y en la facturación de Actions de la cuenta; no es diagnosticable desde el repositorio. CI-01 es un segundo bloqueo apilado detrás de este: arreglar uno solo no pone la cadena en verde."
+    },
+    {
+      "id": "CI-03",
+      "titulo": "Los deploy previews de Netlify están en rojo desde mediados de agosto",
+      "tipo": "bloqueo",
+      "estado": "abierto",
+      "prioridad": "P0",
+      "decide": "director",
+      "evidencia": ["netlify.toml"],
+      "bloquea": [],
+      "nota": "En el PR #46 (18-ago) los tres checks de Netlify —Redirect rules, Header rules, Pages changed— están en failure; en el #60 (1-sep) siguen en failure. El comando de build de netlify.toml encadena tres tramos y dos están rotos en main: `npm run test:orbe-p0-e2e` falla y además se cuelga (PR-02), y `npm run build` no resuelve la config de Firebase (CI-01). Consecuencia a verificar con el director: el sitio publicado podría estar sirviendo un deploy anterior al 13-ago. Además la meta permanente de Lighthouse (97+/100/100/100) no se está midiendo mientras el preview no compile."
+    },
+    {
+      "id": "PR-01",
+      "titulo": "15 pull requests abiertas sin triaje, la más antigua de hace 48 días",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P0",
+      "decide": "director",
+      "evidencia": ["docs/marco/AUDITORIA_FLUJO_SESIONES.md"],
+      "bloquea": [],
+      "nota": "Abiertas: #34 (27-jul), #46, #47, #52, #53, #54 (agosto), #56, #58, #59, #60, #62, #63, #64, #65, #66 (sep). Seis son borrador. Ninguna puede cerrar en verde mientras CI-01 y CI-02 sigan vivos, así que el trabajo terminado se acumula sin integrarse. El triaje (fusionar, rebasar o cerrar cada una) es decisión del director: ver la tabla en AUDITORIA_FLUJO_SESIONES.md §6."
+    },
+    {
+      "id": "PR-02",
+      "titulo": "La suite E2E que Netlify exige falla y se cuelga en main; el PR #63 la corrige y sigue abierto",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P0",
+      "decide": "director",
+      "evidencia": ["scripts/test-orbe-p0-e2e.mts", "netlify.toml", "docs/orbe/ORBE_P0_REPORTE.md"],
+      "bloquea": ["CI-03", "ORBE-01"],
+      "nota": "Reproducido sobre main (d5a78aa): `npm run test:orbe-p0-e2e` deja 7/8 casos en PASS y el caso 8 «Runtime caído» en FAIL con «'RUNTIME' !== 'ERROR'» — ORBE afirma haber ejecutado cuando Context.OS está caído, que es justo el invariante que el caso vigila. Peor: tras imprimir el reporte el proceso no termina; el labServer queda huérfano y hubo que matarlo a mano (dos corridas, exit 143 por timeout). netlify.toml corre esa suite antes de `npm run build`, así que el deploy no solo falla: se queda colgado. El PR #63 (6-sep) corrige exactamente esto —stopLabServer() mataba el proceso npx y no el proceso node que escucha el puerto— y sigue sin fusionarse."
+    },
+    {
+      "id": "CANON-01",
+      "titulo": "Siete documentos compiten por ser el contexto canónico de una sesión de IA",
+      "tipo": "decision",
+      "estado": "abierto",
+      "prioridad": "P1",
+      "decide": "director",
+      "evidencia": [
+        "CLAUDE.md",
+        "Parlamento.MD",
+        "docs/marco/NOTA_DE_CONTEXTO_PARA_CLAUDE.md",
+        "docs/interno/CONTEXTO_MASTER_CLAUDE.md",
+        "docs/PARLAMENTO_PROMPT.md",
+        "public/CONNECTX_SYSTEM_PROMPT.md",
+        "docs/agentes/GABINETE_ESPECIALISTAS.md"
+      ],
+      "bloquea": [],
+      "nota": "Solo CLAUDE.md (26-ago) y el canon congelado del Orbe (3-sep) están al día. Los otros cinco llevan entre 44 y 70 días sin tocarse y ninguno declara estar caducado; NOTA_DE_CONTEXTO_PARA_CLAUDE.md se declara «vigente» desde el 1-ago. Esta PR añade el banner de vigencia a los caducados; retirarlos, fusionarlos o reescribirlos es decisión del director."
+    },
+    {
+      "id": "CANON-02",
+      "titulo": "CONTEXTO_MASTER_CLAUDE.md contradice el semáforo de honestidad y se ofrece como prompt de arranque",
+      "tipo": "decision",
+      "estado": "abierto",
+      "prioridad": "P1",
+      "decide": "director",
+      "evidencia": ["docs/interno/CONTEXTO_MASTER_CLAUDE.md", "docs/interno/README.md"],
+      "bloquea": ["PUB-01"],
+      "nota": "El documento se presenta como «CONTEXTO MAESTRO Y SYSTEM PROMPT PARA CLAUDE» y pide literalmente copiarlo y pegarlo en el primer mensaje de una sesión. Su contenido enmarca la plataforma como herramienta de consolidación política de una candidatura con nombre propio y cifras de aprobación: exactamente lo que el semáforo de CLAUDE.md §3 clasifica en 🔴. Está correctamente clasificado como interno, pero mientras siga descrito como prompt de arranque cualquier sesión que lo use queda alineada contra las reglas del repositorio."
+    },
+    {
+      "id": "CANON-03",
+      "titulo": "Dos propuestas previas de fuente canónica llevan semanas abiertas sin resolverse",
+      "tipo": "decision",
+      "estado": "abierto",
+      "prioridad": "P1",
+      "decide": "director",
+      "evidencia": ["docs/marco/AUDITORIA_FLUJO_SESIONES.md"],
+      "bloquea": ["CANON-01"],
+      "nota": "PR #47 «source of truth v0.1» (19-ago, borrador, 1170 líneas en docs/source-of-truth/) y PR #60 «Constitución de arquitectura v0.1» (1-sep, 415 líneas en docs/marco/). Ambas con CI en rojo. Son intentos del mismo problema que este trabajo aborda: mientras no se decida cuál vive, cada intento nuevo crea un canon paralelo más. La decisión —fusionar una, fusionar ambas con jerarquía explícita, o cerrarlas— precede a cualquier canon nuevo."
+    },
+    {
+      "id": "PROMPT-01",
+      "titulo": "El system prompt que corre hoy en producción está construido sobre PNL comercial — la categoría 🔴 del semáforo",
+      "tipo": "decision",
+      "estado": "abierto",
+      "prioridad": "P1",
+      "decide": "director",
+      "evidencia": ["public/CONNECTX_SYSTEM_PROMPT.md", "server.ts", "docs/marco/GLOSARIO_OFICIAL.md"],
+      "bloquea": [],
+      "nota": "server.ts:58 carga public/CONNECTX_SYSTEM_PROMPT.md como system prompt de /api/ai/chat: es la voz que un ciudadano recibe hoy. Su segunda sección se titula literalmente «ARQUITECTURA DE COMUNICACIÓN (NLP & ASERCIÓN)» y ordena «Lenguaje de Conquista», «Psicología del Usuario» y que «el cambio no es una opción»; el propio texto se refiere a «el tono comercial de este documento» y define a Aura como «Arquitecto de Casos de Éxito Comerciales». El semáforo clasifica la PNL y la manipulación en 🔴 —se elimina— y exige branding institucional, nunca comercial. El archivo no se toca desde el 14-jul, un mes antes de la purga del 13-ago (c6dbb03) que retiró esa categoría del resto del repositorio: la purga no llegó hasta aquí. Los dos bloques finales del archivo (contexto de página y formato apto para voz) son correctos y deben conservarse. Reescribir la voz del asistente ciudadano es decisión del propietario, no de una sesión: esta entrega lo registra y no lo modifica."
+    },
+    {
+      "id": "MOD-01",
+      "titulo": "Los dos registros de módulos se contradicen en tepictu-salud y pulso-nayarit",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P1",
+      "decide": "director",
+      "evidencia": ["docs/marco/modulos/INDICE.json", "docs/orbe/modulos.json"],
+      "bloquea": [],
+      "nota": "CLAUDE.md §5 ordena señalar la contradicción en vez de elegir en silencio. tepictu-salud: el Orbe lo marca `disenado` (no construido) mientras INDICE.json marca el módulo salud como `real` con Firestore detrás (citasSaludService.ts, saludPerfilService.ts) — el registro conceptual va por detrás del código. pulso-nayarit: el Orbe lo marca `desplegado`, el estado más alto de su escala, y no tiene entrada en INDICE.json; existe el directorio pulso-nayarit/ con backend propio, pero «desplegado» necesita URL y fecha para sostenerse en público."
+    },
+    {
+      "id": "MOD-02",
+      "titulo": "INDICE.json declara un rango de líneas corto por uno en municipal_letters",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P2",
+      "decide": "sesion",
+      "evidencia": ["docs/marco/modulos/INDICE.json", "src/components/MunicipalLettersView.tsx"],
+      "bloquea": [],
+      "nota": "Declara 1-759 y el archivo tiene 760 líneas. Es el único desfase de los 29 módulos: los otros 28 rangos siguen apuntando al componente correcto pese a los 161 commits transcurridos desde el commit de verificación f6536a6 (22-jul). El índice está sano; se corrige de paso al próximo cambio que toque ese módulo."
+    },
+    {
+      "id": "ORBE-01",
+      "titulo": "ORBE P0 no está cerrado: cinco verificaciones declaradas pendientes",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P1",
+      "decide": "director",
+      "evidencia": ["docs/orbe/ORBE_P0_REPORTE.md", "docs/orbe/P0_ACCEPTANCE.md"],
+      "bloquea": [],
+      "nota": "El propio reporte fija el criterio: «P0 no se declara terminado hasta que los puntos pendientes estén verificados». Faltan suite verde en Actions sobre el HEAD final, deploy efectivo en Netlify, variables de entorno de la demo, verificación de health y de una solicitud bache/luminaria desde la URL pública, y confirmación de que el frontend muestra el recibo evidenceId. Las tres primeras dependen de CI-01, CI-02 y CI-03."
+    },
+    {
+      "id": "PUB-01",
+      "titulo": "El módulo Gabinete expone nombres reales con KPIs inventados y bloquea abrir el repositorio",
+      "tipo": "decision",
+      "estado": "abierto",
+      "prioridad": "P1",
+      "decide": "director",
+      "evidencia": [
+        "docs/interno/README.md",
+        "src/components/C5Dashboard.tsx",
+        "src/components/TesisCienciaPolitica.tsx",
+        "docs/marco/PROTOCOLO_SEGURIDAD.md"
+      ],
+      "bloquea": [],
+      "nota": "Levantado el 13-jul y sin resolver desde entonces: GabineteView muestra personas reales con cifras de aprobación inventadas y fotos de stock presentadas como oficiales. Choca con el 🔴 del semáforo y con «branding institucional, nunca personal». El propio docs/interno/README.md lo declara bloqueante de la publicación del repositorio como código abierto. Requiere decisión del propietario: autorización expresa de las personas, o genericización."
+    },
+    {
+      "id": "DIR-01",
+      "titulo": "Pendientes manuales del director heredados del relevo del 1-ago, sin confirmación posterior",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P1",
+      "decide": "director",
+      "evidencia": ["docs/marco/NOTA_DE_CONTEXTO_PARA_CLAUDE.md", "docs/marco/PROTOCOLO_SEGURIDAD.md"],
+      "bloquea": [],
+      "nota": "La nota de relevo los lista como pendientes: rotar la llave de Gemini, publicar las reglas de Firestore y Storage en producción, cargar las variables de entorno en Netlify, y decidir sobre la Cloud Function de carga de personal. Ninguno tiene registro posterior que confirme su ejecución. Se listan aquí como «por confirmar», no como incumplidos: solo el director puede cerrarlos."
+    },
+    {
+      "id": "GIT-01",
+      "titulo": "Los commits del trabajo del Orbe están en inglés contra la convención del repositorio",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P2",
+      "decide": "sesion",
+      "evidencia": ["CLAUDE.md"],
+      "bloquea": [],
+      "nota": "CLAUDE.md §6 fija Conventional Commits en español. Los 27 commits del bloque ORBE P0 v0.2 (3 y 4 de septiembre) están en inglés («gate Netlify deploy on P0 E2E suite», «freeze canon baseline v0.1»), posteriores al merge de CLAUDE.md en main. El historial no se reescribe: se corrige hacia adelante. Nada que reparar en el pasado; sí que respetar desde la próxima sesión."
+    }
+  ]
+}
