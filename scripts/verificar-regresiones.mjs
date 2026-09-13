@@ -107,6 +107,36 @@ if (lenguasIncrustadas) {
   );
 }
 
+// R10 · El asistente no puede generar lengua originaria
+// Tres piezas conspiraban para que Aura intentara hablar wixárika: server.ts
+// instruía "usa el idioma solicitado", el prompt público mandaba obedecer el
+// idioma del contexto de página, y la interfaz enviaba la lengua elegida. El
+// léxico estático pasa por GuardiaPreEnvio; la respuesta generada no puede,
+// porque no hay forma de validarla. La única política sostenible es que el
+// asistente no las produzca, y esa regla se compone en el servidor para que
+// editar public/CONNECTX_SYSTEM_PROMPT.md no pueda retirarla.
+const servidor = leer('server.ts') ?? '';
+if (!existsSync('shared/traduccion/asistente.ts')) {
+  errores.push(
+    'Falta shared/traduccion/asistente.ts: ahí vive la restricción que impide que ' +
+    'Aura genere náayeri o wixárika sin que ningún hablante lo haya revisado.'
+  );
+}
+if (servidor && !/componerPromptDelSistema\s*\(/.test(servidor)) {
+  errores.push(
+    'server.ts ya no compone el prompt del sistema con componerPromptDelSistema(). ' +
+    'Sin eso el asistente vuelve a intentar responder en lengua originaria sin ' +
+    'competencia verificada (docs/marco/PROTOCOLO_LENGUAS_ORIGINARIAS.md).'
+  );
+}
+if (/usa el idioma solicitado/i.test(servidor)) {
+  errores.push(
+    'server.ts volvió a instruir "usa el idioma solicitado". Con el selector de ' +
+    'lenguas eso le pide al modelo que conteste en wixárika o náayeri sin anclaje ' +
+    'y sin revisión posible de la salida.'
+  );
+}
+
 // R7 (opcional) · La llave no aparece en el bundle compilado
 if (process.argv.includes('--con-bundle')) {
   try {
