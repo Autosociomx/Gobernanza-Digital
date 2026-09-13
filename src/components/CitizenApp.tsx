@@ -246,7 +246,8 @@ export function CitizenApp({
 
   const getPageContext = React.useCallback(() => {
     return `El ciudadano está en la App Ciudadana de Nayarit Digital, en la pestaña "${activeTab}". ` +
-      `Nombre: ${profile.name || 'no registrado'}. Idioma de interfaz: ${lang}. ` +
+      `Nombre: ${profile.name || 'no registrado'}. ` +
+      `Interfaz pintada en ${descriptorLengua(lang).nombre}; el asistente responde en español. ` +
       `Conexión: ${isOnline ? 'en línea' : 'sin conexión'}.`;
   }, [activeTab, profile.name, lang, isOnline]);
 

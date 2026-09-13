@@ -793,7 +793,8 @@ function IAView() {
 
   const getPageContext = React.useCallback(() => {
     return `El usuario está en el módulo "Asistente IA" del C5 Governance Hub (panel administrativo de gobierno municipal). ` +
-      `Rol: funcionario de gobierno. Idioma de interfaz: ${lang}.`;
+      `Rol: funcionario de gobierno. ` +
+      `Interfaz pintada en ${descriptorLengua(lang).nombre}; el asistente responde en español.`;
   }, [lang]);
 
   const { messages, isTyping, sendMessage, resetGreeting } = useAuraChat({

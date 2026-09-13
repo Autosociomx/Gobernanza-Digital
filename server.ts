@@ -5,6 +5,7 @@ import fs from "fs/promises";
 import Database from "better-sqlite3";
 import { GoogleGenAI, ThinkingLevel, Type } from "@google/genai";
 import Stripe from "stripe";
+import { componerPromptDelSistema } from "./shared/traduccion/asistente";
 
 let aiClient: GoogleGenAI | null = null;
 function getAI() {
@@ -52,8 +53,8 @@ async function startServer() {
   app.use(express.json());
 
   // Load System Prompt from public/CONNECTX_SYSTEM_PROMPT.md
-  let systemPrompt = "Eres ConnectX. Experto en administración municipal y gobernanza digital de Tepic. Tono: Institucional, extremadamente breve y directo. Objetivo: Soluciones pragmáticas de infraestructura y transparencia. Siempre incluye un 'Siguiente paso' y usa el idioma solicitado.";
-  
+  let systemPrompt = "Eres ConnectX. Experto en administración municipal y gobernanza digital de Tepic. Tono: Institucional, extremadamente breve y directo. Objetivo: Soluciones pragmáticas de infraestructura y transparencia. Siempre incluye un 'Siguiente paso'.";
+
   try {
     const promptPath = path.join(process.cwd(), 'public', 'CONNECTX_SYSTEM_PROMPT.md');
     const fileContent = await fs.readFile(promptPath, 'utf-8');
@@ -63,6 +64,10 @@ async function startServer() {
   } catch (error) {
     console.warn("Could not read CONNECTX_SYSTEM_PROMPT.md, using default fallback.", error);
   }
+
+  // La restricción de lenguas se compone aquí, no en el .md: ese archivo puede
+  // reemplazarse por completo y la regla no debe poder borrarse editándolo.
+  systemPrompt = componerPromptDelSistema(systemPrompt);
 
   // API routes
   app.get("/api/departments", (req, res) => {

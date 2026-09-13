@@ -5,6 +5,11 @@ import {
   similitudCoseno,
   UMBRAL_DERIVA_POR_DEFECTO,
 } from '../guardia';
+import {
+  componerPromptDelSistema,
+  MARCA_RESTRICCION_LENGUAS,
+  RESTRICCION_LENGUAS_ASISTENTE,
+} from '../asistente';
 import { GrafoTraduccionNativa, type FuncionTraduccion } from '../grafo';
 import { LEXICO_INTERFAZ } from '../lexico';
 import { descriptorLengua, esLenguaSoportada, LENGUAS, LENGUAS_CLAVES } from '../lenguas';
@@ -493,6 +498,52 @@ describe('GrafoTraduccionNativa', () => {
 
   it('usa el umbral por defecto documentado', () => {
     expect(new GrafoTraduccionNativa().guardia.umbralDeriva).toBe(UMBRAL_DERIVA_POR_DEFECTO);
+  });
+});
+
+describe('Restricción de lengua del asistente', () => {
+  // La restricción es prosa con saltos de línea duros: se compara sobre el
+  // texto con espacios normalizados para que reacomodar un párrafo no rompa
+  // una prueba que verifica lo que dice, no cómo está justificado.
+  const dice = (fragmento: string) =>
+    RESTRICCION_LENGUAS_ASISTENTE.replace(/\s+/g, ' ').includes(fragmento);
+
+  it('prohíbe generar lengua originaria, no solo "preferir" el español', () => {
+    expect(dice('Responde SIEMPRE en español')).toBe(true);
+    expect(dice('Nunca generes texto en una lengua originaria')).toBe(true);
+  });
+
+  it('nombra las lenguas que el registro declara, no una lista escrita a mano', () => {
+    for (const nombre of ['náayeri (cora)', 'wixárika']) {
+      expect(dice(nombre)).toBe(true);
+    }
+  });
+
+  it('desactiva el dato de interfaz como instrucción de idioma', () => {
+    expect(dice('NO es una instrucción de idioma')).toBe(true);
+  });
+
+  it('ofrece atención humana en vez de improvisar la lengua', () => {
+    expect(dice('atención humana')).toBe(true);
+  });
+
+  it('se adjunta a cualquier prompt del sistema, venga de donde venga', () => {
+    // El .md público puede reemplazar el prompt entero; la regla no puede
+    // borrarse editando ese archivo porque se compone en el servidor.
+    const compuesto = componerPromptDelSistema('Eres ConnectX. Tono institucional.');
+    expect(compuesto).toContain('Eres ConnectX. Tono institucional.');
+    expect(compuesto).toContain(MARCA_RESTRICCION_LENGUAS);
+  });
+
+  it('no duplica la restricción si el prompt base ya la trae', () => {
+    const unaVez = componerPromptDelSistema('base');
+    const dosVeces = componerPromptDelSistema(unaVez);
+    expect(dosVeces).toBe(unaVez);
+    expect(dosVeces.split(MARCA_RESTRICCION_LENGUAS)).toHaveLength(2);
+  });
+
+  it('sigue restringiendo aunque el prompt base venga vacío', () => {
+    expect(componerPromptDelSistema('   ')).toBe(RESTRICCION_LENGUAS_ASISTENTE);
   });
 });
 
