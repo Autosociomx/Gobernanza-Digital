@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Prototipo ejecutable del orbe flotante de Nayarit Digital (SOATM, Tepic): arrastre, iman al borde, panel de modulos y equivalencia con Android nativo y Flutter. Simulacion: un navegador no puede crear un overlay del sistema.">
+<meta name="robots" content="noindex">
+<title>Orbe Flotante Tepic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+/* ───────────────────────────────────────────────
+   Banco de pruebas del orbe flotante · Tepic
+   Tokens: tema claro completo en :root, redefinidos
+   para sistema-oscuro y para el sello data-theme.
+   ─────────────────────────────────────────────── */
+:root{
+  --bg:#E8E4DE;
+  --surface:#F7F5F2;
+  --surface-2:#FFFFFF;
+  --sunken:#DFDAD2;
+  --line:#D0C9BF;
+  --line-2:#B6ADA0;
+  --text:#1B1610;
+  --text-2:#5B5348;
+  --text-3:#8A8073;
+  --accent:#E05A05;
+  --accent-2:#FF8A3D;
+  --accent-soft:rgba(224,90,5,.12);
+  --on-accent:#FFFFFF;
+  --ok:#2C7A50;
+  --warn:#A8700A;
+  --crit:#AC3220;
+  --listen:#0E7C86;
+  --think:#6A4EA6;
+  --speak:#2C7A50;
+  --shell:#241E18;
+  --shell-2:#100D0A;
+  --scrim:rgba(20,15,10,.46);
+  --shadow:0 18px 44px -20px rgba(30,20,10,.45);
+  --r-s:6px; --r-m:12px; --r-l:20px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131110;
+    --surface:#1C1916;
+    --surface-2:#252017;
+    --sunken:#0E0C0B;
+    --line:#332C25;
+    --line-2:#4A4137;
+    --text:#F1ECE4;
+    --text-2:#A79C8E;
+    --text-3:#7B7062;
+    --accent:#FF7A26;
+    --accent-2:#FFA05C;
+    --accent-soft:rgba(255,122,38,.14);
+    --on-accent:#1B1206;
+    --ok:#4FB27C;
+    --warn:#D9A03A;
+    --crit:#E2705C;
+    --listen:#3EBAC4;
+    --think:#A48CE0;
+    --speak:#4FB27C;
+    --shell:#2A2521;
+    --shell-2:#070605;
+    --scrim:rgba(0,0,0,.6);
+    --shadow:0 18px 44px -20px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131110;
+  --surface:#1C1916;
+  --surface-2:#252017;
+  --sunken:#0E0C0B;
+  --line:#332C25;
+  --line-2:#4A4137;
+  --text:#F1ECE4;
+  --text-2:#A79C8E;
+  --text-3:#7B7062;
+  --accent:#FF7A26;
+  --accent-2:#FFA05C;
+  --accent-soft:rgba(255,122,38,.14);
+  --on-accent:#1B1206;
+  --ok:#4FB27C;
+  --warn:#D9A03A;
+  --crit:#E2705C;
+  --listen:#3EBAC4;
+  --think:#A48CE0;
+  --speak:#4FB27C;
+  --shell:#2A2521;
+  --shell-2:#070605;
+  --scrim:rgba(0,0,0,.6);
+  --shadow:0 18px 44px -20px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Source Sans 3",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;margin:0;text-wrap:balance;letter-spacing:-.015em}
+h1{font-size:clamp(1.9rem,1.3rem + 2.4vw,3rem);font-weight:700;line-height:1.05}
+h2{font-size:1.28rem;font-weight:600;line-height:1.2}
+h3{font-size:1rem;font-weight:600}
+p{margin:0}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+code{font-size:.86em;background:var(--sunken);padding:.08em .34em;border-radius:var(--r-s);color:var(--text)}
+a{color:var(--accent)}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+.envoltura{max-width:1180px;margin:0 auto;padding:clamp(20px,4vw,44px) clamp(16px,4vw,36px) 72px}
+
+/* ── Encabezado ─────────────────────────────── */
+.cabecera{display:flex;flex-direction:column;gap:16px;padding-bottom:26px;border-bottom:1px solid var(--line)}
+.rotulo{
+  font-family:"Archivo",sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.rotulo::before{content:"";width:26px;height:2px;background:var(--accent);flex:none}
+.entrada{max-width:68ch;color:var(--text-2);font-size:1.02rem}
+.fichas{display:flex;flex-wrap:wrap;gap:8px}
+.ficha{
+  font-family:"IBM Plex Mono",monospace;font-size:.7rem;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 9px;border:1px solid var(--line-2);border-radius:100px;color:var(--text-2);
+}
+.ficha.alerta{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+/* ── Banco de pruebas ───────────────────────── */
+.banco{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:clamp(20px,3vw,38px);align-items:start;padding:34px 0}
+@media (max-width:900px){.banco{grid-template-columns:minmax(0,1fr)}}
+
+.columna-telefono{display:flex;flex-direction:column;gap:14px;align-items:center}
+
+/* Marco del dispositivo */
+.marco{
+  width:min(360px,100%);
+  background:var(--shell);
+  border-radius:34px;
+  padding:11px;
+  box-shadow:var(--shadow),0 0 0 1px rgba(255,255,255,.06) inset;
+  position:relative;
+}
+.marco::after{ /* botón lateral */
+  content:"";position:absolute;right:-2px;top:120px;width:3px;height:52px;
+  background:var(--shell-2);border-radius:2px;
+}
+.pantalla{
+  position:relative;overflow:hidden;
+  aspect-ratio:360/720;
+  border-radius:25px;
+  background:var(--shell-2);
+  touch-action:none;
+  isolation:isolate;
+}
+
+/* Fondos: la app que corre debajo del overlay */
+.fondo{position:absolute;inset:0;opacity:0;transition:opacity .3s ease}
+.fondo.activo{opacity:1}
+.fondo-escritorio{background:linear-gradient(165deg,#3A4A6B 0%,#5C4A6E 48%,#8A5A48 100%)}
+.rejilla-apps{position:absolute;inset:64px 26px auto 26px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 14px}
+.icono-app{aspect-ratio:1;border-radius:14px;background:rgba(255,255,255,.22);box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.icono-app:nth-child(3n){background:rgba(255,255,255,.32)}
+.icono-app:nth-child(5n){background:rgba(0,0,0,.18)}
+.muelle{position:absolute;left:18px;right:18px;bottom:22px;height:66px;border-radius:20px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:space-around;padding:0 16px}
+.muelle span{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.35)}
+
+.fondo-mapa{background:#DDD8CC}
+.calles{position:absolute;inset:0;
+  background-image:
+    repeating-linear-gradient(90deg,transparent 0 46px,rgba(0,0,0,.16) 46px 50px),
+    repeating-linear-gradient(0deg,transparent 0 58px,rgba(0,0,0,.16) 58px 62px);
+}
+.ruta{position:absolute;left:12%;top:18%;width:6px;height:64%;background:#2F6FD0;border-radius:4px;transform:rotate(-9deg);box-shadow:0 0 0 3px rgba(47,111,208,.22)}
+.ruta2{position:absolute;left:12%;top:64%;width:58%;height:6px;background:#2F6FD0;border-radius:4px;box-shadow:0 0 0 3px rgba(47,111,208,.22)}
+.tarjeta-nav{position:absolute;left:14px;right:14px;top:52px;background:#141414;color:#fff;border-radius:14px;padding:12px 14px;font-size:.72rem;line-height:1.35}
+.tarjeta-nav b{display:block;font-family:"Archivo",sans-serif;font-size:.95rem}
+
+.fondo-tramite{background:#EFEDE8}
+.encabezado-tramite{position:absolute;left:0;right:0;top:28px;height:56px;background:#154734;display:flex;align-items:center;padding:0 16px;color:#fff;font-family:"Archivo",sans-serif;font-size:.8rem;font-weight:600}
+.hoja-tramite{position:absolute;left:14px;right:14px;top:98px;background:#fff;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:9px;box-shadow:0 4px 14px rgba(0,0,0,.09)}
+.renglon{height:9px;border-radius:3px;background:#E2DFD8}
+.renglon.corto{width:52%}
+.renglon.medio{width:74%}
+.campo{height:34px;border-radius:7px;border:1px solid #D6D2C9;background:#FAF9F7}
+.boton-tramite{height:38px;border-radius:8px;background:#154734;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.76rem;font-family:"Archivo",sans-serif}
+
+/* Barra de estado y notificación de servicio */
+.barra-estado{position:absolute;top:0;left:0;right:0;height:28px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;color:#fff;font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.04em;text-shadow:0 1px 2px rgba(0,0,0,.4);z-index:4;pointer-events:none}
+.senal{display:flex;gap:3px;align-items:flex-end}
+.senal i{width:2.5px;background:currentColor;border-radius:1px;display:block}
+.senal i:nth-child(1){height:4px}.senal i:nth-child(2){height:6px}.senal i:nth-child(3){height:8px}.senal i:nth-child(4){height:10px}
+
+.aviso-servicio{
+  position:absolute;top:34px;left:12px;right:12px;z-index:5;
+  background:rgba(20,16,12,.86);color:#F5F0E8;border-radius:12px;padding:8px 11px;
+  display:flex;gap:9px;align-items:flex-start;
+  font-size:.68rem;line-height:1.3;
+  backdrop-filter:blur(6px);
+  transform:translateY(-16px);opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;
+}
+.aviso-servicio.visible{transform:translateY(0);opacity:1}
+.aviso-servicio b{font-family:"Archivo",sans-serif;font-size:.72rem;display:block}
+.punto-naranja{width:9px;height:9px;border-radius:50%;background:var(--accent-2);flex:none;margin-top:3px}
+
+/* ── El orbe ────────────────────────────────── */
+.orbe{
+  position:absolute;z-index:20;
+  border:none;padding:0;margin:0;
+  border-radius:50%;
+  background:radial-gradient(circle at 34% 30%, var(--accent-2) 0%, var(--accent) 55%, #B5450A 100%);
+  box-shadow:0 0 0 1.5px rgba(255,255,255,.35) inset, 0 10px 26px -6px rgba(224,90,5,.75), 0 0 34px -4px rgba(224,90,5,.5);
+  display:flex;align-items:center;justify-content:center;
+  cursor:grab;touch-action:none;
+  transition:opacity .4s ease, box-shadow .3s ease, width .18s ease, height .18s ease;
+  color:#fff;
+}
+.orbe:active{cursor:grabbing}
+.orbe.transitando{transition:left .34s cubic-bezier(.22,1.2,.36,1), top .34s cubic-bezier(.22,1.2,.36,1), opacity .4s ease, transform .2s ease}
+.orbe.atenuado{opacity:.62}
+.orbe.oculto{opacity:0;transform:scale(.4);pointer-events:none}
+.orbe.por-cerrar{filter:grayscale(.7) brightness(.8)}
+.orbe svg{width:44%;height:44%;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
+.anillo{
+  position:absolute;inset:-7px;border-radius:50%;
+  border:2.5px solid transparent;
+  transition:border-color .25s ease;
+}
+.orbe[data-estado="escuchando"] .anillo{border-color:var(--listen);animation:latido 1.5s ease-out infinite}
+.orbe[data-estado="pensando"] .anillo{border-color:var(--think);animation:giro 1.1s linear infinite;border-right-color:transparent;border-bottom-color:transparent}
+.orbe[data-estado="respondiendo"] .anillo{border-color:var(--speak);animation:latido 1.1s ease-out infinite}
+@keyframes latido{0%{transform:scale(1);opacity:.85}70%{transform:scale(1.28);opacity:0}100%{opacity:0}}
+@keyframes giro{to{transform:rotate(360deg)}}
+
+.globo{
+  position:absolute;z-index:19;
+  max-width:170px;padding:6px 11px;border-radius:100px;
+  background:rgba(20,16,12,.9);color:#F7F2EA;
+  font-size:.7rem;line-height:1.25;
+  backdrop-filter:blur(6px);
+  opacity:0;transform:translateY(4px);transition:opacity .2s ease,transform .2s ease;
+  pointer-events:none;white-space:nowrap;
+}
+.globo.visible{opacity:1;transform:translateY(0)}
+
+/* Zona de descarte */
+.zona-cierre{
+  position:absolute;bottom:26px;left:50%;transform:translateX(-50%) scale(.7);
+  width:62px;height:62px;border-radius:50%;
+  background:rgba(20,16,12,.72);border:1.5px dashed rgba(255,255,255,.5);
+  display:flex;align-items:center;justify-content:center;color:#fff;
+  opacity:0;transition:opacity .2s ease,transform .2s ease,background .2s ease;
+  z-index:18;pointer-events:none;
+}
+.zona-cierre.visible{opacity:1;transform:translateX(-50%) scale(1)}
+.zona-cierre.activa{background:var(--crit);border-style:solid;transform:translateX(-50%) scale(1.22)}
+
+/* Panel desplegado */
+.scrim{position:absolute;inset:0;background:var(--scrim);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:24}
+.scrim.visible{opacity:1;pointer-events:auto}
+.panel{
+  position:absolute;left:0;right:0;bottom:0;z-index:25;
+  background:var(--surface);
+  border-radius:20px 20px 25px 25px;
+  transform:translateY(102%);transition:transform .32s cubic-bezier(.3,1,.4,1);
+  display:flex;flex-direction:column;max-height:76%;
+  border-top:1px solid var(--line);
+}
+.panel.abierto{transform:translateY(0)}
+.asa{width:34px;height:4px;border-radius:3px;background:var(--line-2);margin:9px auto 4px}
+.panel-cabeza{padding:6px 16px 12px;display:flex;gap:11px;align-items:center;border-bottom:1px solid var(--line)}
+.mini-orbe{width:34px;height:34px;border-radius:50%;flex:none;background:radial-gradient(circle at 34% 30%,var(--accent-2),var(--accent) 60%,#B5450A);box-shadow:0 4px 12px -3px rgba(224,90,5,.7)}
+.panel-cabeza b{font-family:"Archivo",sans-serif;font-size:.86rem;display:block;line-height:1.2}
+.panel-cabeza small{font-size:.68rem;color:var(--text-2)}
+.cerrar-panel{margin-left:auto;background:none;border:1px solid var(--line);color:var(--text-2);width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.8rem;line-height:1;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.hablar{
+  margin:12px 16px 6px;display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:12px;border:1px solid var(--line);
+  background:var(--surface-2);cursor:pointer;width:calc(100% - 32px);text-align:left;
+  font-family:inherit;font-size:.78rem;color:var(--text);
+}
+.hablar:hover{border-color:var(--accent)}
+.hablar .icono{width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex:none}
+.lista-modulos{overflow-y:auto;padding:8px 16px 18px;display:flex;flex-direction:column;gap:2px}
+.titulo-lista{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);padding:8px 0 4px}
+.modulo{
+  display:flex;align-items:center;gap:9px;padding:8px 6px;border-radius:9px;
+  border:none;background:none;width:100%;text-align:left;font-family:inherit;font-size:.76rem;color:var(--text);
+  border-bottom:1px solid var(--line);
+}
+.modulo:last-child{border-bottom:none}
+.modulo.activo{cursor:pointer}
+.modulo.activo:hover{background:var(--accent-soft)}
+.modulo.inerte{color:var(--text-3);cursor:not-allowed}
+.punto-modulo{width:7px;height:7px;border-radius:50%;flex:none;background:var(--line-2)}
+.modulo.activo .punto-modulo{background:var(--ok)}
+.estado-modulo{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);border:1px solid var(--line);padding:1px 5px;border-radius:100px;flex:none}
+.modulo.activo .estado-modulo{color:var(--ok);border-color:var(--ok)}
+
+/* Pie del teléfono */
+.pie-telefono{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;width:min(360px,100%)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;background:var(--surface)}
+.seg button{
+  border:none;background:none;padding:6px 12px;cursor:pointer;
+  font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--text-2);
+}
+.seg button[aria-pressed="true"]{background:var(--text);color:var(--bg)}
+
+/* ── Columna de control ─────────────────────── */
+.controles{display:flex;flex-direction:column;gap:14px}
+.tarjeta{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:16px}
+.tarjeta > header{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.tarjeta > header h3{font-family:"Archivo",sans-serif}
+.tarjeta > header .num{font-family:"IBM Plex Mono",monospace;font-size:.66rem;color:var(--text-3);letter-spacing:.1em}
+.nota{font-size:.8rem;color:var(--text-2);margin-top:8px;line-height:1.45}
+.nota code{font-size:.78em}
+
+.par-botones{display:flex;flex-wrap:wrap;gap:8px}
+button.accion{
+  font-family:"Archivo",sans-serif;font-size:.78rem;font-weight:500;
+  padding:7px 13px;border-radius:8px;border:1px solid var(--line-2);
+  background:var(--surface-2);color:var(--text);cursor:pointer;
+  transition:border-color .15s ease,background .15s ease;
+}
+button.accion:hover{border-color:var(--accent);color:var(--accent)}
+button.accion.primaria{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+button.accion.primaria:hover{background:var(--accent-2);border-color:var(--accent-2);color:var(--on-accent)}
+button.accion:disabled{opacity:.42;cursor:not-allowed;border-color:var(--line)}
+button.accion:disabled:hover{color:var(--text)}
+
+.semaforo{display:flex;flex-direction:column;gap:9px}
+.linea-estado{display:flex;align-items:center;gap:9px;font-size:.82rem}
+.led{width:9px;height:9px;border-radius:50%;flex:none;background:var(--crit);box-shadow:0 0 0 3px color-mix(in srgb,var(--crit) 22%,transparent)}
+.linea-estado[data-on="si"] .led{background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 22%,transparent)}
+.linea-estado .valor{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em}
+
+.telemetria{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-s);overflow:hidden}
+.celda{background:var(--surface-2);padding:9px 10px}
+.celda dt{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin:0}
+.celda dd{margin:2px 0 0;font-family:"IBM Plex Mono",monospace;font-size:1rem;font-weight:500;font-variant-numeric:tabular-nums;color:var(--text)}
+.celda dd small{font-size:.6rem;color:var(--text-3);font-weight:400}
+
+.control-rango{display:flex;align-items:center;gap:12px;margin-top:4px}
+.control-rango label{font-size:.8rem;color:var(--text-2);flex:none}
+input[type=range]{flex:1;accent-color:var(--accent);min-width:100px}
+.valor-rango{font-family:"IBM Plex Mono",monospace;font-size:.8rem;min-width:52px;text-align:right;color:var(--text)}
+
+.interruptor{display:flex;align-items:center;gap:9px;font-size:.82rem;color:var(--text-2);cursor:pointer;margin-top:10px}
+.interruptor input{accent-color:var(--accent);width:16px;height:16px}
+
+.bitacora{
+  background:var(--sunken);border:1px solid var(--line);border-radius:var(--r-s);
+  font-family:"IBM Plex Mono",monospace;font-size:.68rem;line-height:1.7;
+  height:126px;overflow-y:auto;padding:9px 11px;color:var(--text-2);
+}
+.bitacora div{display:flex;gap:9px;white-space:nowrap}
+.bitacora .t{color:var(--text-3);flex:none}
+.bitacora .ev{color:var(--text)}
+.bitacora .ev.n{color:var(--accent)}
+.bitacora .ev.k{color:var(--ok)}
+.bitacora .ev.x{color:var(--crit)}
+
+/* ── Secciones de documentación ─────────────── */
+.seccion{padding-top:34px;border-top:1px solid var(--line);margin-top:14px}
+.seccion > header{margin-bottom:18px;display:flex;flex-direction:column;gap:6px}
+.seccion > header p{color:var(--text-2);max-width:65ch;font-size:.94rem}
+
+.desliz{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-m);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:.84rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{
+  font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--text-3);font-weight:500;background:var(--sunken);position:sticky;top:0;
+}
+tbody tr:last-child td{border-bottom:none}
+td:first-child{font-family:"Archivo",sans-serif;font-weight:500;white-space:nowrap}
+td code{white-space:nowrap}
+
+.limites{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-m);overflow:hidden}
+.limite{background:var(--surface);padding:15px 16px;display:flex;flex-direction:column;gap:6px}
+.limite h3{font-size:.9rem}
+.limite p{font-size:.82rem;color:var(--text-2);line-height:1.45}
+.marca{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+.limite[data-sev="alto"] .marca{color:var(--crit)}
+.limite[data-sev="medio"] .marca{color:var(--warn)}
+
+.pendientes{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0;counter-reset:paso}
+.pendientes li{
+  display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);align-items:baseline;
+}
+.pendientes li:last-child{border-bottom:none}
+.pendientes li::before{
+  counter-increment:paso;content:counter(paso,decimal-leading-zero);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--accent);flex:none;padding-top:2px;
+}
+.pendientes b{font-family:"Archivo",sans-serif;font-weight:600;display:block;font-size:.94rem}
+.pendientes span{font-size:.86rem;color:var(--text-2)}
+
+.pie{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);font-size:.8rem;color:var(--text-3);display:flex;flex-wrap:wrap;gap:6px 20px}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+}
+</style>
+<style>html{color-scheme:light dark}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="envoltura">
+
+  <header class="cabecera">
+    <div class="rotulo">Nayarit Digital · SOATM · Tepic</div>
+    <h1>Orbe flotante sobre otras apps</h1>
+    <p class="entrada">
+      El prototipo corriendo, no descrito: arrastra el orbe dentro del teléfono, suéltalo cerca de un
+      borde para sentir el imán, tócalo para desplegar el panel y llévalo a la zona de descarte para
+      detener el servicio. Cada gesto de aquí abajo tiene su equivalente exacto en
+      <code>WindowManager.LayoutParams</code>, y la tabla de más abajo lo nombra.
+    </p>
+    <div class="fichas">
+      <span class="ficha alerta">Simulado</span>
+      <span class="ficha">Android 8+ · API 26</span>
+      <span class="ficha">SYSTEM_ALERT_WINDOW</span>
+      <span class="ficha">Pantalla 360 × 720 dp</span>
+      <span class="ficha">1 px CSS = 1 dp</span>
+    </div>
+  </header>
+
+  <div class="banco">
+
+    <!-- ── Teléfono ────────────────────────── -->
+    <div class="columna-telefono">
+      <div class="marco">
+        <div class="pantalla" id="pantalla">
+
+          <div class="fondo fondo-escritorio activo" data-fondo="escritorio">
+            <div class="rejilla-apps">
+              <span class="icono-app"></span><span class="icono-app"></span><span class="icono-app"></span><span class="icono-app"></span>
+              <span class="icono-app"></span><span class="icono-app"></span><span class="icono-app"></span><span class="icono-app"></span>
+              <span class="icono-app"></span><span class="icono-app"></span><span class="icono-app"></span><span class="icono-app"></span>
+            </div>
+            <div class="muelle"><span></span><span></span><span></span><span></span></div>
+          </div>
+
+          <div class="fondo fondo-mapa" data-fondo="mapa">
+            <div class="calles"></div>
+            <div class="ruta"></div>
+            <div class="ruta2"></div>
+            <div class="tarjeta-nav"><b>380 m · Av. Insurgentes</b>Continúa hacia el norte, luego gira a la derecha</div>
+          </div>
+
+          <div class="fondo fondo-tramite" data-fondo="tramite">
+            <div class="encabezado-tramite">Constancia de residencia</div>
+            <div class="hoja-tramite">
+              <div class="renglon corto"></div>
+              <div class="campo"></div>
+              <div class="renglon medio"></div>
+              <div class="campo"></div>
+              <div class="renglon corto"></div>
+              <div class="campo"></div>
+              <div class="boton-tramite">Enviar solicitud</div>
+            </div>
+          </div>
+
+          <div class="barra-estado">
+            <span>8:24</span>
+            <span class="senal" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </div>
+
+          <div class="aviso-servicio visible" id="aviso">
+            <span class="punto-naranja"></span>
+            <span>
+              <b>Orbe · Nayarit Digital</b>
+              Servicio en primer plano. Toca para ocultar el orbe.
+            </span>
+          </div>
+
+          <div class="zona-cierre" id="zonaCierre" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+              <path d="M6 6l12 12M18 6L6 18"/>
+            </svg>
+          </div>
+
+          <span class="globo" id="globo" role="status" aria-live="polite"></span>
+
+          <button class="orbe" id="orbe" data-estado="inerte"
+                  aria-label="Orbe de Nayarit Digital. Arrastra para mover, Enter para abrir el panel.">
+            <span class="anillo" aria-hidden="true"></span>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M8 5.14v13.72a1 1 0 0 0 1.53.85l10.6-6.86a1 1 0 0 0 0-1.7L9.53 4.29A1 1 0 0 0 8 5.14z"/>
+            </svg>
+          </button>
+
+          <div class="scrim" id="scrim"></div>
+
+          <div class="panel" id="panel" aria-hidden="true">
+            <div class="asa"></div>
+            <div class="panel-cabeza">
+              <span class="mini-orbe" aria-hidden="true"></span>
+              <span>
+                <b>Orbe Central · Aura</b>
+                <small>Tepic, Nayarit · estado del núcleo: en construcción</small>
+              </span>
+              <button class="cerrar-panel" id="cerrarPanel" aria-label="Cerrar panel">✕</button>
+            </div>
+
+            <button class="hablar" id="hablar">
+              <span class="icono" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/>
+                </svg>
+              </span>
+              Habla con Nayarit Digital
+            </button>
+
+            <div class="lista-modulos" id="listaModulos">
+              <div class="titulo-lista">Módulos del Orbe · docs/orbe/modulos.json</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="pie-telefono">
+        <div class="seg" role="group" aria-label="App que corre debajo del orbe">
+          <button type="button" data-fondo-btn="escritorio" aria-pressed="true">Escritorio</button>
+          <button type="button" data-fondo-btn="mapa" aria-pressed="false">Mapa</button>
+          <button type="button" data-fondo-btn="tramite" aria-pressed="false">Trámite</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Controles ───────────────────────── -->
+    <div class="controles">
+
+      <section class="tarjeta">
+        <header><h3>Servicio y permiso</h3><span class="num">FloatingOrbService</span></header>
+        <div class="semaforo">
+          <div class="linea-estado" id="lineaPermiso" data-on="si">
+            <span class="led"></span>
+            <span>Mostrar sobre otras apps</span>
+            <span class="valor" id="valorPermiso">Concedido</span>
+          </div>
+          <div class="linea-estado" id="lineaServicio" data-on="si">
+            <span class="led"></span>
+            <span>Servicio en primer plano</span>
+            <span class="valor" id="valorServicio">Activo</span>
+          </div>
+        </div>
+        <div class="par-botones" style="margin-top:14px">
+          <button class="accion" id="btnServicio">Detener servicio</button>
+          <button class="accion" id="btnRevocar">Revocar permiso</button>
+        </div>
+        <p class="nota">
+          En Android el orden es innegociable: sin <code>Settings.canDrawOverlays()</code> en verdadero,
+          <code>windowManager.addView()</code> lanza excepción. Revoca el permiso y vuelve a concederlo
+          para ver el diálogo que el sistema muestra en <code>ACTION_MANAGE_OVERLAY_PERMISSION</code>.
+        </p>
+      </section>
+
+      <section class="tarjeta">
+        <header><h3>Telemetría del overlay</h3><span class="num">LayoutParams</span></header>
+        <dl class="telemetria">
+          <div class="celda"><dt>params.x</dt><dd id="mx">—<small> dp</small></dd></div>
+          <div class="celda"><dt>params.y</dt><dd id="my">—<small> dp</small></dd></div>
+          <div class="celda"><dt>gravity</dt><dd id="mg" style="font-size:.74rem">TOP|START</dd></div>
+          <div class="celda"><dt>estado</dt><dd id="me" style="font-size:.74rem">inerte</dd></div>
+        </dl>
+        <div class="control-rango">
+          <label for="tam">Tamaño</label>
+          <input type="range" id="tam" min="48" max="96" step="4" value="72">
+          <span class="valor-rango" id="valorTam">72 dp</span>
+        </div>
+        <label class="interruptor"><input type="checkbox" id="atenuar" checked> Atenuar en reposo (4 s sin tocarlo)</label>
+        <p class="nota">
+          El deslizador cubre el rango realista: 48 dp queda por debajo del objetivo táctil mínimo de
+          Material y 96 dp tapa una quinta parte del ancho. El código que pegaste usa 80 dp.
+        </p>
+      </section>
+
+      <section class="tarjeta">
+        <header><h3>Ciclo de voz</h3><span class="num">OrbeCitizen</span></header>
+        <div class="par-botones">
+          <button class="accion primaria" id="btnCiclo">Ejecutar ciclo</button>
+          <button class="accion" data-estado="escuchando">Escuchando</button>
+          <button class="accion" data-estado="pensando">Pensando</button>
+          <button class="accion" data-estado="respondiendo">Respondiendo</button>
+          <button class="accion" data-estado="inerte">Inerte</button>
+        </div>
+        <p class="nota">
+          Los colores del anillo son los que ya usa <code>src/components/orbe/OrbeCitizen.tsx</code>:
+          cian al escuchar, violeta al pensar, verde al responder. El cuerpo naranja es el aporte de
+          este prototipo.
+        </p>
+      </section>
+
+      <section class="tarjeta">
+        <header><h3>Bitácora de eventos</h3><span class="num">OnTouchListener</span></header>
+        <div class="bitacora" id="bitacora" aria-live="off"></div>
+        <p class="nota">
+          Los <code>ACTION_MOVE</code> se agrupan igual que en un <code>OnTouchListener</code> real:
+          llegan decenas por gesto y cada uno dispara <code>updateViewLayout()</code>.
+        </p>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ── Equivalencias ─────────────────────── -->
+  <section class="seccion">
+    <header>
+      <h2>De esta simulación al APK</h2>
+      <p>Cada comportamiento del banco tiene un nombre propio en la API de Android. Esta tabla es
+         la que conviene tener abierta al escribir el servicio.</p>
+    </header>
+    <div class="desliz">
+      <table>
+        <thead>
+          <tr><th>Comportamiento</th><th>Aquí (web)</th><th>Kotlin nativo</th><th>Flutter</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Capa sobre otras apps</td>
+            <td>Posición absoluta dentro del marco</td>
+            <td><code>TYPE_APPLICATION_OVERLAY</code> en <code>LayoutParams</code> (API 26+)</td>
+            <td><code>SystemAlertWindow.showSystemWindow()</code></td>
+          </tr>
+          <tr>
+            <td>Permiso</td>
+            <td>Diálogo simulado</td>
+            <td><code>Settings.canDrawOverlays()</code> + <code>ACTION_MANAGE_OVERLAY_PERMISSION</code></td>
+            <td><code>SystemAlertWindow.requestPermissions</code></td>
+          </tr>
+          <tr>
+            <td>Arrastre</td>
+            <td>Pointer Events + <code>setPointerCapture</code></td>
+            <td><code>OnTouchListener</code> con ACTION_DOWN/MOVE/UP y <code>updateViewLayout()</code></td>
+            <td>Widget arrastrable dentro del <code>overlayMain()</code></td>
+          </tr>
+          <tr>
+            <td>Toque vs. arrastre</td>
+            <td>Umbral de 12 px antes de considerarlo arrastre</td>
+            <td><code>ViewConfiguration.get(ctx).scaledTouchSlop</code></td>
+            <td>Mismo umbral, del lado nativo del plugin</td>
+          </tr>
+          <tr>
+            <td>Imán al borde</td>
+            <td>Transición CSS de 340 ms</td>
+            <td><code>ValueAnimator</code> sobre <code>params.x</code> + <code>updateViewLayout()</code></td>
+            <td><code>AnimatedPositioned</code> en el overlay</td>
+          </tr>
+          <tr>
+            <td>No robar el foco</td>
+            <td>El marco no captura teclado</td>
+            <td><code>FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL</code></td>
+            <td>Flags equivalentes del plugin</td>
+          </tr>
+          <tr>
+            <td>Permanencia</td>
+            <td>Mientras viva la pestaña</td>
+            <td><code>Service</code> en primer plano + notificación obligatoria (API 26+)</td>
+            <td><code>@pragma("vm:entry-point")</code> sobre <code>overlayMain()</code></td>
+          </tr>
+          <tr>
+            <td>Descarte</td>
+            <td>Zona inferior al soltar</td>
+            <td><code>windowManager.removeView()</code> en <code>onDestroy()</code></td>
+            <td><code>SystemAlertWindow.closeSystemWindow()</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── Límites ───────────────────────────── -->
+  <section class="seccion">
+    <header>
+      <h2>Lo que el prototipo no puede prometer</h2>
+      <p>Cinco restricciones reales que conviene decidir antes de invertir en el desarrollo nativo.</p>
+    </header>
+    <div class="limites">
+      <div class="limite" data-sev="alto">
+        <span class="marca">Plataforma</span>
+        <h3>En iOS no existe</h3>
+        <p>Apple no expone ventanas de sistema a apps de terceros. El equivalente honesto es una
+           Live Activity o un widget, no un orbe flotante.</p>
+      </div>
+      <div class="limite" data-sev="alto">
+        <span class="marca">Tienda</span>
+        <h3>Permiso sensible en Play</h3>
+        <p><code>SYSTEM_ALERT_WINDOW</code> exige justificar el uso en la ficha. Una app de gobierno
+           debe declarar por qué necesita dibujarse encima de todo.</p>
+      </div>
+      <div class="limite" data-sev="medio">
+        <span class="marca">Android 12+</span>
+        <h3>Arranque en segundo plano</h3>
+        <p>Iniciar el servicio en primer plano desde el fondo lanza
+           <code>ForegroundServiceStartNotAllowedException</code>. El orbe se enciende con el usuario
+           dentro de la app.</p>
+      </div>
+      <div class="limite" data-sev="medio">
+        <span class="marca">Privacidad</span>
+        <h3>Pantallas protegidas</h3>
+        <p>Sobre ventanas con <code>FLAG_SECURE</code> —banca, contenido con DRM— el overlay se oculta.
+           No es un fallo: es la defensa del sistema contra el robo de toques.</p>
+      </div>
+      <div class="limite" data-sev="medio">
+        <span class="marca">Accesibilidad</span>
+        <h3>Tapa contenido ajeno</h3>
+        <p>El orbe se interpone entre el usuario y otra app. Necesita
+           <code>contentDescription</code>, respetar TalkBack y poder apagarse en un toque.</p>
+      </div>
+      <div class="limite" data-sev="alto">
+        <span class="marca">Alcance</span>
+        <h3>No autoriza trámites</h3>
+        <p>El runtime Context.OS responde siempre <code>executionMode: 'LAB_MOCK'</code> y el puente
+           está apagado (<code>VITE_CONTEXTOS_BRIDGE_ENABLED=false</code>). El orbe orienta; no
+           resuelve actos administrativos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Qué falta ─────────────────────────── -->
+  <section class="seccion">
+    <header>
+      <h2>Para que esto sea un APK</h2>
+      <p>El orden importa: cada paso desbloquea al siguiente.</p>
+    </header>
+    <ol class="pendientes">
+      <li><span><b>Declarar el permiso y el servicio</b><span><code>SYSTEM_ALERT_WINDOW</code> y <code>FOREGROUND_SERVICE_SPECIAL_USE</code> en el manifiesto, con el <code>foregroundServiceType</code> que exige API 34.</span></span></li>
+      <li><span><b>Compuerta de permiso antes de todo</b><span>Nada de <code>startService()</code> hasta que <code>canDrawOverlays()</code> sea verdadero; si no, pantalla explicando por qué se pide.</span></span></li>
+      <li><span><b>Canal de notificación</b><span>El servicio en primer plano necesita canal y notificación permanente. Es el interruptor de apagado que el usuario espera encontrar.</span></span></li>
+      <li><span><b>Umbral táctil real</b><span>Sustituir el umbral fijo por <code>scaledTouchSlop</code>: cambia con la densidad del dispositivo y evita que cada toque se lea como arrastre.</span></span></li>
+      <li><span><b>Persistir la posición</b><span>Guardar <code>params.x</code> y <code>params.y</code> en <code>DataStore</code> para que el orbe reaparezca donde el usuario lo dejó.</span></span></li>
+      <li><span><b>Conectar el panel a lo que existe</b><span>Solo Pulso Nayarit está desplegado y el Expediente Familiar en piloto. El resto se muestra en gris, sin destino: el orbe no debe prometer pantallas que aún no existen.</span></span></li>
+    </ol>
+  </section>
+
+  <footer class="pie">
+    <span>Fuente de los módulos: <code>docs/orbe/modulos.json</code></span>
+    <span>Estados del anillo: <code>src/components/orbe/OrbeCitizen.tsx</code></span>
+    <span>Simulación · sin datos personales · sin llaves de API</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ── Referencias ───────────────────────── */
+  var pantalla = document.getElementById('pantalla');
+  var orbe     = document.getElementById('orbe');
+  var globo    = document.getElementById('globo');
+  var zona     = document.getElementById('zonaCierre');
+  var panel    = document.getElementById('panel');
+  var scrim    = document.getElementById('scrim');
+  var aviso    = document.getElementById('aviso');
+  var bitacora = document.getElementById('bitacora');
+
+  var DP_BASE = 360;        // ancho lógico de la pantalla simulada
+  var MARGEN  = 8;          // margen al borde, en dp
+  var SLOP    = 12;         // umbral toque/arrastre, en px
+
+  var estado = {
+    permiso: true,
+    servicio: true,
+    voz: 'inerte',
+    tam: 72,
+    atenuar: true,
+    lado: 'end',
+    x: 0, y: 0,
+    arrastrando: false,
+    movido: false,
+    movimientos: 0,
+    panelAbierto: false
+  };
+  var temporizadorReposo = null;
+  var temporizadoresVoz  = [];
+
+  var MODULOS = [
+    { n:'Llave e Identidad',            e:'propuesta',       activo:false },
+    { n:'Expediente Digital Familiar',  e:'piloto',          activo:true  },
+    { n:'TEPICTU Salud',                e:'diseñado',        activo:false },
+    { n:'Tesorería Digital',            e:'diseñado',        activo:false },
+    { n:'Trazabilidad de Obras',        e:'diseñado',        activo:false },
+    { n:'Servicios Públicos',           e:'diseñado',        activo:false },
+    { n:'Bienestar Social',             e:'diseñado',        activo:false },
+    { n:'Pulso Nayarit',                e:'desplegado',      activo:true  },
+    { n:'Protección Digital',           e:'propuesta',       activo:false }
+  ];
+
+  /* ── Bitácora ──────────────────────────── */
+  function hora(){
+    var d = new Date();
+    return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');
+  }
+  function log(texto, clase){
+    var fila = document.createElement('div');
+    var t = document.createElement('span'); t.className='t'; t.textContent = hora();
+    var e = document.createElement('span'); e.className='ev'+(clase?' '+clase:''); e.textContent = texto;
+    fila.appendChild(t); fila.appendChild(e);
+    bitacora.appendChild(fila);
+    while(bitacora.children.length > 60) bitacora.removeChild(bitacora.firstChild);
+    bitacora.scrollTop = bitacora.scrollHeight;
+  }
+
+  /* ── Geometría ─────────────────────────── */
+  function factor(){ return DP_BASE / pantalla.getBoundingClientRect().width; }   // dp por px
+  function tamPx(){ return estado.tam / factor(); }
+
+  function limites(){
+    var r = pantalla.getBoundingClientRect();
+    var m = MARGEN / factor();
+    return { min:m, maxX:r.width - tamPx() - m, minY:34/factor(), maxY:r.height - tamPx() - m };
+  }
+
+  function pintar(){
+    var px = tamPx();
+    orbe.style.width  = px+'px';
+    orbe.style.height = px+'px';
+    orbe.style.left   = estado.x+'px';
+    orbe.style.top    = estado.y+'px';
+    colocarGlobo();
+    telemetria();
+  }
+
+  function telemetria(){
+    var f = factor();
+    document.getElementById('mx').innerHTML = Math.round(estado.x*f)+'<small> dp</small>';
+    document.getElementById('my').innerHTML = Math.round(estado.y*f)+'<small> dp</small>';
+    document.getElementById('mg').textContent = 'TOP|'+(estado.lado==='end'?'END':'START');
+    document.getElementById('me').textContent = estado.voz;
+  }
+
+  function colocarGlobo(){
+    var px = tamPx();
+    globo.style.top = (estado.y + px/2 - 14)+'px';
+    if(estado.lado === 'end'){
+      globo.style.right = (pantalla.getBoundingClientRect().width - estado.x + 8)+'px';
+      globo.style.left  = 'auto';
+    }else{
+      globo.style.left  = (estado.x + px + 8)+'px';
+      globo.style.right = 'auto';
+    }
+  }
+
+  function posicionInicial(){
+    var l = limites();
+    estado.x = l.maxX;
+    estado.y = pantalla.getBoundingClientRect().height * 0.52;
+    estado.lado = 'end';
+    pintar();
+  }
+
+  /* ── Reposo ────────────────────────────── */
+  function despertar(){
+    orbe.classList.remove('atenuado');
+    clearTimeout(temporizadorReposo);
+    if(estado.atenuar && estado.servicio){
+      temporizadorReposo = setTimeout(function(){
+        if(!estado.panelAbierto && estado.voz === 'inerte') orbe.classList.add('atenuado');
+      }, 4000);
+    }
+  }
+
+  /* ── Arrastre ──────────────────────────── */
+  var inicio = {px:0, py:0, ox:0, oy:0};
+
+  orbe.addEventListener('pointerdown', function(ev){
+    if(!estado.servicio || estado.panelAbierto) return;
+    ev.preventDefault();
+    orbe.setPointerCapture(ev.pointerId);
+    orbe.classList.remove('transitando');
+    estado.arrastrando = true;
+    estado.movido = false;
+    estado.movimientos = 0;
+    inicio = { px:ev.clientX, py:ev.clientY, ox:estado.x, oy:estado.y };
+    despertar();
+    log('ACTION_DOWN  x='+Math.round(estado.x*factor())+'dp y='+Math.round(estado.y*factor())+'dp');
+  });
+
+  orbe.addEventListener('pointermove', function(ev){
+    if(!estado.arrastrando) return;
+    var dx = ev.clientX - inicio.px, dy = ev.clientY - inicio.py;
+    if(!estado.movido && Math.hypot(dx,dy) < SLOP) return;
+    if(!estado.movido){
+      estado.movido = true;
+      zona.classList.add('visible');
+      ocultarGlobo();
+    }
+    estado.movimientos++;
+    var l = limites();
+    estado.x = Math.min(Math.max(inicio.ox + dx, l.min), l.maxX);
+    estado.y = Math.min(Math.max(inicio.oy + dy, l.minY), l.maxY);
+    pintar();
+    orbe.classList.toggle('por-cerrar', sobreZona());
+    zona.classList.toggle('activa', sobreZona());
+  });
+
+  function sobreZona(){
+    var r = pantalla.getBoundingClientRect();
+    var px = tamPx();
+    var cx = estado.x + px/2, cy = estado.y + px/2;
+    var zx = r.width/2, zy = r.height - 26/factor() - 31/factor();
+    return Math.hypot(cx-zx, cy-zy) < 76/factor();
+  }
+
+  orbe.addEventListener('pointerup', function(ev){
+    if(!estado.arrastrando) return;
+    estado.arrastrando = false;
+    try{ orbe.releasePointerCapture(ev.pointerId); }catch(e){}
+
+    if(!estado.movido){
+      log('ACTION_UP → TAP', 'n');
+      abrirPanel();
+      return;
+    }
+
+    log('ACTION_MOVE ×'+estado.movimientos);
+    zona.classList.remove('visible','activa');
+    orbe.classList.remove('por-cerrar');
+
+    if(sobreZona()){
+      log('ACTION_UP → descarte', 'x');
+      detenerServicio(true);
+      return;
+    }
+
+    var l = limites();
+    var r = pantalla.getBoundingClientRect();
+    var centro = estado.x + tamPx()/2;
+    estado.lado = centro < r.width/2 ? 'start' : 'end';
+    estado.x = estado.lado === 'start' ? l.min : l.maxX;
+    orbe.classList.add('transitando');
+    pintar();
+    log('ACTION_UP → imán al borde '+(estado.lado==='end'?'END':'START'), 'k');
+    despertar();
+  });
+
+  orbe.addEventListener('pointercancel', function(){
+    estado.arrastrando = false;
+    zona.classList.remove('visible','activa');
+    orbe.classList.remove('por-cerrar');
+  });
+
+  /* Teclado: el overlay también se maneja sin dedos */
+  orbe.addEventListener('keydown', function(ev){
+    var paso = 8/factor(), l = limites(), usado = true;
+    if(ev.key === 'ArrowUp')         estado.y = Math.max(estado.y-paso, l.minY);
+    else if(ev.key === 'ArrowDown')  estado.y = Math.min(estado.y+paso, l.maxY);
+    else if(ev.key === 'ArrowLeft')  estado.x = Math.max(estado.x-paso, l.min);
+    else if(ev.key === 'ArrowRight') estado.x = Math.min(estado.x+paso, l.maxX);
+    else usado = false;
+    if(usado){ ev.preventDefault(); orbe.classList.remove('transitando'); pintar(); despertar(); }
+  });
+
+  orbe.addEventListener('click', function(ev){
+    // El clic de teclado (sin puntero) también abre el panel.
+    if(ev.detail === 0 && estado.servicio) abrirPanel();
+  });
+
+  /* ── Panel ─────────────────────────────── */
+  function abrirPanel(){
+    if(!estado.servicio) return;
+    estado.panelAbierto = true;
+    panel.classList.add('abierto');
+    panel.setAttribute('aria-hidden','false');
+    scrim.classList.add('visible');
+    orbe.classList.add('oculto');
+    ocultarGlobo();
+    clearTimeout(temporizadorReposo);
+    log('TAP → panel desplegado', 'n');
+  }
+  function cerrarPanel(){
+    estado.panelAbierto = false;
+    panel.classList.remove('abierto');
+    panel.setAttribute('aria-hidden','true');
+    scrim.classList.remove('visible');
+    orbe.classList.remove('oculto');
+    despertar();
+  }
+  scrim.addEventListener('click', cerrarPanel);
+  document.getElementById('cerrarPanel').addEventListener('click', cerrarPanel);
+
+  /* ── Estados de voz ────────────────────── */
+  function ocultarGlobo(){ globo.classList.remove('visible'); }
+  function mostrarGlobo(texto){
+    globo.textContent = texto;
+    globo.classList.add('visible');
+    colocarGlobo();
+  }
+  var ETIQUETAS = {
+    inerte:'',
+    escuchando:'Te escucho…',
+    pensando:'Un momento…',
+    respondiendo:'El reporte quedó con folio TEP-0142'
+  };
+  function setVoz(v){
+    estado.voz = v;
+    orbe.setAttribute('data-estado', v);
+    if(v === 'inerte'){ ocultarGlobo(); despertar(); }
+    else { orbe.classList.remove('atenuado'); clearTimeout(temporizadorReposo); mostrarGlobo(ETIQUETAS[v]); }
+    telemetria();
+  }
+  function limpiarVoz(){ temporizadoresVoz.forEach(clearTimeout); temporizadoresVoz = []; }
+
+  document.querySelectorAll('button.accion[data-estado]').forEach(function(b){
+    b.addEventListener('click', function(){
+      if(!estado.servicio) return;
+      limpiarVoz();
+      setVoz(b.getAttribute('data-estado'));
+      log('estado → '+b.getAttribute('data-estado'));
+    });
+  });
+
+  function ciclo(){
+    if(!estado.servicio) return;
+    limpiarVoz();
+    setVoz('escuchando');
+    log('ciclo de voz iniciado', 'n');
+    temporizadoresVoz.push(setTimeout(function(){ setVoz('pensando'); }, 1600));
+    temporizadoresVoz.push(setTimeout(function(){ setVoz('respondiendo'); }, 2900));
+    temporizadoresVoz.push(setTimeout(function(){ setVoz('inerte'); log('ciclo completo', 'k'); }, 5600));
+  }
+  document.getElementById('btnCiclo').addEventListener('click', ciclo);
+  document.getElementById('hablar').addEventListener('click', function(){ cerrarPanel(); ciclo(); });
+
+  /* ── Servicio y permiso ────────────────── */
+  var btnServicio = document.getElementById('btnServicio');
+  var btnRevocar  = document.getElementById('btnRevocar');
+
+  function pintarSemaforo(){
+    var lp = document.getElementById('lineaPermiso'), ls = document.getElementById('lineaServicio');
+    lp.setAttribute('data-on', estado.permiso ? 'si':'no');
+    ls.setAttribute('data-on', estado.servicio ? 'si':'no');
+    document.getElementById('valorPermiso').textContent  = estado.permiso ? 'Concedido' : 'Denegado';
+    document.getElementById('valorServicio').textContent = estado.servicio ? 'Activo' : 'Detenido';
+    btnServicio.textContent = estado.servicio ? 'Detener servicio' : 'Iniciar servicio';
+    btnServicio.classList.toggle('primaria', !estado.servicio);
+    btnServicio.disabled = !estado.permiso;
+    btnRevocar.textContent = estado.permiso ? 'Revocar permiso' : 'Conceder permiso';
+  }
+
+  function detenerServicio(porDescarte){
+    estado.servicio = false;
+    limpiarVoz(); setVoz('inerte');
+    orbe.classList.add('oculto');
+    aviso.classList.remove('visible');
+    if(estado.panelAbierto) cerrarPanel();
+    clearTimeout(temporizadorReposo);
+    log(porDescarte ? 'removeView() · servicio detenido' : 'stopService()', 'x');
+    pintarSemaforo();
+  }
+  function iniciarServicio(){
+    if(!estado.permiso) return;
+    estado.servicio = true;
+    orbe.classList.remove('oculto','transitando');
+    posicionInicial();
+    aviso.classList.add('visible');
+    log('startForegroundService() · addView()', 'k');
+    pintarSemaforo();
+    despertar();
+  }
+  btnServicio.addEventListener('click', function(){
+    if(estado.servicio) detenerServicio(false); else iniciarServicio();
+  });
+
+  /* Diálogo de permiso dentro del teléfono */
+  function dialogoPermiso(){
+    var capa = document.createElement('div');
+    capa.style.cssText = 'position:absolute;inset:0;z-index:40;background:var(--scrim);display:flex;align-items:center;justify-content:center;padding:20px';
+    var caja = document.createElement('div');
+    caja.style.cssText = 'background:var(--surface);border-radius:16px;padding:18px;width:100%;box-shadow:var(--shadow)';
+    caja.innerHTML =
+      '<div style="font-family:Archivo,sans-serif;font-weight:600;font-size:.92rem;margin-bottom:8px">'+
+        'Mostrar sobre otras apps</div>'+
+      '<p style="font-size:.76rem;color:var(--text-2);line-height:1.4;margin:0 0 14px">'+
+        'Permitir que <b>Nayarit Digital</b> se muestre encima de otras aplicaciones. '+
+        'Podrá aparecer sobre lo que estés usando.</p>'+
+      '<div style="display:flex;gap:8px;justify-content:flex-end">'+
+        '<button type="button" data-r="no" style="font-family:Archivo,sans-serif;font-size:.78rem;padding:6px 12px;border:1px solid var(--line);background:none;color:var(--text-2);border-radius:8px;cursor:pointer">No permitir</button>'+
+        '<button type="button" data-r="si" style="font-family:Archivo,sans-serif;font-size:.78rem;padding:6px 14px;border:none;background:var(--accent);color:var(--on-accent);border-radius:8px;cursor:pointer">Permitir</button>'+
+      '</div>';
+    capa.appendChild(caja);
+    pantalla.appendChild(capa);
+    capa.addEventListener('click', function(ev){
+      var r = ev.target.getAttribute && ev.target.getAttribute('data-r');
+      if(!r) return;
+      pantalla.removeChild(capa);
+      if(r === 'si'){
+        estado.permiso = true;
+        log('canDrawOverlays() = true', 'k');
+        pintarSemaforo();
+        iniciarServicio();
+      }else{
+        log('permiso denegado por el usuario', 'x');
+      }
+    });
+    caja.querySelector('[data-r="si"]').focus();
+  }
+
+  btnRevocar.addEventListener('click', function(){
+    if(estado.permiso){
+      estado.permiso = false;
+      log('canDrawOverlays() = false', 'x');
+      if(estado.servicio) detenerServicio(false);
+      pintarSemaforo();
+    }else{
+      log('ACTION_MANAGE_OVERLAY_PERMISSION');
+      dialogoPermiso();
+    }
+  });
+
+  aviso.addEventListener('click', function(){ if(estado.servicio) detenerServicio(false); });
+
+  /* ── Ajustes ───────────────────────────── */
+  document.getElementById('tam').addEventListener('input', function(){
+    estado.tam = parseInt(this.value,10);
+    document.getElementById('valorTam').textContent = estado.tam+' dp';
+    var l = limites();
+    if(estado.lado === 'end') estado.x = l.maxX;
+    estado.y = Math.min(estado.y, l.maxY);
+    pintar();
+  });
+  document.getElementById('atenuar').addEventListener('change', function(){
+    estado.atenuar = this.checked;
+    if(!this.checked){ clearTimeout(temporizadorReposo); orbe.classList.remove('atenuado'); }
+    else despertar();
+  });
+
+  /* Fondo: la app que corre debajo */
+  document.querySelectorAll('[data-fondo-btn]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var id = b.getAttribute('data-fondo-btn');
+      document.querySelectorAll('[data-fondo-btn]').forEach(function(o){
+        o.setAttribute('aria-pressed', o === b ? 'true':'false');
+      });
+      document.querySelectorAll('.fondo').forEach(function(f){
+        f.classList.toggle('activo', f.getAttribute('data-fondo') === id);
+      });
+      log('app de fondo → '+id);
+    });
+  });
+
+  /* ── Lista de módulos ──────────────────── */
+  (function pintarModulos(){
+    var cont = document.getElementById('listaModulos');
+    MODULOS.forEach(function(m){
+      var fila = document.createElement(m.activo ? 'button' : 'div');
+      if(m.activo) fila.type = 'button';
+      fila.className = 'modulo '+(m.activo ? 'activo':'inerte');
+      fila.innerHTML = '<span class="punto-modulo"></span><span>'+m.n+'</span>'+
+                       '<span class="estado-modulo">'+m.e+'</span>';
+      if(m.activo){
+        fila.addEventListener('click', function(){
+          cerrarPanel();
+          log('abrir módulo → '+m.n, 'n');
+          setTimeout(function(){ if(estado.servicio){ setVoz('respondiendo'); mostrarGlobo('Abriendo '+m.n); } }, 340);
+          setTimeout(function(){ if(estado.servicio) setVoz('inerte'); }, 3200);
+        });
+      }else{
+        fila.setAttribute('aria-disabled','true');
+        fila.title = 'Sin pantalla real todavía: el orbe no ofrece destino.';
+      }
+      cont.appendChild(fila);
+    });
+  })();
+
+  /* ── Arranque ──────────────────────────── */
+  window.addEventListener('resize', function(){
+    var l = limites();
+    estado.x = estado.lado === 'start' ? l.min : l.maxX;
+    estado.y = Math.min(Math.max(estado.y, l.minY), l.maxY);
+    pintar();
+  });
+
+  posicionInicial();
+  pintarSemaforo();
+  log('canDrawOverlays() = true', 'k');
+  log('startForegroundService() · addView()', 'k');
+  despertar();
+})();
+</script>
+</body>
+</html>
