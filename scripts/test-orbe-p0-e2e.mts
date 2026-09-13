@@ -8,6 +8,11 @@ import { buildPublicWorksIntentEnvelope, interpretCitizenUtterance } from '../sr
 import type { RuntimeRequest, RuntimeResponse } from '../contextos/contracts';
 
 const AUDITED_HEAD = 'afb75910bc631d9714fd797cc950550f45f8c7b9';
+/** Semilla fija: el reporte debe salir idéntico en cada corrida. */
+const LAB_SEED = 'orbe-p0-e2e';
+/** Marca fija del reporte, por la misma razón: la fecha real de corrida haría
+ *  que dos ejecuciones del mismo código produjeran archivos distintos. */
+const REPORT_TIMESTAMP = '2026-01-01T00:00:00.000Z';
 const port = 31_000 + (process.pid % 20_000);
 const baseUrl = `http://127.0.0.1:${port}`;
 const reportPath = path.join(process.cwd(), 'artifacts', 'orbe-p0-e2e-report.md');
@@ -27,55 +32,99 @@ function record(id: number, name: string, expected: string, passed: boolean, det
   results.push({ id, name, expected, passed, detail });
 }
 
+/** Una petición de salud, con corte propio. Sin este timeout, un `fetch` que se
+ *  cuelga deja el bucle de espera atascado y el plazo nunca se vuelve a mirar. */
+async function probeHealth(): Promise<boolean> {
+  try {
+    const response = await fetch(`${baseUrl}/api/contextos/v0.1/health`, {
+      signal: AbortSignal.timeout(1_000),
+    });
+    if (!response.ok) return false;
+    const body = await response.json() as any;
+    assert.equal(body.executionMode, 'LAB_MOCK');
+    assert.equal(body.authority, 'NONE');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function waitForHealth(timeoutMs = 15_000) {
   const deadline = Date.now() + timeoutMs;
-  let lastError: unknown;
   while (Date.now() < deadline) {
-    try {
-      const response = await fetch(`${baseUrl}/api/contextos/v0.1/health`);
-      if (response.ok) {
-        const body = await response.json() as any;
-        assert.equal(body.executionMode, 'LAB_MOCK');
-        assert.equal(body.authority, 'NONE');
-        return;
-      }
-    } catch (error) {
-      lastError = error;
-    }
+    if (await probeHealth()) return;
     await new Promise((resolve) => setTimeout(resolve, 200));
   }
-  throw new Error(`LAB server did not become healthy: ${String(lastError ?? 'timeout')}`);
+  throw new Error('LAB server did not become healthy dentro del plazo');
+}
+
+/** El caso 8 sólo prueba algo si el runtime está realmente apagado. */
+async function waitForRuntimeDown(timeoutMs = 10_000) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (!(await probeHealth())) return;
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  throw new Error('El runtime sigue respondiendo: el caso de degradación no probaría nada');
 }
 
 function startLabServer() {
-  server = spawn(process.platform === 'win32' ? 'npx.cmd' : 'npx', ['tsx', 'contextos/labServer.ts'], {
+  // Binario local en vez de `npx`: `npx` es un envoltorio, así que el servidor
+  // real queda como proceso nieto y sobrevive a la señal que se manda al hijo.
+  // Además `npx` puede consultar el registro, y el gate debe correr sin red.
+  const tsxBin = path.join(
+    process.cwd(),
+    'node_modules',
+    '.bin',
+    process.platform === 'win32' ? 'tsx.cmd' : 'tsx',
+  );
+  server = spawn(tsxBin, ['contextos/labServer.ts'], {
     cwd: process.cwd(),
     env: {
       ...process.env,
       CONTEXTOS_HOST: '127.0.0.1',
       CONTEXTOS_PORT: String(port),
       CONTEXTOS_ALLOWED_ORIGINS: 'http://localhost:3000',
+      CONTEXTOS_LAB_SEED: LAB_SEED,
     },
     stdio: ['ignore', 'pipe', 'pipe'],
+    // Grupo de procesos propio, para poder apagar el árbol completo.
+    detached: process.platform !== 'win32',
   });
   server.stdout?.on('data', (chunk) => process.stdout.write(`[LAB] ${chunk}`));
   server.stderr?.on('data', (chunk) => process.stderr.write(`[LAB] ${chunk}`));
 }
 
+function signalTree(child: ChildProcess, signal: NodeJS.Signals) {
+  try {
+    if (process.platform !== 'win32' && typeof child.pid === 'number') {
+      process.kill(-child.pid, signal); // negativo = grupo entero
+      return;
+    }
+  } catch {
+    // El grupo ya no existe; se intenta con el hijo directo.
+  }
+  try {
+    child.kill(signal);
+  } catch {
+    // Ya terminó.
+  }
+}
+
 async function stopLabServer() {
   const child = server;
   server = null;
-  if (!child || child.killed || child.exitCode !== null) return;
+  if (!child || child.exitCode !== null) return;
   await new Promise<void>((resolve) => {
     const timer = setTimeout(() => {
-      child.kill('SIGKILL');
+      signalTree(child, 'SIGKILL');
       resolve();
     }, 3_000);
     child.once('exit', () => {
       clearTimeout(timer);
       resolve();
     });
-    child.kill('SIGTERM');
+    signalTree(child, 'SIGTERM');
   });
 }
 
@@ -112,7 +161,7 @@ async function writeReport() {
   const lines = [
     '# ORBE P0 E2E — reporte de corrida',
     '',
-    `- Fecha: ${new Date().toISOString()}`,
+    `- Marca de corrida (fija, semilla \`${LAB_SEED}\`): ${REPORT_TIMESTAMP}`,
     `- Base auditada: \`${AUDITED_HEAD}\``,
     '- Runtime: `contextos/labServer.ts` por HTTP real',
     '- Execution mode exigido: `LAB_MOCK`',
@@ -205,7 +254,9 @@ async function main() {
       );
       assert.equal(second.runtimeResponse?.status, 'EXECUTED');
       assert.equal(second.runtimeResponse?.correlationId, requestId);
-      return `correlationId preservado=${requestId}`;
+      // El requestId lo genera ORBE por turno y cambia en cada corrida; lo que
+      // el caso prueba es que se conserva entre turnos, no su valor literal.
+      return 'correlationId conservado entre los dos turnos';
     });
 
     await runCase(5, 'Expresión ambigua', 'ASK_INTENT; cero ejecución', async () => {
@@ -258,6 +309,7 @@ async function main() {
     });
 
     await stopLabServer();
+    await waitForRuntimeDown();
 
     await runCase(8, 'Runtime caído', 'ORBE no afirma ejecución; degradación segura', async () => {
       const result = await processCitizenUtterance(
@@ -278,10 +330,17 @@ async function main() {
   const failed = results.filter((result) => !result.passed);
   if (failed.length > 0) {
     console.error(`\n${failed.length} caso(s) fallaron.`);
-    process.exitCode = 1;
   } else {
     console.log('\n8/8 casos ORBE P0 E2E pasan.');
   }
+  // Salida explícita: el gate es la puerta de un build (`netlify.toml`) y de un
+  // job de CI. Dejar el veredicto en `process.exitCode` y confiar en que el
+  // bucle de eventos se vacíe deja el proceso colgado si algo sigue vivo.
+  process.exit(failed.length > 0 ? 1 : 0);
 }
 
-void main();
+void main().catch(async (error) => {
+  console.error('\nEl gate no pudo completarse:', error);
+  await stopLabServer();
+  process.exit(1);
+});
