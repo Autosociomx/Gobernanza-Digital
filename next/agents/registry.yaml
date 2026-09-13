@@ -1,0 +1,84 @@
+version: 0.1.0
+platform: nayarit-digital-next
+default_execution_mode: LAB_MOCK
+
+shared_requirements:
+  policy_gate: context-policy-agent
+  evidence_sink: evidence-agent
+  default_fail_mode: closed
+  human_override: true
+  provider_portable: true
+
+agents:
+  - id: orbe-agent
+    module: ORBE
+    maturity: EXPERIMENTAL
+    risk: MEDIUM
+    mission: Convertir lenguaje natural, voz y accesibilidad en una intención estructurada.
+    triggers: [conversation.received, voice.transcribed]
+    allowed_capabilities: [intent.parse, accessibility.adapt, response.render]
+    forbidden_capabilities: [institutional.write, clinical.diagnose, legal.decide]
+
+  - id: context-policy-agent
+    module: Context.OS
+    maturity: EXPERIMENTAL
+    risk: HIGH
+    mission: Evaluar políticas, consentimiento, propósito, permisos y modo de ejecución.
+    triggers: [capability.requested]
+    allowed_capabilities: [policy.evaluate, consent.require, capability.allow, capability.deny, capability.escalate]
+    forbidden_capabilities: [domain.execute]
+
+  - id: evidence-agent
+    module: Evidence.OS
+    maturity: EXPERIMENTAL
+    risk: HIGH
+    mission: Registrar procedencia, versión, hashes, fuentes y decisiones reproducibles.
+    triggers: [evidence.capture.requested, agent.completed, agent.failed]
+    allowed_capabilities: [evidence.append, evidence.hash, evidence.verify, evidence.index]
+    forbidden_capabilities: [evidence.rewrite_history]
+
+  - id: soatm-routing-agent
+    module: SOATM
+    maturity: EXPERIMENTAL
+    risk: MEDIUM
+    mission: Resolver dependencia, servicio, trámite y ruta institucional.
+    triggers: [route.requested]
+    allowed_capabilities: [service.lookup, institution.route, requirement.list]
+    forbidden_capabilities: [institutional.write, payment.execute]
+
+  - id: citizen-record-agent
+    module: Expediente Digital Ciudadano
+    maturity: PROPOSED
+    risk: HIGH
+    mission: Mantener referencias documentales y contexto ciudadano con propósito y consentimiento explícitos.
+    triggers: [record.lookup.requested, record.reference.requested]
+    allowed_capabilities: [record.lookup, record.reference, record.minimize]
+    forbidden_capabilities: [record.bulk_export, record.unconsented_access]
+
+  - id: health-triage-agent
+    module: Salud / Triage
+    maturity: PROPOSED
+    risk: CRITICAL
+    mission: Priorizar atención y escalar a profesionales sin diagnosticar ni prescribir.
+    triggers: [health.triage.requested]
+    allowed_capabilities: [triage.prioritize, manchester.apply, icd.classify_assist, care.route, emergency.escalate]
+    forbidden_capabilities: [clinical.diagnose, clinical.prescribe, clinical.discharge, autonomous.emergency_decision]
+    human_required: true
+
+  - id: c5-governance-agent
+    module: C5 / Governance Hub
+    maturity: PROPOSED
+    risk: HIGH
+    mission: Consolidar estado, capacidades, dependencias, bloqueos y semáforos del Institutional Graph.
+    triggers: [institution.status.changed, capability.status.changed, audit.status.changed]
+    allowed_capabilities: [graph.read, graph.status, dependency.detect, readiness.score]
+    forbidden_capabilities: [institutional.command, surveillance.identify_person]
+
+  - id: award-pack-agent
+    module: Premio Innovación Mexicana 2026
+    maturity: EXPERIMENTAL
+    risk: LOW
+    mission: Mantener la candidatura alineada a requisitos, pruebas y criterios verificables.
+    triggers: [evidence.appended, build.completed, demo.completed, award.review.requested]
+    allowed_capabilities: [award.score, evidence.map, gap.detect, claim.verify, dossier.compose]
+    forbidden_capabilities: [claim.fabricate, evidence.invent]
