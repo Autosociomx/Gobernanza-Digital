@@ -109,6 +109,9 @@
 - [ ] Presupuesto de Egresos de Tepic 2026
 - [ ] Plan Nacional de Desarrollo 2025–2030
 - [ ] Legislación de armonización de Nayarit con la LNETB
+- [ ] Régimen de datos personales en posesión de **sujetos obligados** (LGPDPPSO):
+      hoy referido en `MARCO_CUMPLIMIENTO_LNETB.md` §3 y en
+      `TRANSFORMACION_VS_CONSTRUCCION.md` (H1) sin ficha propia con estatus
 
 ---
 
