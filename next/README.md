@@ -79,3 +79,13 @@ next/
 5. Conectar Evidence.OS como requisito transversal.
 6. Construir tres demos reproducibles: trámite simple, expediente/autorización y salud/triage.
 7. Desplegar workers 24/7 únicamente después de observabilidad, seguridad y límites de autoridad.
+
+## Demo reproducible LAB_MOCK
+
+La demo mínima conecta una solicitud pública de bache con ORBE, el `ContextPolicyAgent`, el routing SOATM y `InMemoryEvidenceAgent`:
+
+```bash
+npm run demo:lab-mock
+```
+
+La salida JSON muestra la decisión de cada worker, sus `evidenceRefs` y los registros con SHA-256. El flujo siempre usa `executionMode: LAB_MOCK`, no escribe en sistemas institucionales y no convierte al agente en autoridad administrativa, jurídica o clínica.
