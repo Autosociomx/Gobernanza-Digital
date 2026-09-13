@@ -40,6 +40,17 @@ jobs:
       - name: Verificar regresiones (config y archivos)
         run: node scripts/verificar-regresiones.mjs
 
+      - name: Verificar el estado canónico
+        run: node scripts/verificar-estado.mjs
+
+      # firebase-applet-config.json está gitignoreado (contiene la apiKey real,
+      # hallazgo E3 del Acta 006) y src/firebase.ts lo importa. Sin este paso,
+      # `npm run lint` y `vite build` fallan siempre en un checkout limpio y la
+      # Guardia no puede terminar en verde. Ver CI-01 en docs/marco/ESTADO.md.
+      # Los valores del ejemplo son marcadores: no viaja ninguna credencial.
+      - name: Preparar configuración de Firebase (valores de ejemplo)
+        run: node scripts/preparar-config-firebase.mjs --placeholder
+
       - name: Verificar tipos
         run: npm run lint
 
