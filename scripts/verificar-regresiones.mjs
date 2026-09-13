@@ -9,6 +9,9 @@
  *
  * Uso:  node scripts/verificar-regresiones.mjs [--con-bundle]
  *   --con-bundle  además compila y verifica que la llave no esté en dist/
+ *
+ * R9 delega en scripts/verificar-canon.mjs: la fuente canónica de trámites
+ * (data/canon/) debe seguir siendo coherente con el código y con la ley citada.
  */
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { execSync } from 'node:child_process';
@@ -78,6 +81,19 @@ try {
     }
   }
 } catch { /* sin carpeta public */ }
+
+// R9 · El canon del ORBE es la fuente canónica y debe seguir siéndolo
+// (data/municipality/tepic/services.json vivió meses sin que nadie lo leyera;
+//  un catálogo que nadie verifica deja de ser fuente de verdad en silencio)
+try {
+  execSync('node scripts/verificar-canon.mjs', { stdio: 'pipe' });
+} catch (e) {
+  const salida = [e.stdout, e.stderr].map((b) => (b ? b.toString() : '')).join('').trim();
+  errores.push(
+    'El canon del ORBE (data/canon/) no pasa su verificación:\n' +
+    salida.split('\n').map((l) => '     ' + l).join('\n')
+  );
+}
 
 // R7 (opcional) · La llave no aparece en el bundle compilado
 if (process.argv.includes('--con-bundle')) {

@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tepic.netlify.app/schema/orbe-canon/v0.1",
+  "title": "ORBE · Canon de trámites y servicios",
+  "description": "Contrato publicado del canon del ORBE. Es un artefacto de estándar abierto (docs/marco/ESTRATEGIA_ESTANDAR_ABIERTO.md): cualquier municipio, estado o proveedor puede publicar su catálogo con esta forma y el ORBE lo entiende sin código nuevo. La aplicación de estas reglas la hace scripts/verificar-canon.mjs, que además exige integridad referencial contra el código.",
+  "definitions": {
+    "Nivel": { "enum": ["federal", "estatal", "municipal"] },
+    "EstatusDato": { "enum": ["propuesto", "demo", "por_verificar", "verificado"] },
+    "EstatusFuente": { "enum": ["vigente", "por_verificar", "historico"] },
+    "EfectoJuridico": { "enum": ["ninguno_en_demo", "revision_humana_obligatoria"] },
+    "Dato": {
+      "type": "object",
+      "description": "Un dato operativo con su propio semáforo. El estatus del trámite nunca puede ser más fuerte que el más débil de sus datos.",
+      "properties": {
+        "valor": { "type": ["string", "null"] },
+        "estatus": { "$ref": "#/definitions/EstatusDato" }
+      },
+      "required": ["valor", "estatus"],
+      "additionalProperties": false
+    },
+    "Jurisdiccion": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(\\.[a-z0-9-]+)*$" },
+        "nivel": { "$ref": "#/definitions/Nivel" },
+        "nombre": { "type": "string", "minLength": 1 },
+        "padre": { "type": ["string", "null"] },
+        "codigo_contextos": { "type": "string", "pattern": "^[A-Z0-9]+(-[A-Z0-9]+)*$" },
+        "autoridad_general": { "type": "string", "minLength": 1 }
+      },
+      "required": ["id", "nivel", "nombre", "padre", "codigo_contextos", "autoridad_general"],
+      "additionalProperties": false
+    },
+    "Fuente": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "autoridad": { "type": "string", "minLength": 1 },
+        "nivel": { "$ref": "#/definitions/Nivel" },
+        "tipo": { "type": "string", "minLength": 1 },
+        "referencia": { "type": "string", "minLength": 1 },
+        "alcance": { "type": "string", "minLength": 1 },
+        "fecha_consulta": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "estatus": { "$ref": "#/definitions/EstatusFuente" },
+        "espejo_biblioteca_legal": { "type": "string" },
+        "nota_conflicto": { "type": "string", "minLength": 1 }
+      },
+      "required": ["id", "autoridad", "nivel", "tipo", "referencia", "alcance", "fecha_consulta", "estatus"],
+      "additionalProperties": false
+    },
+    "Fundamento": {
+      "type": "object",
+      "properties": {
+        "fuente": { "type": "string", "minLength": 1 },
+        "articulos": { "type": "string", "minLength": 1 }
+      },
+      "required": ["fuente", "articulos"],
+      "additionalProperties": false
+    },
+    "Tramite": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(\\.[a-z0-9-]+)*$" },
+        "nombre": { "type": "string", "minLength": 1 },
+        "jurisdiccion": { "type": "string", "minLength": 1 },
+        "autoridad": { "type": "string", "minLength": 1 },
+        "familia": { "type": "string", "minLength": 1 },
+        "descripcion_ciudadana": { "type": "string", "minLength": 1 },
+        "expresiones_ciudadanas": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "fundamento": { "type": "array", "items": { "$ref": "#/definitions/Fundamento" } },
+        "dependencia": { "$ref": "#/definitions/Dato" },
+        "costo": { "$ref": "#/definitions/Dato" },
+        "plazo": { "$ref": "#/definitions/Dato" },
+        "canal_oficial": { "$ref": "#/definitions/Dato" },
+        "estatus": { "$ref": "#/definitions/EstatusDato" },
+        "efecto_juridico": { "$ref": "#/definitions/EfectoJuridico" },
+        "orbe": {
+          "type": "object",
+          "properties": {
+            "acciones_permitidas": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+            "acciones_restringidas": { "type": "array", "items": { "type": "string" } },
+            "superficie": {
+              "type": ["string", "null"],
+              "description": "Enlace profundo a una pantalla real de la aplicación. Null cuando no existe pantalla: nunca se inventa un destino."
+            },
+            "contrato_semantico": { "type": ["string", "null"] },
+            "servicio_contextos": { "type": ["string", "null"] }
+          },
+          "required": ["acciones_permitidas", "acciones_restringidas", "superficie", "contrato_semantico", "servicio_contextos"],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id", "nombre", "jurisdiccion", "autoridad", "familia", "descripcion_ciudadana",
+        "expresiones_ciudadanas", "fundamento", "dependencia", "costo", "plazo",
+        "canal_oficial", "estatus", "efecto_juridico", "orbe"
+      ],
+      "additionalProperties": false
+    },
+    "RegistroJurisdicciones": {
+      "type": "object",
+      "properties": {
+        "$schema": { "type": "string" },
+        "registro": { "const": "orbe.canon.jurisdicciones" },
+        "version": { "type": "string" },
+        "nota": { "type": "string" },
+        "niveles_validos": { "type": "array", "items": { "$ref": "#/definitions/Nivel" } },
+        "jurisdicciones": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/Jurisdiccion" } }
+      },
+      "required": ["registro", "version", "niveles_validos", "jurisdicciones"],
+      "additionalProperties": false
+    },
+    "RegistroFuentes": {
+      "type": "object",
+      "properties": {
+        "$schema": { "type": "string" },
+        "registro": { "const": "orbe.canon.fuentes" },
+        "version": { "type": "string" },
+        "nota": { "type": "string" },
+        "estatus_validos": { "type": "array", "items": { "$ref": "#/definitions/EstatusFuente" } },
+        "fuentes": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/Fuente" } }
+      },
+      "required": ["registro", "version", "estatus_validos", "fuentes"],
+      "additionalProperties": false
+    },
+    "RegistroTramites": {
+      "type": "object",
+      "properties": {
+        "$schema": { "type": "string" },
+        "registro": { "const": "orbe.canon.tramites" },
+        "version": { "type": "string" },
+        "nota": { "type": "string" },
+        "estatus_validos": { "type": "array", "items": { "$ref": "#/definitions/EstatusDato" } },
+        "acciones_permitidas_validas": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "tramites": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/Tramite" } }
+      },
+      "required": ["registro", "version", "estatus_validos", "acciones_permitidas_validas", "tramites"],
+      "additionalProperties": false
+    }
+  }
+}

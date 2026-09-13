@@ -1,37 +1,36 @@
-# Catálogo municipal para el ORBE — Tepic
+# Catálogo municipal de Tepic — **retirado**
 
-Este directorio es la primera base de conocimiento estructurada del ORBE ciudadano.
+> **Este directorio ya no es fuente de verdad.**
+> La fuente canónica de trámites y servicios vive ahora en
+> [`data/canon/`](../../canon/README.md).
 
-## Regla de verdad
+## Qué pasó
 
-El ORBE no debe inventar requisitos, costos, plazos, dependencias, autoridades, efectos jurídicos ni integraciones. Cuando exista una fuente oficial vigente, prevalece sobre documentación interna o conocimiento general del modelo.
+`services.json` e `intents.json` vivieron aquí como «la primera base de
+conocimiento estructurada del ORBE» y **ninguna línea de código los leyó
+jamás**. Su propio README dejaba pendiente, como paso 4, «conectar el catálogo
+al resolvedor de intención del ORBE»; nunca ocurrió. Mientras tanto el runtime
+resolvía servicios desde `contextos/serviceCatalog.ts`, con otro vocabulario y
+otros ids. Dos catálogos, ninguna autoridad.
 
-Estados usados:
+Además el catálogo asumía municipio por omisión: el acta de nacimiento estaba
+registrada como `tepic.registro_civil_acta_nacimiento` cuando la competencia es
+**estatal**, con la propia ficha admitiendo «autoridad competente por validar».
 
-- `verificado`: respaldado por fuente oficial vigente identificada.
-- `por_verificar`: dato plausible o existente en materiales previos, pero sin cierre de fuente vigente.
-- `demo`: funcionalidad demostrativa sin efectos jurídicos.
-- `propuesto`: capacidad futura o diseño que requiere autorización/integración.
+## Dónde quedó cada cosa
 
-## Archivos
+Los ocho servicios y sus expresiones ciudadanas se migraron íntegros a
+`data/canon/tramites.json`, con estos cambios:
 
-- `services.json`: catálogo inicial de servicios y capacidades de alto impacto.
-- `intents.json`: maneras naturales en que una persona puede expresar su necesidad.
+- ids reescritos con su jurisdicción real (`mx.nay.tepic.predial`,
+  `mx.nay.registro-civil-acta-nacimiento`);
+- fundamento normativo vinculado a `data/canon/fuentes.json` en vez de texto
+  suelto;
+- un semáforo por dato (`dependencia`, `costo`, `plazo`, `canal_oficial`) en vez
+  de un solo `source_status` para todo el servicio;
+- verificación ejecutable en cada build (`scripts/verificar-canon.mjs`, R9 de la
+  Guardia), incluida la regla que impide que el código tenga capacidades que el
+  canon no describa.
 
-## Política de acciones
-
-El ORBE puede informar, orientar, explicar y navegar a superficies existentes. Ninguna operación sensible debe ejecutarse solo porque un LLM la sugiera.
-
-Las acciones que afecten identidad, patrimonio, pagos, expedientes, licencias, beneficios, catastro o actos de autoridad deberán pasar por una capa explícita de autoridad, política y evidencia (Context.OS/COP cuando esa capa esté implementada y auditada).
-
-## Human-in-the-loop
-
-Para Catastro Inteligente y Tesorería de Campo, cualquier anomalía o discrepancia detectada por IA se considera únicamente una señal para revisión. No crea adeudos, no modifica padrones, no determina sanciones y no produce efectos jurídicos por sí sola.
-
-## Siguiente cierre
-
-1. Vincular cada servicio a fuentes oficiales ATDT/federales/estatales/municipales.
-2. Registrar fecha de consulta, autoridad emisora y alcance de cada fuente.
-3. Validar dependencia, requisitos, costo, plazo y fundamento de cada servicio.
-4. Conectar el catálogo al resolvedor de intención del ORBE.
-5. Mantener trazabilidad de cada respuesta hacia su fuente.
+El contenido original sigue en el historial de git. Auditoría completa:
+[`docs/marco/AUDITORIA_FUENTE_CANONICA.md`](../../../docs/marco/AUDITORIA_FUENTE_CANONICA.md).

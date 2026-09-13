@@ -1,0 +1,39 @@
+series: orbe-canon
+version: v0.2
+snapshot: active
+snapshot_date: 2026-09-13
+audited_repository: Autosociomx/Gobernanza-digital-
+audited_head: d5a78aaca3b11c1d459acab154d66b3db87ef4f5
+parent: v0.1
+parent_hash: 8fa4e790b6a5691eb550c52fe39e955cfa403187349a306b226d885e06eaebb9
+parent_hash_target: docs/orbe/canon/v0.1/MANIFEST.yaml
+scope:
+  authorized_stage: jurisdictional-canon
+  purpose: >-
+    Extends the frozen v0.1 definition with the dimension it left implicit: the
+    order of government. Declares that ORBE serves a person, not a tier, and that
+    jurisdiction is a datum of the procedure resolved by the canon
+    (data/canon/), never a system-wide assumption.
+  changes_vs_parent:
+    - Adds the jurisdictional canon as delivered data and code (data/canon/,
+      shared/canon/, scripts/verificar-canon.mjs) covering federal, state and
+      municipal procedures for guidance.
+    - Specifies, without executing, the contextos.v0.2 envelope change that would
+      allow execution beyond the municipal tier, with its acceptance tests.
+    - Records adjacent debt: service-scoped POLICY_VERSION, public-works-bound
+      envelope builder, duplicated citizen-text normalizer.
+  not_changed:
+    - The ten constitutional invariants of v0.1/ORBE_CANON.md section 6.
+    - Execution mode remains LAB_MOCK. Widening jurisdiction does not widen authority.
+integrity:
+  algorithm: sha256
+  files:
+    ORBE_CANON_JURISDICCIONAL.md: c92038498ea57a72dd13acb9ea19c5005c4c914221ac58208d5e9366d3a0a542
+    README.md: 09ede3bf4045e2926f8a7862ffb5988c9907035951dbe0c206e733e91fbaa8e3
+declarations:
+  immutable_baseline: false
+  architecture_rule: Native first, AI optional, provider replaceable, evidence mandatory.
+  canon_entry_rule: >-
+    A capability that is not declared in data/canon/tramites.json does not exist
+    for ORBE, neither for guidance nor for execution. Enforced in both directions
+    by scripts/verificar-canon.mjs rule C6.

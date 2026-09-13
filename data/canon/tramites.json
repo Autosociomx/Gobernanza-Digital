@@ -1,0 +1,349 @@
+{
+  "$schema": "./schema/canon.schema.json#/definitions/RegistroTramites",
+  "registro": "orbe.canon.tramites",
+  "version": "0.1.0",
+  "nota": "Catálogo canónico de trámites y servicios que el ORBE puede explicar, orientar o (cuando exista servicio registrado) iniciar. Es jurisdiccionalmente neutro por diseño: un trámite se declara contra una jurisdicción del registro, no contra 'el municipio'. Sustituye a data/municipality/tepic/services.json + intents.json, que ningún módulo del código leía.",
+  "estatus_validos": ["propuesto", "demo", "por_verificar", "verificado"],
+  "acciones_permitidas_validas": [
+    "informar",
+    "explicar_requisitos",
+    "explicar_proceso",
+    "orientar",
+    "clasificar_intencion",
+    "canalizar",
+    "redirigir_a_fuente_oficial",
+    "escalar_a_humano",
+    "consultar_estado_autorizado",
+    "iniciar_demo",
+    "capturar_reporte_demo",
+    "navegar_a_pago_demo",
+    "registrar_gestion_demo"
+  ],
+  "tramites": [
+    {
+      "id": "mx.nay.tepic.reporte-servicios-publicos",
+      "nombre": "Reporte de bache o luminaria",
+      "jurisdiccion": "mx.nay.tepic",
+      "autoridad": "H. Ayuntamiento de Tepic",
+      "familia": "servicios_publicos",
+      "descripcion_ciudadana": "Registro y seguimiento de reportes urbanos como baches y luminarias.",
+      "expresiones_ciudadanas": [
+        "hay un bache afuera de mi casa",
+        "no sirve la luminaria de mi calle",
+        "quiero reportar un bache"
+      ],
+      "fundamento": [
+        { "fuente": "cpeum.art115", "articulos": "115 fr. III (alumbrado público y calles)" }
+      ],
+      "dependencia": { "valor": null, "estatus": "por_verificar" },
+      "costo": { "valor": null, "estatus": "por_verificar" },
+      "plazo": { "valor": null, "estatus": "por_verificar" },
+      "canal_oficial": { "valor": "Laboratorio ORBE — Context.OS en modo LAB_MOCK", "estatus": "demo" },
+      "estatus": "demo",
+      "efecto_juridico": "ninguno_en_demo",
+      "orbe": {
+        "acciones_permitidas": ["informar", "orientar", "explicar_proceso", "capturar_reporte_demo"],
+        "acciones_restringidas": ["cerrar_reporte_sin_evidencia", "asignar_presupuesto", "emitir_orden_de_trabajo"],
+        "superficie": "?view=citizen&tab=services",
+        "contrato_semantico": "mx.nay.tepic.public-works.report.semantic",
+        "servicio_contextos": "mx.nay.tepic.public-works.report"
+      }
+    },
+    {
+      "id": "mx.nay.tepic.constancia-residencia",
+      "nombre": "Constancia de Residencia",
+      "jurisdiccion": "mx.nay.tepic",
+      "autoridad": "H. Ayuntamiento de Tepic",
+      "familia": "documental",
+      "descripcion_ciudadana": "Orientación para acreditar residencia en el municipio.",
+      "expresiones_ciudadanas": [
+        "quiero sacar una constancia de residencia",
+        "necesito comprobar dónde vivo",
+        "necesito una carta de residencia"
+      ],
+      "fundamento": [
+        { "fuente": "lnetb", "articulos": "66–76 (simplificación y expediente digital)" },
+        { "fuente": "ley-organica-municipal-nayarit", "articulos": "por verificar" }
+      ],
+      "dependencia": { "valor": null, "estatus": "por_verificar" },
+      "costo": { "valor": null, "estatus": "por_verificar" },
+      "plazo": { "valor": null, "estatus": "por_verificar" },
+      "canal_oficial": { "valor": null, "estatus": "por_verificar" },
+      "estatus": "por_verificar",
+      "efecto_juridico": "ninguno_en_demo",
+      "orbe": {
+        "acciones_permitidas": ["informar", "explicar_requisitos", "orientar", "iniciar_demo"],
+        "acciones_restringidas": ["emitir_documento_oficial", "firmar", "aprobar"],
+        "superficie": "?view=citizen&tab=municipal_letters",
+        "contrato_semantico": null,
+        "servicio_contextos": null
+      }
+    },
+    {
+      "id": "mx.nay.tepic.predial",
+      "nombre": "Impuesto predial",
+      "jurisdiccion": "mx.nay.tepic",
+      "autoridad": "H. Ayuntamiento de Tepic",
+      "familia": "tesoreria",
+      "descripcion_ciudadana": "Orientación sobre consulta, pago y aclaración del impuesto predial.",
+      "expresiones_ciudadanas": [
+        "quiero pagar el predial",
+        "cuánto debo de predial",
+        "quiero aclarar mi predial",
+        "tengo descuento por ser adulto mayor en el predial"
+      ],
+      "fundamento": [
+        { "fuente": "cpeum.art115", "articulos": "115 fr. IV (contribuciones sobre la propiedad inmobiliaria)" },
+        { "fuente": "ley-hacienda-municipal-nayarit", "articulos": "21, 22, 34" },
+        { "fuente": "ley-ingresos-tepic-2026", "articulos": "tarifas del ejercicio fiscal 2026" }
+      ],
+      "dependencia": { "valor": "Tesorería Municipal / Catastro", "estatus": "por_verificar" },
+      "costo": { "valor": null, "estatus": "por_verificar" },
+      "plazo": { "valor": null, "estatus": "por_verificar" },
+      "canal_oficial": { "valor": null, "estatus": "por_verificar" },
+      "estatus": "por_verificar",
+      "efecto_juridico": "ninguno_en_demo",
+      "orbe": {
+        "acciones_permitidas": ["informar", "orientar", "explicar_proceso", "navegar_a_pago_demo"],
+        "acciones_restringidas": ["determinar_credito_fiscal", "condonar", "embargar", "alterar_padron"],
+        "superficie": "?view=citizen&tab=payments",
+        "contrato_semantico": null,
+        "servicio_contextos": null
+      }
+    },
+    {
+      "id": "mx.nay.tepic.apertura-negocio",
+      "nombre": "Apertura de negocio",
+      "jurisdiccion": "mx.nay.tepic",
+      "autoridad": "H. Ayuntamiento de Tepic",
+      "familia": "actividad_economica",
+      "descripcion_ciudadana": "Orientación para identificar la ruta municipal aplicable a la apertura de un establecimiento.",
+      "expresiones_ciudadanas": [
+        "quiero abrir una tienda",
+        "qué necesito para abrir un negocio",
+        "quiero poner una cafetería"
+      ],
+      "fundamento": [
+        { "fuente": "cpeum.art115", "articulos": "115 fr. VI (licencias y permisos)" },
+        { "fuente": "lnetb", "articulos": "66–76" }
+      ],
+      "dependencia": { "valor": null, "estatus": "por_verificar" },
+      "costo": { "valor": null, "estatus": "por_verificar" },
+      "plazo": { "valor": null, "estatus": "por_verificar" },
+      "canal_oficial": { "valor": null, "estatus": "por_verificar" },
+      "estatus": "por_verificar",
+      "efecto_juridico": "ninguno_en_demo",
+      "orbe": {
+        "acciones_permitidas": ["informar", "clasificar_intencion", "orientar", "explicar_requisitos"],
+        "acciones_restringidas": ["autorizar_apertura", "emitir_licencia", "omitir_requisitos_legales"],
+        "superficie": null,
+        "contrato_semantico": null,
+        "servicio_contextos": null
+      }
+    },
+    {
+      "id": "mx.nay.tepic.bienestar-atencion",
+      "nombre": "Orientación y beneficios sociales",
+      "jurisdiccion": "mx.nay.tepic",
+      "autoridad": "H. Ayuntamiento de Tepic",
+      "familia": "atencion_ciudadana",
+      "descripcion_ciudadana": "Orientación hacia programas, apoyos o canales de atención disponibles.",
+      "expresiones_ciudadanas": [
+        "qué apoyos hay",
+        "necesito orientación para un programa social",
+        "a dónde voy para pedir ayuda"
+      ],
+      "fundamento": [],
+      "dependencia": { "valor": null, "estatus": "propuesto" },
+      "costo": { "valor": null, "estatus": "propuesto" },
+      "plazo": { "valor": null, "estatus": "propuesto" },
+      "canal_oficial": { "valor": null, "estatus": "propuesto" },
+      "estatus": "propuesto",
+      "efecto_juridico": "ninguno_en_demo",
+      "orbe": {
+        "acciones_permitidas": ["informar", "orientar", "canalizar", "escalar_a_humano"],
+        "acciones_restringidas": ["aprobar_beneficio", "crear_padron", "alterar_elegibilidad"],
+        "superficie": null,
+        "contrato_semantico": null,
+        "servicio_contextos": null
+      }
+    },
+    {
+      "id": "mx.nay.tepic.catastro-actualizacion",
+      "nombre": "Actualización y revisión catastral asistida",
+      "jurisdiccion": "mx.nay.tepic",
+      "autoridad": "H. Ayuntamiento de Tepic",
+      "familia": "catastro",
+      "descripcion_ciudadana": "Orientación y soporte para procesos de actualización catastral. La IA solo puede señalar discrepancias potenciales; no determina adeudos ni sanciones.",
+      "expresiones_ciudadanas": [
+        "quiero aclarar los datos de mi casa",
+        "mi propiedad tiene datos incorrectos",
+        "cómo actualizo mi información catastral"
+      ],
+      "fundamento": [
+        { "fuente": "ley-hacienda-municipal-nayarit", "articulos": "21, 22 fr. I, II, IV y VI" },
+        { "fuente": "ley-catastro-nayarit", "articulos": "por verificar" }
+      ],
+      "dependencia": { "valor": "Catastro Municipal", "estatus": "propuesto" },
+      "costo": { "valor": null, "estatus": "propuesto" },
+      "plazo": { "valor": null, "estatus": "propuesto" },
+      "canal_oficial": { "valor": null, "estatus": "propuesto" },
+      "estatus": "propuesto",
+      "efecto_juridico": "revision_humana_obligatoria",
+      "orbe": {
+        "acciones_permitidas": ["informar", "orientar", "explicar_proceso", "escalar_a_humano"],
+        "acciones_restringidas": ["determinar_adeudo", "actualizar_valor_catastral", "sancionar", "embargar"],
+        "superficie": null,
+        "contrato_semantico": null,
+        "servicio_contextos": null
+      }
+    },
+    {
+      "id": "mx.nay.tepic.tesoreria-campo",
+      "nombre": "Tesorería de Campo",
+      "jurisdiccion": "mx.nay.tepic",
+      "autoridad": "H. Ayuntamiento de Tepic",
+      "familia": "tesoreria",
+      "descripcion_ciudadana": "Propuesta para digitalizar gestiones de cobro en campo mediante expediente, código QR, registro y acuse trazable.",
+      "expresiones_ciudadanas": [
+        "quiero saber si mi negocio tiene un cobro pendiente",
+        "me visitó un cobrador del ayuntamiento",
+        "quiero comprobar un pago de mi negocio"
+      ],
+      "fundamento": [
+        { "fuente": "ley-ingresos-tepic-2026", "articulos": "derechos y aprovechamientos del ejercicio fiscal 2026" }
+      ],
+      "dependencia": { "valor": "Tesorería Municipal", "estatus": "propuesto" },
+      "costo": { "valor": null, "estatus": "propuesto" },
+      "plazo": { "valor": null, "estatus": "propuesto" },
+      "canal_oficial": { "valor": null, "estatus": "propuesto" },
+      "estatus": "propuesto",
+      "efecto_juridico": "revision_humana_obligatoria",
+      "orbe": {
+        "acciones_permitidas": ["informar", "consultar_estado_autorizado", "registrar_gestion_demo", "escalar_a_humano"],
+        "acciones_restringidas": ["crear_adeudo", "modificar_tarifa", "condonar", "registrar_pago_real_sin_integracion_oficial"],
+        "superficie": null,
+        "contrato_semantico": null,
+        "servicio_contextos": null
+      }
+    },
+    {
+      "id": "mx.nay.registro-civil-acta-nacimiento",
+      "nombre": "Acta de nacimiento (Registro Civil)",
+      "jurisdiccion": "mx.nay",
+      "autoridad": "Gobierno del Estado de Nayarit — Registro Civil",
+      "familia": "registro_civil",
+      "descripcion_ciudadana": "Orientación para obtener o localizar el canal oficial de actas de nacimiento. El trámite no es municipal: la competencia es estatal.",
+      "expresiones_ciudadanas": [
+        "necesito mi acta de nacimiento",
+        "dónde saco un acta",
+        "quiero una copia certificada de mi acta",
+        "necesito el acta de nacimiento de mi hijo"
+      ],
+      "fundamento": [
+        { "fuente": "registro-civil-nayarit", "articulos": "por verificar" }
+      ],
+      "dependencia": { "valor": "Dirección del Registro Civil del Estado de Nayarit", "estatus": "por_verificar" },
+      "costo": { "valor": null, "estatus": "por_verificar" },
+      "plazo": { "valor": null, "estatus": "por_verificar" },
+      "canal_oficial": { "valor": null, "estatus": "por_verificar" },
+      "estatus": "por_verificar",
+      "efecto_juridico": "ninguno_en_demo",
+      "orbe": {
+        "acciones_permitidas": ["informar", "orientar", "redirigir_a_fuente_oficial", "explicar_requisitos"],
+        "acciones_restringidas": ["emitir_acta", "certificar_identidad", "alterar_registro"],
+        "superficie": null,
+        "contrato_semantico": null,
+        "servicio_contextos": null
+      }
+    },
+    {
+      "id": "mx.nay.guia-transito-ganado",
+      "nombre": "Guía de tránsito de ganado",
+      "jurisdiccion": "mx.nay",
+      "autoridad": "Gobierno del Estado de Nayarit — autoridad pecuaria competente",
+      "familia": "pecuario",
+      "descripcion_ciudadana": "Orientación sobre la documentación exigida para movilizar ganado dentro del estado: identificador individual, fierro registrado y guía de tránsito.",
+      "expresiones_ciudadanas": [
+        "quiero mover mi ganado",
+        "necesito una guía para transportar vacas",
+        "qué papeles necesito para llevar ganado a otro municipio"
+      ],
+      "fundamento": [
+        { "fuente": "ley-ganadera-nayarit-2025", "articulos": "117–123" }
+      ],
+      "dependencia": { "valor": null, "estatus": "por_verificar" },
+      "costo": { "valor": null, "estatus": "por_verificar" },
+      "plazo": { "valor": null, "estatus": "por_verificar" },
+      "canal_oficial": { "valor": null, "estatus": "por_verificar" },
+      "estatus": "por_verificar",
+      "efecto_juridico": "ninguno_en_demo",
+      "orbe": {
+        "acciones_permitidas": ["informar", "explicar_requisitos", "orientar", "redirigir_a_fuente_oficial"],
+        "acciones_restringidas": ["emitir_guia", "certificar_sanidad", "autorizar_movilizacion"],
+        "superficie": null,
+        "contrato_semantico": null,
+        "servicio_contextos": null
+      }
+    },
+    {
+      "id": "mx.siniiga-identificacion-ganado",
+      "nombre": "Identificación individual de ganado (SINIIGA) y Padrón Ganadero Nacional",
+      "jurisdiccion": "mx",
+      "autoridad": "SADER / SENASICA",
+      "familia": "pecuario",
+      "descripcion_ciudadana": "Orientación sobre el alta en el Padrón Ganadero Nacional, la clave UPP y el identificador individual que la normativa estatal exige antes de movilizar o sacrificar ganado.",
+      "expresiones_ciudadanas": [
+        "cómo registro mi ganado",
+        "qué es el arete del siniiga",
+        "necesito mi clave upp"
+      ],
+      "fundamento": [
+        { "fuente": "ley-federal-sanidad-animal", "articulos": "Título IV, Cap. I, Arts. 56 y 58" },
+        { "fuente": "ley-ganadera-nayarit-2025", "articulos": "117, 121, 131 (remisión estatal al identificador federal)" }
+      ],
+      "dependencia": { "valor": null, "estatus": "por_verificar" },
+      "costo": { "valor": null, "estatus": "por_verificar" },
+      "plazo": { "valor": null, "estatus": "por_verificar" },
+      "canal_oficial": { "valor": null, "estatus": "por_verificar" },
+      "estatus": "por_verificar",
+      "efecto_juridico": "ninguno_en_demo",
+      "orbe": {
+        "acciones_permitidas": ["informar", "explicar_requisitos", "orientar", "redirigir_a_fuente_oficial"],
+        "acciones_restringidas": ["dar_de_alta_upp", "emitir_identificador", "certificar_sanidad"],
+        "superficie": null,
+        "contrato_semantico": null,
+        "servicio_contextos": null
+      }
+    },
+    {
+      "id": "mx.llave-mx",
+      "nombre": "Llave MX (identidad digital nacional)",
+      "jurisdiccion": "mx",
+      "autoridad": "Gobierno de México",
+      "familia": "identidad",
+      "descripcion_ciudadana": "Orientación sobre la identidad digital nacional prevista por la LNETB, que el expediente digital y el Portal Ciudadano Único usan como llave de acceso.",
+      "expresiones_ciudadanas": [
+        "qué es la llave mx",
+        "cómo saco mi identidad digital",
+        "necesito mi llave para trámites en línea"
+      ],
+      "fundamento": [
+        { "fuente": "lnetb", "articulos": "3 fr. XVIII (Llave MX) y fr. XXV (Portal Ciudadano Único)" }
+      ],
+      "dependencia": { "valor": null, "estatus": "por_verificar" },
+      "costo": { "valor": null, "estatus": "por_verificar" },
+      "plazo": { "valor": null, "estatus": "por_verificar" },
+      "canal_oficial": { "valor": null, "estatus": "por_verificar" },
+      "estatus": "por_verificar",
+      "efecto_juridico": "ninguno_en_demo",
+      "orbe": {
+        "acciones_permitidas": ["informar", "orientar", "redirigir_a_fuente_oficial"],
+        "acciones_restringidas": ["emitir_identidad", "validar_identidad_oficial", "almacenar_credenciales"],
+        "superficie": null,
+        "contrato_semantico": null,
+        "servicio_contextos": null
+      }
+    }
+  ]
+}

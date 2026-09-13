@@ -1,0 +1,33 @@
+{
+  "$schema": "./schema/canon.schema.json#/definitions/RegistroJurisdicciones",
+  "registro": "orbe.canon.jurisdicciones",
+  "version": "0.1.0",
+  "nota": "Registro canónico de jurisdicciones. El ORBE no asume municipio: toda capacidad se declara contra una jurisdicción de este registro. 'codigo_contextos' es la única forma autorizada de traducir una jurisdicción al código que usa contextos/serviceCatalog.ts (jurisdictionCode).",
+  "niveles_validos": ["federal", "estatal", "municipal"],
+  "jurisdicciones": [
+    {
+      "id": "mx",
+      "nivel": "federal",
+      "nombre": "Estados Unidos Mexicanos",
+      "padre": null,
+      "codigo_contextos": "MX",
+      "autoridad_general": "Gobierno de México"
+    },
+    {
+      "id": "mx.nay",
+      "nivel": "estatal",
+      "nombre": "Nayarit",
+      "padre": "mx",
+      "codigo_contextos": "MX-NAY",
+      "autoridad_general": "Gobierno del Estado de Nayarit"
+    },
+    {
+      "id": "mx.nay.tepic",
+      "nivel": "municipal",
+      "nombre": "Tepic",
+      "padre": "mx.nay",
+      "codigo_contextos": "MX-NAY-TEPIC",
+      "autoridad_general": "H. Ayuntamiento de Tepic"
+    }
+  ]
+}

@@ -40,6 +40,9 @@ jobs:
       - name: Verificar regresiones (config y archivos)
         run: node scripts/verificar-regresiones.mjs
 
+      - name: Verificar el canon del ORBE (fuente canónica de trámites)
+        run: npm run verificar:canon
+
       - name: Verificar tipos
         run: npm run lint
 

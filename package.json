@@ -13,7 +13,9 @@
     "test": "vitest run",
     "test:contextos": "vitest run contextos/__tests__/runtime.test.ts",
     "test:semantic-registry": "vitest run shared/semantic/__tests__/registry.test.ts",
-    "test:orbe-contextos": "vitest run contextos/__tests__/runtime.test.ts src/orbe/__tests__/contextosBridge.test.ts shared/semantic/__tests__/registry.test.ts",
+    "test:orbe-contextos": "vitest run contextos/__tests__/runtime.test.ts src/orbe/__tests__/contextosBridge.test.ts shared/semantic/__tests__/registry.test.ts shared/canon/__tests__/resolver.test.ts",
+    "test:canon": "vitest run shared/canon/__tests__/resolver.test.ts",
+    "verificar:canon": "node scripts/verificar-canon.mjs",
     "test:orbe-p0-e2e": "tsx scripts/test-orbe-p0-e2e.mts",
     "contextos:lab": "tsx contextos/labServer.ts",
     "test:firestore-rules": "JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 npx firebase emulators:exec --only firestore \"node scripts/test-firestore-rules.mjs\""

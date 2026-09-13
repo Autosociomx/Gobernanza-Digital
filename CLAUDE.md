@@ -56,7 +56,9 @@ Copia `firebase-applet-config.example.json` y llénalo, o pídeselo al usuario.
 | `npm run build` | `vite build` + esbuild bundle de `server.ts` → `dist/server.cjs` |
 | `npm run contextos:lab` | Servidor de laboratorio Context.OS en `127.0.0.1:3011` |
 | `npm run test:firestore-rules` | Reglas de Firestore contra el emulador (requiere Java 21) |
-| `node scripts/verificar-regresiones.mjs` | **La Guardia** — corre esto antes de entregar |
+| `npm run verificar:canon` | Valida `data/canon/` (fuente canónica de trámites) contra su esquema y contra el código |
+| `npm run test:canon` | Pruebas del resolvedor del canon (`shared/canon/`) |
+| `node scripts/verificar-regresiones.mjs` | **La Guardia** — corre esto antes de entregar (incluye el canon, R9) |
 
 > `npx tsc` instala un paquete distinto y falso. Usa `npm run lint` o
 > `./node_modules/.bin/tsc --noEmit`.
@@ -105,13 +107,25 @@ Referencia normativa: `docs/marco/PROTOCOLO_SEGURIDAD.md`.
    positivo). El navegador nunca decide cuánto se cobra.
 9. **Ningún dato personal real** en el repositorio, ni en semillas de demo, ni
    en actas.
+10. **`data/canon/` es la fuente canónica de trámites y servicios.** Un trámite
+    que no está ahí no existe para el ORBE — ni para orientar ni para ejecutar.
+    Se declara contra una jurisdicción (`federal` / `estatal` / `municipal`),
+    **nunca contra "el municipio" por omisión**: el acta de nacimiento es
+    estatal, el predial es municipal con fundamento estatal, y un ORBE que
+    asume municipio manda al ciudadano a la ventanilla equivocada. Prohibido
+    abrir un catálogo paralelo de trámites en un componente, un JSON suelto o
+    una tabla de Markdown; ya pasó diez veces (`docs/marco/AUDITORIA_FUENTE_CANONICA.md`).
+    R9 de la Guardia falla el build en las dos direcciones: si el canon promete
+    una ejecución que el código no registra, y si el código tiene un contrato
+    semántico activo que el canon no describe.
 
 ### Archivos protegidos
 
 Cambiar cualquiera de estos exige mención explícita en la descripción del PR:
 `index.html`, `vite.config.ts`, `netlify.toml`, `public/robots.txt`,
-`src/App.tsx`, `server.ts`, `docs/` completo,
-`scripts/verificar-regresiones.mjs`, `.github/workflows/`.
+`src/App.tsx`, `server.ts`, `docs/` completo, `data/canon/` completo,
+`scripts/verificar-regresiones.mjs`, `scripts/verificar-canon.mjs`,
+`.github/workflows/`.
 
 ### Honestidad de datos (el "semáforo")
 
@@ -231,7 +245,19 @@ contrato — no un `if`.
 
 ---
 
-## 5. Los dos registros de módulos (no los confundas)
+## 5. Los registros (no los confundas)
+
+### 5.1 El canon de trámites — `data/canon/`
+
+**Es la fuente canónica**, y es un eje distinto de los dos registros de módulos:
+aquellos inventarian *pantallas y código*; el canon inventaria *trámites del
+ciudadano*, con jurisdicción, fundamento registrado y semáforo por dato
+(`dependencia`, `costo`, `plazo`, `canal_oficial` llevan cada uno su estatus, y
+el trámite no puede declararse más fuerte que su dato más débil). Lo verifica
+`scripts/verificar-canon.mjs` en cada build. Lee `data/canon/README.md` antes
+de tocarlo. El resolvedor tipado vive en `shared/canon/`.
+
+### 5.2 Los dos registros de módulos
 
 El repo tiene **dos** inventarios de "módulos", con vocabularios distintos a
 propósito:
@@ -297,7 +323,8 @@ endpoints del servidor o el lazy loading: es una regresión, no una mejora.
 ├── firestore.rules             Roles + perfiles_salud por código de personal
 ├── storage.rules
 ├── scripts/
-│   ├── verificar-regresiones.mjs   La Guardia (R1–R8)
+│   ├── verificar-regresiones.mjs   La Guardia (R1–R9)
+│   ├── verificar-canon.mjs         Verificador del canon (C1–C8)
 │   └── test-firestore-rules.mjs    Pruebas de reglas contra el emulador
 ├── src/
 │   ├── App.tsx                 Ruteo por useState + enlaces profundos
@@ -311,8 +338,10 @@ endpoints del servidor o el lazy loading: es una regresión, no una mejora.
 │   └── lib/utils.ts            cn()
 ├── contextos/                  Context.OS Runtime v0.1 (servidor, LAB_MOCK)
 ├── shared/semantic/            Registro de contratos semánticos versionados
+├── shared/canon/               Resolvedor tipado del canon (types + resolver)
 ├── pulso-nayarit/              Módulo con backend propio (Supabase/Postgres)
-├── data/municipality/tepic/    services.json, intents.json
+├── data/canon/                 **Fuente canónica**: jurisdicciones, fuentes,
+│                               trámites + JSON Schema publicado
 ├── demo/                       Demos HTML autocontenidas
 └── docs/
     ├── marco/                  Gobernanza pública: glosario, biblioteca legal,
@@ -339,6 +368,11 @@ En este orden:
 6. `docs/plataforma/05-MANUAL-DESARROLLADORES.md` — qué APIs existen hoy.
 7. `contextos/README.md` — alcance exacto del runtime y, sobre todo, **lo que
    no hace**.
+8. `data/canon/README.md` — la fuente canónica de trámites y sus ocho reglas.
+9. `docs/marco/AUDITORIA_FUENTE_CANONICA.md` — por qué existe el canon y qué
+   diez inventarios paralelos reemplazó.
+10. `docs/orbe/canon/` — la definición canónica del ORBE, versionada. `v0.2`
+    fija la neutralidad jurisdiccional.
 
 Las actas de `docs/actas/` son el registro institucional: no se borran, se
 corrigen con actas posteriores.

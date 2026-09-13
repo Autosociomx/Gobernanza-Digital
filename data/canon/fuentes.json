@@ -1,0 +1,142 @@
+{
+  "$schema": "./schema/canon.schema.json#/definitions/RegistroFuentes",
+  "registro": "orbe.canon.fuentes",
+  "version": "0.1.0",
+  "nota": "Registro canónico de fuentes normativas. Implementa el esquema declarado en docs/fuentes-oficiales-y-alineacion/README.md, que hasta ahora existía como prosa sin datos. Regla del Glosario Oficial: solo se cita en público lo que está 'vigente'. Este registro no sustituye a docs/marco/BIBLIOTECA_LEGAL.md — lo indexa en forma legible por máquina; si discrepan, la Biblioteca Legal manda y la discrepancia se corrige aquí.",
+  "estatus_validos": ["vigente", "por_verificar", "historico"],
+  "fuentes": [
+    {
+      "id": "cpeum.art115",
+      "autoridad": "Congreso de la Unión",
+      "nivel": "federal",
+      "tipo": "constitucion",
+      "referencia": "CPEUM Art. 115",
+      "alcance": "Facultades municipales: agua, drenaje, alumbrado, calles, mercados, rastros, panteones, limpieza, catastro y predial (fr. IV), licencias (fr. VI).",
+      "fecha_consulta": "2026-08-01",
+      "estatus": "vigente",
+      "espejo_biblioteca_legal": "docs/marco/BIBLIOTECA_LEGAL.md#0-núcleo-transversal-el-soatm"
+    },
+    {
+      "id": "cpeum.art6",
+      "autoridad": "Congreso de la Unión",
+      "nivel": "federal",
+      "tipo": "constitucion",
+      "referencia": "CPEUM Art. 6",
+      "alcance": "Transparencia y acceso a la información pública.",
+      "fecha_consulta": "2026-08-01",
+      "estatus": "vigente",
+      "espejo_biblioteca_legal": "docs/marco/BIBLIOTECA_LEGAL.md#0-núcleo-transversal-el-soatm"
+    },
+    {
+      "id": "lnetb",
+      "autoridad": "Congreso de la Unión",
+      "nivel": "federal",
+      "tipo": "ley",
+      "referencia": "Ley Nacional para Eliminar Trámites Burocráticos (LNETB), Arts. 2, 3 y 66–76",
+      "alcance": "Eliminación de trámites, Llave MX (Art. 3 fr. XVIII), Portal Ciudadano Único (fr. XXV), expediente digital y repositorio.",
+      "fecha_consulta": "2026-08-01",
+      "estatus": "vigente",
+      "espejo_biblioteca_legal": "docs/marco/BIBLIOTECA_LEGAL.md#0-núcleo-transversal-el-soatm"
+    },
+    {
+      "id": "ley-gobierno-digital-nayarit",
+      "autoridad": "Congreso del Estado de Nayarit",
+      "nivel": "estatal",
+      "tipo": "ley",
+      "referencia": "Ley de Gobierno Digital del Estado de Nayarit, Arts. 2, 5 y 6",
+      "alcance": "Obliga a los Ayuntamientos al gobierno digital; expediente digital e interoperabilidad; simplificación administrativa.",
+      "fecha_consulta": "2026-08-01",
+      "estatus": "vigente",
+      "espejo_biblioteca_legal": "docs/marco/BIBLIOTECA_LEGAL.md#0-núcleo-transversal-el-soatm"
+    },
+    {
+      "id": "lfpdppp",
+      "autoridad": "Congreso de la Unión",
+      "nivel": "federal",
+      "tipo": "ley",
+      "referencia": "Ley Federal de Protección de Datos Personales",
+      "alcance": "Datos personales en posesión de sujetos obligados; los datos sensibles exigen consentimiento expreso.",
+      "fecha_consulta": "2026-08-01",
+      "estatus": "vigente",
+      "espejo_biblioteca_legal": "docs/marco/BIBLIOTECA_LEGAL.md#0-núcleo-transversal-el-soatm"
+    },
+    {
+      "id": "ley-hacienda-municipal-nayarit",
+      "autoridad": "Congreso del Estado de Nayarit",
+      "nivel": "estatal",
+      "tipo": "ley",
+      "referencia": "Ley de Hacienda Municipal del Estado de Nayarit, Arts. 21, 22 y 34",
+      "alcance": "Determinación del valor catastral y sus supuestos de modificación; pago bimestral del predial, descuentos por anualidad anticipada y factor 0.50 para adultos mayores, jubilados, pensionados y personas con discapacidad.",
+      "fecha_consulta": "2026-08-01",
+      "estatus": "vigente",
+      "espejo_biblioteca_legal": "docs/marco/BIBLIOTECA_LEGAL.md#2-hacienda-municipal-catastro-y-tesorería"
+    },
+    {
+      "id": "ley-ingresos-tepic-2026",
+      "autoridad": "H. Ayuntamiento de Tepic / Congreso del Estado de Nayarit",
+      "nivel": "municipal",
+      "tipo": "ley",
+      "referencia": "Ley de Ingresos para la Municipalidad de Tepic, Nayarit, Ejercicio Fiscal 2026 (fe de erratas 27-04-2026)",
+      "alcance": "Predial, derechos y licencias del ejercicio fiscal 2026.",
+      "fecha_consulta": "2026-08-01",
+      "estatus": "vigente",
+      "espejo_biblioteca_legal": "docs/marco/BIBLIOTECA_LEGAL.md#2-hacienda-municipal-catastro-y-tesorería"
+    },
+    {
+      "id": "ley-ganadera-nayarit-2025",
+      "autoridad": "Congreso del Estado de Nayarit",
+      "nivel": "estatal",
+      "tipo": "ley",
+      "referencia": "Ley Ganadera y de Desarrollo Pecuario para el Estado de Nayarit (decreto 10-07-2025), Arts. 79, 94, 117–123, 128–131 y Transitorio Octavo",
+      "alcance": "Registro municipal del fierro para mostrencos; identificador SINIIGA; guías de tránsito; rastros y bitácora con informe mensual; plazo de 90 días para que los municipios adecúen su marco normativo.",
+      "fecha_consulta": "2026-08-01",
+      "estatus": "vigente",
+      "espejo_biblioteca_legal": "docs/marco/BIBLIOTECA_LEGAL.md#5-ganadería-extensión-de-agrovisión--módulo-ganado"
+    },
+    {
+      "id": "ley-federal-sanidad-animal",
+      "autoridad": "Congreso de la Unión",
+      "nivel": "federal",
+      "tipo": "ley",
+      "referencia": "Ley Federal de Sanidad Animal (DOF 25-07-2007, reformada 21-05-2024)",
+      "alcance": "Prevención y control de enfermedades animales; bienestar animal; Padrón Ganadero Nacional y clave UPP. Autoridad: SADER/SENASICA.",
+      "fecha_consulta": "2026-08-01",
+      "estatus": "vigente",
+      "espejo_biblioteca_legal": "docs/marco/BIBLIOTECA_LEGAL.md#5-ganadería-extensión-de-agrovisión--módulo-ganado"
+    },
+    {
+      "id": "ley-catastro-nayarit",
+      "autoridad": "Congreso del Estado de Nayarit",
+      "nivel": "estatal",
+      "tipo": "ley",
+      "referencia": "Ley de Catastro del Estado de Nayarit",
+      "alcance": "Referida por el Art. 34 fr. I de la Ley de Hacienda Municipal; declaraciones catastrales.",
+      "fecha_consulta": "2026-08-01",
+      "estatus": "por_verificar",
+      "espejo_biblioteca_legal": "docs/marco/BIBLIOTECA_LEGAL.md#2-hacienda-municipal-catastro-y-tesorería",
+      "nota_conflicto": "La Biblioteca Legal la marca POR VERIFICAR (falta localizar el texto vigente). No se cita en público hasta cerrarla."
+    },
+    {
+      "id": "ley-organica-municipal-nayarit",
+      "autoridad": "Congreso del Estado de Nayarit",
+      "nivel": "estatal",
+      "tipo": "ley",
+      "referencia": "Ley Orgánica Municipal del Estado de Nayarit",
+      "alcance": "Invocada como fundamento estatal de la Constancia Municipal de Residencia.",
+      "fecha_consulta": "2026-09-13",
+      "estatus": "por_verificar",
+      "nota_conflicto": "Discrepancia detectada en la auditoría: docs/presentacion-tepic/02_TRAMITE_PRIORIZADO/FICHA_TECNICA_TRAMITE.md la marca 🟢 VERIFICADO, pero no aparece en docs/marco/BIBLIOTECA_LEGAL.md, y src/components/MunicipalLettersView.tsx:438 cita en su lugar 'Ley Municipal para el Estado de Nayarit'. Hasta cerrar nombre y vigencia con el Congreso del Estado, se mantiene por_verificar."
+    },
+    {
+      "id": "registro-civil-nayarit",
+      "autoridad": "Gobierno del Estado de Nayarit — Registro Civil",
+      "nivel": "estatal",
+      "tipo": "dependencia",
+      "referencia": "Dirección del Registro Civil del Estado de Nayarit",
+      "alcance": "Competencia sobre actas del estado civil de las personas.",
+      "fecha_consulta": "2026-09-13",
+      "estatus": "por_verificar",
+      "nota_conflicto": "Competencia asumida por la práctica común en México (el Registro Civil es estatal), pero sin fundamento cerrado en la Biblioteca Legal. No se afirma en público hasta verificar ordenamiento y canal oficial vigente."
+    }
+  ]
+}
