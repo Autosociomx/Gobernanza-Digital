@@ -12,3 +12,8 @@ firebase-applet-config.json
 
 # Carpeta de trabajo temporal de auditoría
 .openclaw/
+
+# Recibos de arquitectura generados en cada corrida (el permanente se versiona
+# en docs/marco/recibos/)
+artifacts/recibo-arquitectura.yml
+artifacts/recibo-arquitectura.json

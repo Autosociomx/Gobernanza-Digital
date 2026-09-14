@@ -1,0 +1,81 @@
+name: Compuerta de arquitectura
+
+# Convierte el canon de Context.OS, ORBE y Evidence en una comprobación que
+# corre: clasificación de impacto, nivel de evidencia, frontera de autoridad y
+# deriva entre canon y código. Decisión: docs/marco/adr/ADR-0001-compuerta-de-arquitectura.md
+#
+# Es una compuerta de fusión, no de despliegue: por eso vive aquí y no en
+# netlify.toml, igual que el verificador del estado canónico.
+
+"on":
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compuerta-arquitectura-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compuerta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # fetch-depth 0: la compuerta compara base…cabeza, así que necesita el
+      # ancestro común, no sólo la punta.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Probar la propia compuerta
+        run: npm run test:compuerta
+
+      - name: Verificar el estado canónico
+        run: node scripts/verificar-estado.mjs
+
+      # Corre siempre, incluso en push a main: la deriva entre canon y código
+      # no necesita una PR para existir.
+      - name: Detectar deriva del canon
+        run: node scripts/compuerta-arquitectura.mjs --solo-canon
+
+      - name: Traer la rama base
+        if: github.event_name == 'pull_request'
+        env:
+          RAMA_BASE: ${{ github.base_ref }}
+        run: git fetch origin "$RAMA_BASE" --depth=0 || git fetch origin "$RAMA_BASE"
+
+      # El cuerpo y el título de la PR viajan por variables de entorno, nunca
+      # interpolados dentro del `run`: son texto que escribe cualquiera con
+      # permiso de abrir una PR.
+      - name: Clasificar el cambio y emitir el recibo
+        if: github.event_name == 'pull_request'
+        env:
+          COMPUERTA_CUERPO: ${{ github.event.pull_request.body }}
+          COMPUERTA_TITULO: ${{ github.event.pull_request.title }}
+          COMPUERTA_BASE: origin/${{ github.base_ref }}
+          COMPUERTA_CABEZA: ${{ github.event.pull_request.head.sha }}
+          COMPUERTA_PR: ${{ github.event.pull_request.number }}
+        run: node scripts/compuerta-arquitectura.mjs
+
+      - name: Conservar el recibo de arquitectura
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: recibo-arquitectura
+          path: |
+            artifacts/recibo-arquitectura.yml
+            artifacts/recibo-arquitectura.json
+          if-no-files-found: warn

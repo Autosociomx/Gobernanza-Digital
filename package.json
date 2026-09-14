@@ -15,6 +15,10 @@
     "test:semantic-registry": "vitest run shared/semantic/__tests__/registry.test.ts",
     "test:orbe-contextos": "vitest run contextos/__tests__/runtime.test.ts src/orbe/__tests__/contextosBridge.test.ts shared/semantic/__tests__/registry.test.ts",
     "test:orbe-p0-e2e": "tsx scripts/test-orbe-p0-e2e.mts",
+    "test:compuerta": "vitest run scripts/__tests__/compuerta-arquitectura.test.ts",
+    "compuerta:arquitectura": "node scripts/compuerta-arquitectura.mjs",
+    "compuerta:canon": "node scripts/compuerta-arquitectura.mjs --solo-canon",
+    "estado:semaforo": "node scripts/verificar-estado.mjs --semaforo",
     "contextos:lab": "tsx contextos/labServer.ts",
     "test:firestore-rules": "JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 npx firebase emulators:exec --only firestore \"node scripts/test-firestore-rules.mjs\""
   },

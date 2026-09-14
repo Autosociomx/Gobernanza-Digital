@@ -1,0 +1,161 @@
+{
+  "$nota": "Las fronteras del canon en forma ejecutable. NO es un registro de estado: docs/marco/estado.json es el MASTER_STATE y mide trabajo; este archivo mide invariantes. Cada frontera enuncia una regla que ya está escrita en el canon y la ancla a un literal concreto del código, para que el detector de deriva (scripts/compuerta/deriva.mjs) pueda comprobar las dos direcciones: que el código todavía sostiene lo que el canon afirma, y que nadie mueve la frontera en el código sin actualizar el canon. Añadir una frontera es declarar una regla que ya existe; no es crear arquitectura nueva.",
+  "version": "fronteras-arquitectura.v0.1",
+  "actualizado": "2026-09-14",
+  "verificado_contra": "13fde75b8469c1569789f8bf0040f6f6f2555284",
+  "componentes_validos": [
+    "Context.OS",
+    "ORBE",
+    "Evidence.OS",
+    "Registro semántico",
+    "Plataforma SOATM"
+  ],
+  "fronteras": [
+    {
+      "id": "FR-01",
+      "componente": "Context.OS",
+      "enunciado": "Los adapters sólo ejecutan en modo laboratorio: cualquier otro executionMode se rechaza.",
+      "codigo": [
+        {
+          "archivo": "contextos/adapters/publicWorksReportAdapter.ts",
+          "debe_contener": "request.service.executionMode !== 'LAB_MOCK'"
+        }
+      ],
+      "canon": [
+        { "archivo": "CLAUDE.md", "debe_mencionar": "LAB_MOCK" },
+        { "archivo": "docs/orbe/canon/v0.1/ORBE_CONTRATO_CONTEXTOS.md", "debe_mencionar": "LAB_MOCK" }
+      ],
+      "impacto_si_cambia": ["AUTHORITY_CHANGE"],
+      "adr_requerido": true
+    },
+    {
+      "id": "FR-02",
+      "componente": "Context.OS",
+      "enunciado": "El runtime declara autoridad nula: no autoriza ningún acto administrativo.",
+      "codigo": [
+        { "archivo": "contextos/labServer.ts", "debe_contener": "authority: 'NONE'" }
+      ],
+      "canon": [
+        { "archivo": "docs/orbe/canon/v0.1/ORBE_RESUMEN_EJECUTIVO.md", "debe_mencionar": "authority: NONE" },
+        { "archivo": "docs/orbe/P0_ACCEPTANCE.md", "debe_mencionar": "authority: NONE" }
+      ],
+      "impacto_si_cambia": ["AUTHORITY_CHANGE"],
+      "adr_requerido": true
+    },
+    {
+      "id": "FR-03",
+      "componente": "Evidence.OS",
+      "enunciado": "La evidencia lleva checksum SHA-256, no firma digital: su garantía declarada es CHECKSUM_ONLY y no prueba inmutabilidad.",
+      "codigo": [
+        { "archivo": "contextos/evidence.ts", "debe_contener": "integrityAssurance: 'CHECKSUM_ONLY'" },
+        { "archivo": "contextos/contracts.ts", "debe_contener": "integrityAssurance: 'CHECKSUM_ONLY'" }
+      ],
+      "canon": [
+        { "archivo": "CLAUDE.md", "debe_mencionar": "CHECKSUM_ONLY" },
+        { "archivo": "docs/orbe/canon/v0.1/ORBE_CANON.md", "debe_mencionar": "CHECKSUM_ONLY" }
+      ],
+      "impacto_si_cambia": ["EVIDENCE_CHANGE"],
+      "adr_requerido": true
+    },
+    {
+      "id": "FR-04",
+      "componente": "Registro semántico",
+      "enunciado": "El registro de contratos semánticos está versionado y el binding se valida contra esa versión.",
+      "codigo": [
+        { "archivo": "shared/semantic/types.ts", "debe_contener": "orbe.semantic-registry.v0.1" }
+      ],
+      "canon": [
+        { "archivo": "CLAUDE.md", "debe_mencionar": "orbe.semantic-registry.v0.1" }
+      ],
+      "impacto_si_cambia": ["CONTRACT_CHANGE"],
+      "adr_requerido": true
+    },
+    {
+      "id": "FR-05",
+      "componente": "Context.OS",
+      "enunciado": "El esquema del runtime está versionado: contextos.v0.1.",
+      "codigo": [
+        { "archivo": "contextos/contracts.ts", "debe_contener": "contextos.v0.1" }
+      ],
+      "canon": [
+        { "archivo": "contextos/README.md", "debe_mencionar": "/api/contextos/v0.1/" },
+        { "archivo": "docs/orbe/canon/v0.1/ORBE_CONTRATO_CONTEXTOS.md", "debe_mencionar": "contextos.v0.1" }
+      ],
+      "impacto_si_cambia": ["CONTRACT_CHANGE"],
+      "adr_requerido": true
+    },
+    {
+      "id": "FR-06",
+      "componente": "ORBE",
+      "enunciado": "El puente ORBE–Context.OS está apagado por defecto; encenderlo es una decisión explícita de despliegue.",
+      "codigo": [
+        { "archivo": ".env.example", "debe_contener": "VITE_CONTEXTOS_BRIDGE_ENABLED=false" },
+        { "archivo": "src/services/contextosRuntimeClient.ts", "debe_contener": "VITE_CONTEXTOS_BRIDGE_ENABLED === 'true'" }
+      ],
+      "canon": [
+        { "archivo": "CLAUDE.md", "debe_mencionar": "VITE_CONTEXTOS_BRIDGE_ENABLED=false" },
+        { "archivo": "docs/orbe/canon/v0.1/ORBE_BRECHAS.md", "debe_mencionar": "VITE_CONTEXTOS_BRIDGE_ENABLED=false" }
+      ],
+      "impacto_si_cambia": ["INTEGRATION_CHANGE"],
+      "adr_requerido": false
+    },
+    {
+      "id": "FR-07",
+      "componente": "Registro semántico",
+      "enunciado": "Los actos de habla informativos no implican ejecución: se enrutan a conversación, nunca a Context.OS.",
+      "codigo": [
+        { "archivo": "shared/semantic/contracts/publicWorksReport.ts", "debe_contener": "NO_EXECUTION_IMPLIED" },
+        { "archivo": "shared/semantic/contracts/publicWorksReport.ts", "debe_contener": "act: 'INFORMATION_REQUEST'" }
+      ],
+      "canon": [
+        { "archivo": "CLAUDE.md", "debe_mencionar": "INFORMATION_REQUEST" },
+        { "archivo": "docs/orbe/canon/v0.1/ORBE_TAXONOMIA.md", "debe_mencionar": "INFORMATION_REQUEST" }
+      ],
+      "impacto_si_cambia": ["CONTRACT_CHANGE", "AUTHORITY_CHANGE"],
+      "adr_requerido": true
+    },
+    {
+      "id": "FR-08",
+      "componente": "Context.OS",
+      "enunciado": "La política es determinística: ningún modelo de lenguaje decide policy ni consentimiento.",
+      "codigo": [
+        { "archivo": "contextos/policyEngine.ts", "no_debe_contener": ["GoogleGenAI", "@anthropic-ai", "openai", "generateContent"] },
+        { "archivo": "contextos/consent.ts", "no_debe_contener": ["GoogleGenAI", "@anthropic-ai", "openai", "generateContent"] }
+      ],
+      "canon": [
+        { "archivo": "CLAUDE.md", "debe_mencionar": "determinística" },
+        { "archivo": "contextos/README.md", "debe_mencionar": "determinística" }
+      ],
+      "impacto_si_cambia": ["AUTHORITY_CHANGE"],
+      "adr_requerido": true
+    },
+    {
+      "id": "FR-09",
+      "componente": "Context.OS",
+      "enunciado": "El consentimiento es obligatorio antes de compartir contacto personal y queda ligado a la solicitud.",
+      "codigo": [
+        { "archivo": "contextos/policyEngine.ts", "debe_contener": "CONTACT_CONSENT_SCOPE" },
+        { "archivo": "contextos/consent.ts", "debe_contener": "REQUEST_MISMATCH" }
+      ],
+      "canon": [
+        { "archivo": "CLAUDE.md", "debe_mencionar": "consentimiento" },
+        { "archivo": "contextos/README.md", "debe_mencionar": "consentimiento" }
+      ],
+      "impacto_si_cambia": ["AUTHORITY_CHANGE"],
+      "adr_requerido": true
+    },
+    {
+      "id": "FR-10",
+      "componente": "ORBE",
+      "enunciado": "La interfaz ciudadana declara de forma permanente que lo mostrado es laboratorio, sin autoridad ni efecto administrativo.",
+      "codigo": [
+        { "archivo": "src/components/orbe/OrbeContextPilot.tsx", "debe_contener": "LAB_MOCK · autoridad: NONE" }
+      ],
+      "canon": [
+        { "archivo": "docs/orbe/P0_ACCEPTANCE.md", "debe_mencionar": "LAB_MOCK" }
+      ],
+      "impacto_si_cambia": ["AUTHORITY_CHANGE"],
+      "adr_requerido": true
+    }
+  ]
+}
