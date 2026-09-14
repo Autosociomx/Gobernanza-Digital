@@ -1,5 +1,11 @@
 # 🏛️ PARLAMENTO_PROMPT.md — Prompt Maestro del Parlamento de las Sillas
 
+> **⏳ Documento normativo sin revisión desde el 30 de julio de 2026.**
+> Sus reglas —en especial la Regla 4, el voto humano decisivo— siguen rigiendo y
+> esta auditoría se apoya en ellas. Lo que puede haber envejecido es la
+> composición de las sillas y sus modelos. El estado del trabajo vive en
+> `docs/marco/ESTADO.md`, no aquí.
+
 **Nayarit Digital / ConnectX** · Documento normativo · v1.0
 **Cámara:** DECISIÓN · **Antecedente:** Acta 004 (ampliación a 5 sillas)
 **Documentos hermanos:** `docs/agentes/GABINETE_ESPECIALISTAS.md` (cámara de trabajo) · `docs/marco/GOBERNANZA_REPOSITORIO.md` (flujo de cambios)

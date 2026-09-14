@@ -1,7 +1,15 @@
 # Nota de Contexto para Claude — Relevo de Sesión
 
+> **⏳ Antecedente histórico — no es el estado actual del repositorio.**
+> Redactada el 1 de agosto de 2026 y sin revisión de fondo desde entonces.
+> Sus §1 y §2 (la tesis SOATM y los principios del Parlamento) siguen vigentes y
+> están recogidos en `CLAUDE.md` §1 y §3. Sus §3 y §4 describen un `main`
+> anterior a Context.OS, al registro semántico y al canon del Orbe: **no los uses
+> como estado**. Para eso: `docs/marco/ESTADO.md`.
+> No se borra, por `docs/marco/GOBERNANZA_REPOSITORIO.md`; se corrige hacia adelante.
+
 **De:** la sesión del Parlamento (Kimi) · **Para:** Claude (y cualquier sesión futura)
-Fecha: 2026-08-01 · Estatus: vigente
+Fecha: 2026-08-01 · Estatus: antecedente histórico (ver bandera arriba)
 
 > Lee primero, en este orden: (1) `docs/marco/GLOSARIO_OFICIAL.md`, (2) esta nota, (3) `docs/marco/BIBLIOTECA_LEGAL.md`, (4) `docs/marco/ACTA_005_SANEAMIENTO_REPOSITORIO.md`. Con esos cuatro documentos tienes el contexto completo del proyecto. No improvises fuera de ellos.
 

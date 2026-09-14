@@ -4,7 +4,12 @@
   # queda marcado en rojo — protección independiente de GitHub Actions.
   # ORBE P0 añade un gate E2E reproducible: si cualquiera de los ocho casos
   # falla, Netlify no publica el deploy.
-  command = "node scripts/verificar-regresiones.mjs && npm run test:orbe-p0-e2e && npm run build"
+  # preparar-config-firebase.mjs materializa firebase-applet-config.json, que
+  # está gitignoreado y que src/firebase.ts importa: sin él `npm run build` no
+  # resuelve el módulo. Requiere la variable FIREBASE_APPLET_CONFIG con el JSON
+  # completo en la configuración del sitio; si falta, el build falla diciéndolo
+  # en vez de con un «Could not resolve» opaco. Ver CI-01 en docs/marco/ESTADO.md.
+  command = "node scripts/verificar-regresiones.mjs && node scripts/preparar-config-firebase.mjs && npm run test:orbe-p0-e2e && npm run build"
   publish = "dist"
 
 [[redirects]]

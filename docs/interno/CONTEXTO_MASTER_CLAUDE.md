@@ -1,4 +1,15 @@
 # CONTEXTO MAESTRO Y SYSTEM PROMPT PARA CLAUDE
+
+> **🔴 NO USAR COMO PROMPT DE ARRANQUE — antecedente histórico (12 de julio de 2026).**
+> Este documento pide copiarse y pegarse en el primer mensaje de una sesión de IA.
+> **No lo hagas.** Su encuadre —consolidación política de una candidatura, con
+> nombre propio, seguidores y cifras de aprobación— es la categoría 🔴 del
+> semáforo de `CLAUDE.md` §3 (nombres de políticos, promesas, cifras sin fuente) y
+> contradice el principio de branding institucional, nunca personal.
+> Se conserva como antecedente del origen del proyecto y porque las actas y el
+> material interno no se borran. El contexto de arranque real es `CLAUDE.md` y
+> después `docs/marco/ESTADO.md`. Ver la entrada `CANON-02`.
+
 **PROYECTO:** ConnectX "Aplicación Madre" - Infraestructura Estatal Nayarit 2027
 **OBJETIVO:** Construir el esqueleto backend, arquitectura de base de datos y panel central (C5 Digital) para gestionar el ecosistema de Gobernanza de Geraldine Ponce.
 

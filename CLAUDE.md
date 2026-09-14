@@ -57,22 +57,30 @@ Copia `firebase-applet-config.example.json` y llénalo, o pídeselo al usuario.
 | `npm run contextos:lab` | Servidor de laboratorio Context.OS en `127.0.0.1:3011` |
 | `npm run test:firestore-rules` | Reglas de Firestore contra el emulador (requiere Java 21) |
 | `node scripts/verificar-regresiones.mjs` | **La Guardia** — corre esto antes de entregar |
+| `node scripts/verificar-estado.mjs` | Verifica `docs/marco/estado.json` (caducidad, evidencias, coherencia con `ESTADO.md`) |
+| `node scripts/preparar-config-firebase.mjs` | Materializa `firebase-applet-config.json` desde `FIREBASE_APPLET_CONFIG`, o desde el ejemplo con `--placeholder` |
 
 > `npx tsc` instala un paquete distinto y falso. Usa `npm run lint` o
 > `./node_modules/.bin/tsc --noEmit`.
 
 ### Antes de dar por terminado cualquier cambio
 
-Los tres en verde, sin excepción:
+Los cuatro en verde, sin excepción:
 
 ```bash
 node scripts/verificar-regresiones.mjs
+node scripts/verificar-estado.mjs
 npm run lint
 npx vite build
 ```
 
 Si tocaste `contextos/`, `shared/semantic/` o `src/orbe/`, añade
 `npm run test:orbe-contextos`.
+
+Y antes de cerrar la sesión, actualiza la entrada que trabajaste en
+`docs/marco/estado.json` y sube su fecha. Un cambio que no deja el estado al día
+obliga a la siguiente sesión a redescubrir dónde quedó todo — que es exactamente
+el gasto que ese registro existe para evitar.
 
 ---
 
@@ -112,6 +120,11 @@ Cambiar cualquiera de estos exige mención explícita en la descripción del PR:
 `index.html`, `vite.config.ts`, `netlify.toml`, `public/robots.txt`,
 `src/App.tsx`, `server.ts`, `docs/` completo,
 `scripts/verificar-regresiones.mjs`, `.github/workflows/`.
+
+`docs/marco/estado.json` es la excepción dentro de `docs/`: se actualiza en cada
+sesión y no requiere mención especial **mientras el cambio sea de estado**
+(cerrar una entrada, añadir una nueva, subir la fecha). Cambiar su esquema o
+retirar entradas sin resolver sí la requiere.
 
 ### Honestidad de datos (el "semáforo")
 
@@ -298,6 +311,8 @@ endpoints del servidor o el lazy loading: es una regresión, no una mejora.
 ├── storage.rules
 ├── scripts/
 │   ├── verificar-regresiones.mjs   La Guardia (R1–R8)
+│   ├── verificar-estado.mjs        Verificador del estado canónico (E1–E7)
+│   ├── preparar-config-firebase.mjs  Materializa la config de Firebase en CI/deploy
 │   └── test-firestore-rules.mjs    Pruebas de reglas contra el emulador
 ├── src/
 │   ├── App.tsx                 Ruteo por useState + enlaces profundos
@@ -331,14 +346,24 @@ endpoints del servidor o el lazy loading: es una regresión, no una mejora.
 
 En este orden:
 
-1. `docs/marco/GLOSARIO_OFICIAL.md` — vocabulario, etiquetas, regla de citación.
-2. `docs/marco/NOTA_DE_CONTEXTO_PARA_CLAUDE.md` — relevo de sesión, principios.
+1. **`docs/marco/ESTADO.md` — en qué va el trabajo hoy: qué está bloqueado, qué
+   espera decisión y qué ya se comprobó que está sano.** Este archivo dice cómo
+   se trabaja aquí y casi no cambia; `ESTADO.md` dice en qué va y cambia cada
+   semana. Léelo siempre: evita redescubrir lo que otra sesión ya levantó. Su
+   diagnóstico de origen está en `docs/marco/AUDITORIA_FLUJO_SESIONES.md`.
+2. `docs/marco/GLOSARIO_OFICIAL.md` — vocabulario, etiquetas, regla de citación.
 3. `docs/marco/PROTOCOLO_SEGURIDAD.md` — llaves, guardia, incidentes.
 4. `docs/marco/GOBERNANZA_REPOSITORIO.md` — flujo de cambios, archivos protegidos.
 5. `docs/marco/BIBLIOTECA_LEGAL.md` — base normativa por módulo, con estatus.
 6. `docs/plataforma/05-MANUAL-DESARROLLADORES.md` — qué APIs existen hoy.
 7. `contextos/README.md` — alcance exacto del runtime y, sobre todo, **lo que
    no hace**.
+
+`docs/marco/NOTA_DE_CONTEXTO_PARA_CLAUDE.md` salió de esta lista: es el relevo de
+sesión del 1 de agosto y describe un `main` anterior a Context.OS, al registro
+semántico y al canon del Orbe. Sigue siendo útil como antecedente —sus principios
+son los que este archivo recoge en §3— pero su §3 y su §4 ya no son el estado del
+repositorio. Para eso está `ESTADO.md`.
 
 Las actas de `docs/actas/` son el registro institucional: no se borran, se
 corrigen con actas posteriores.

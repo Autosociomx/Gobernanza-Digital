@@ -1,5 +1,12 @@
 # Parlamento de las Sillas: Sesión Estratégica Nayarit Digital
 
+> **⏳ Transcripción de sesión del 5 de julio de 2026 — antecedente, no hoja de ruta.**
+> Es el registro de una deliberación temprana, anterior a la tesis SOATM y a la
+> Biblioteca Legal. Sus prioridades y afirmaciones (incluida la «Devolución SAT»,
+> que no es competencia municipal) no se han contrastado contra
+> `docs/marco/BIBLIOTECA_LEGAL.md` ni contra el código. No se cita en público.
+> La hoja de ruta vigente está en `docs/marco/ESTADO.md`.
+
 **Participantes:**
 - **Consejo (C):** Visión institucional, normatividad y viabilidad técnica.
 - **Marketing (M):** Visión de adopción masiva, percepción pública y UX.
