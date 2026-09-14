@@ -3,10 +3,10 @@
 # la compuerta no eleva niveles de evidencia. Ver docs/marco/COMPUERTA_ARQUITECTURA.md
 change_id: ARCH-2026-001
 generado_por: scripts/compuerta-arquitectura.mjs
-generado_en: 2026-09-14T01:23:34.605Z
+generado_en: 2026-09-14T01:26:46.688Z
 pr: null
 base: origin/main
-verified_at_commit: d8b3d280d15e85321d663f56cd4cf09eccdba47d
+verified_at_commit: eed2533eb57f1a7700987fd94b2f186699a41c0d
 component: 'Plataforma SOATM'
 impact:
   - ARCHITECTURE_CHANGE
@@ -19,7 +19,10 @@ institutional_effects: false
 adr: docs/marco/adr/ADR-0001-compuerta-de-arquitectura.md
 adr_required: false
 tests:
-
+  compuerta: 35/35
+  orbe_contextos: 45/45
+  suite_completa: 89/89
+  fronteras_canon: 10/10
 fronteras_movidas: []
 fronteras_tocadas: []
 open_gaps:

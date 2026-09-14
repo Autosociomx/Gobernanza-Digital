@@ -348,7 +348,7 @@
       "madurez": "EXPERIMENTAL",
       "evidence_level": "E3_REPRODUCIBLE_EXECUTION",
       "semaforo": "AMARILLO",
-      "verified_at_commit": "140f11febb1b1d4746daf93a260e3b6cabe78745",
+      "verified_at_commit": "eed2533eb57f1a7700987fd94b2f186699a41c0d",
       "evidencia": [
         "scripts/compuerta-arquitectura.mjs",
         "docs/marco/fronteras-arquitectura.json",

@@ -41,6 +41,10 @@ function aYaml(objeto, sangria = 0) {
       continue;
     }
     if (valor !== null && typeof valor === 'object') {
+      if (!Object.keys(valor).length) {
+        lineas.push(`${espacios}${clave}: {}`);
+        continue;
+      }
       lineas.push(`${espacios}${clave}:`);
       lineas.push(aYaml(valor, sangria + 2));
       continue;
