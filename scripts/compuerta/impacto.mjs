@@ -17,6 +17,7 @@ import {
   SEMAFORO,
   RUTAS_VIGILADAS,
   RUTAS_CONTRATO,
+  RUTAS_ARQUITECTURA,
   RUTAS_EVIDENCIA,
   RUTAS_AUTORIDAD,
   esRutaDe,
@@ -112,13 +113,22 @@ export function compuertaDeImpacto(contexto) {
   const contratos = archivos.map((a) => a.ruta).filter((r) => esRutaDe(r, RUTAS_CONTRATO));
   const evidencias = archivos.map((a) => a.ruta).filter((r) => esRutaDe(r, RUTAS_EVIDENCIA));
   const autoridades = archivos.map((a) => a.ruta).filter((r) => esRutaDe(r, RUTAS_AUTORIDAD));
+  const estructurales = archivos.map((a) => a.ruta).filter((r) => esRutaDe(r, RUTAS_ARQUITECTURA));
 
-  if (soloSinImpacto && (contratos.length || evidencias.length || autoridades.length)) {
+  if (soloSinImpacto && (contratos.length || evidencias.length || autoridades.length || estructurales.length)) {
     error(
       'B12',
       'La declaración dice NO_ARCH_IMPACT pero el cambio toca ' +
-        [...contratos, ...evidencias, ...autoridades].join(', ') +
+        [...contratos, ...evidencias, ...autoridades, ...estructurales].join(', ') +
         '. Eso es un impacto arquitectónico por definición, no por opinión.',
+    );
+  }
+
+  if (estructurales.length && !impactos.includes('ARCHITECTURE_CHANGE')) {
+    error(
+      'B17',
+      `Toca la arquitectura o su canon ejecutable (${estructurales.join(', ')}) y no declara ` +
+        'ARCHITECTURE_CHANGE. La propia compuerta está aquí a propósito: relajarla no es un cambio menor.',
     );
   }
 

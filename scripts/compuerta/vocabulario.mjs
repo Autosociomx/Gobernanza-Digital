@@ -74,6 +74,19 @@ export const RUTAS_CONTRATO = [
 /** Rutas de evidencia: tocarlas es EVIDENCE_CHANGE por definición. */
 export const RUTAS_EVIDENCIA = ['contextos/evidence.ts'];
 
+/**
+ * Rutas que definen la propia arquitectura o su canon ejecutable: tocarlas es
+ * ARCHITECTURE_CHANGE por definición. Incluye la compuerta misma, para que
+ * relajarla no pueda pasar como cambio menor.
+ */
+export const RUTAS_ARQUITECTURA = [
+  'docs/marco/fronteras-arquitectura.json',
+  'contextos/runtime.ts',
+  'contextos/factory.ts',
+  'scripts/compuerta/',
+  'scripts/compuerta-arquitectura.mjs',
+];
+
 /** Rutas de policy y consentimiento: tocarlas mueve la frontera de autoridad. */
 export const RUTAS_AUTORIDAD = [
   'contextos/policyEngine.ts',

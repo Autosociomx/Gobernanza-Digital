@@ -360,7 +360,7 @@
       "bloquea": [],
       "test_evidence": {
         "comando": "npm run test:compuerta && node scripts/compuerta-arquitectura.mjs --solo-canon",
-        "resultado": "34/34 pruebas de las cuatro fases; 10/10 fronteras del canon sin deriva.",
+        "resultado": "35/35 pruebas de las cuatro fases; 10/10 fronteras del canon sin deriva.",
         "artifact": "docs/marco/recibos/ARCH-2026-001.yml"
       },
       "criterio_cierre": "El criterio de la issue #68: una PR de prueba sobre un contrato de Context.OS que sea clasificada, produzca recibo, falle al omitir el impacto contractual, falle al declarar E3 sin prueba reproducible, falle al ampliar autoridad sin ADR y deje estado.json coherente — demostrado en una corrida de CI real, no sólo en local. Depende de CI-02.",

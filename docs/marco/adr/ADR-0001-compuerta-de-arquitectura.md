@@ -147,13 +147,27 @@ producto. Lo que sí queda versionado es el recibo.
 ## Cómo se verifica
 
 ```bash
-npm run test:compuerta        # 34 pruebas de las cuatro fases
+npm run test:compuerta        # 35 pruebas de las cuatro fases
 npm run compuerta:canon       # deriva entre canon y código, sin PR
 npm run estado:semaforo       # el semáforo, generado desde el MASTER_STATE
 node scripts/verificar-estado.mjs
 ```
 
-Sobre `140f11f`, en local: 34/34 pruebas, 10/10 fronteras sin deriva.
+En local, sobre esta rama: 35/35 pruebas y 10/10 fronteras sin deriva. El
+commit exacto queda registrado en el recibo `docs/marco/recibos/ARCH-2026-001.yml`.
+
+Además se corrieron los cuatro escenarios negativos del criterio de cierre de
+la issue #68, sobre el propio parche de esta entrega:
+
+| Escenario | Resultado |
+|---|---|
+| PR sin declaración | bloqueada · `B1` |
+| PR que declara `NO_ARCH_IMPACT` tocando la compuerta | bloqueada · `B12`, `B17` |
+| PR que declara `E3` sin comando ni resultado | bloqueada · `C4`, `C5` |
+| PR que retira la barrera `LAB_MOCK` del adapter declarando `authority_changed: false` | bloqueada · `D1` y `FR-01` en tres frentes: el código dejó de sostener el canon, falta el ADR que la frontera exige, y el impacto declarado no incluye `AUTHORITY_CHANGE` |
+
+El cuarto se ejecutó sobre un árbol desechable creado con `git worktree`, que
+se eliminó después: la barrera del adapter nunca se movió en esta rama.
 
 **Lo que todavía no está demostrado:** que la compuerta corra en CI real. Los
 jobs de GitHub Actions de este repositorio terminan en 3–5 segundos sin

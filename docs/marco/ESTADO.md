@@ -77,7 +77,7 @@ abiertas, el trabajo terminado se acumula en ramas sin poder integrarse.
 | **PR-01** | 15 pull requests abiertas sin triaje, la más antigua de hace 48 días, ninguna capaz de cerrar en verde mientras CI-01 y CI-02 sigan vivos | director |
 | **ORBE-P0-E2E-008** 🔴 | El caso 8 de la suite E2E —degradación segura con Context.OS caído— falla en `main` afirmando ejecución que no ocurrió. Corregido y verificado en la rama del PR #63 (8/8), sin cerrar hasta que corra en CI | director |
 | **PR-03** | El PR #67, que trae este registro y el arreglo de CI-01, sigue sin fusionarse. Sus cuatro comandos de verificación se reprodujeron aquí en verde | director |
-| **ARCH-01** | Compuerta de arquitectura v0.1 (impacto, evidencia, autoridad, deriva de canon): corre en local con 34/34 pruebas y 10/10 fronteras, sin poder demostrarse en CI mientras CI-02 siga vivo | director |
+| **ARCH-01** | Compuerta de arquitectura v0.1 (impacto, evidencia, autoridad, deriva de canon): corre en local con 35/35 pruebas y 10/10 fronteras, sin poder demostrarse en CI mientras CI-02 siga vivo | director |
 
 **ORBE-P0-E2E-008 tiene evidencia E3 y sigue en 🔴 a propósito.** El caso 8
 vigila que ORBE no afirme haber ejecutado cuando el runtime está caído: es la

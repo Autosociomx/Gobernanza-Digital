@@ -141,6 +141,15 @@ describe('fase B · compuerta de impacto', () => {
     expect(ids(resultado)).toContain('B10');
   });
 
+  it('exige ARCHITECTURE_CHANGE al tocar la propia compuerta o sus fronteras', () => {
+    const resultado = compuertaDeImpacto({
+      declaracion: leerDeclaracion(cuerpoCon(DECLARACION_MINIMA)),
+      archivos: [{ estado: 'M', ruta: 'docs/marco/fronteras-arquitectura.json' }],
+      ...entorno,
+    });
+    expect(ids(resultado)).toContain('B17');
+  });
+
   it('rechaza vocabulario inventado', () => {
     const resultado = compuertaDeImpacto({
       declaracion: leerDeclaracion(cuerpoCon(DECLARACION_MINIMA.replace('CONTRACT_CHANGE', 'ALGO_NUEVO'))),

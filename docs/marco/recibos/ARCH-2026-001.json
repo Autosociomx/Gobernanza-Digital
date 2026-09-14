@@ -1,0 +1,33 @@
+{
+  "change_id": "ARCH-2026-001",
+  "generado_por": "scripts/compuerta-arquitectura.mjs",
+  "generado_en": "2026-09-14T01:23:34.605Z",
+  "pr": null,
+  "base": "origin/main",
+  "verified_at_commit": "d8b3d280d15e85321d663f56cd4cf09eccdba47d",
+  "component": "Plataforma SOATM",
+  "impact": [
+    "ARCHITECTURE_CHANGE"
+  ],
+  "evidence_level": "E3_REPRODUCIBLE_EXECUTION",
+  "evidence_level_elevado_por_la_compuerta": false,
+  "maturity": "EXPERIMENTAL",
+  "semaforo": "AMARILLO",
+  "authority_changed": false,
+  "institutional_effects": false,
+  "adr": "docs/marco/adr/ADR-0001-compuerta-de-arquitectura.md",
+  "adr_required": false,
+  "tests": {},
+  "fronteras_movidas": [],
+  "fronteras_tocadas": [],
+  "open_gaps": [
+    "CI real (CI-02): la compuerta nunca ha corrido en un runner",
+    "identidad: no hay frontera porque no hay codigo de identidad todavia",
+    "jurisdiccion: el catalogo declara una, sin verificacion institucional"
+  ],
+  "requiere_revision_humana": false,
+  "veredicto": "PASA",
+  "bloqueos": [],
+  "escalamientos": [],
+  "avisos": []
+}
