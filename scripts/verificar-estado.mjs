@@ -19,10 +19,26 @@
  * E6 · el archivo no ha caducado (`actualizado` + `vigencia_dias`)
  * E7 · ESTADO.md menciona todas las entradas (prosa y datos no divergen)
  *
- * Uso:  node scripts/verificar-estado.mjs
+ * Desde la compuerta de arquitectura (ADR-0001) el registro lleva además dos
+ * ejes independientes —madurez y fuerza de evidencia— y un semáforo, y esas
+ * tres cosas también se verifican:
+ *
+ * E8  · el vocabulario declarado en el JSON coincide con el de la compuerta
+ * E9  · cada entrada declara `evidence_level` y `semaforo` válidos
+ * E10 · E2 o más exige `verified_at_commit`; E3 o más exige `test_evidence`
+ *       con comando y resultado (o artefacto existente)
+ * E11 · ROJO y AMARILLO exigen criterio de cierre; GRIS, condición de arranque
+ * E12 · VERDE exige entrada resuelta, evidencia E2 o más, commit, criterio y
+ *       responsable: verde es cerrado con evidencia, no optimismo
+ * E13 · nadie declara E5 mientras el runtime siga declarando authority: NONE
+ *
+ * Uso:  node scripts/verificar-estado.mjs [--semaforo]
+ *   --semaforo  imprime el reporte del semáforo en vez de sólo verificar
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
+
+import { MADUREZ, EVIDENCIA, SEMAFORO, NIVEL_EVIDENCIA } from './compuerta/vocabulario.mjs';
 
 const RUTA_JSON = 'docs/marco/estado.json';
 const RUTA_MD = 'docs/marco/ESTADO.md';
@@ -153,6 +169,133 @@ if (!existsSync(RUTA_MD)) {
   }
 }
 
+
+// ---------------------------------------------------------------------------
+// Ejes de madurez y evidencia (ADR-0001)
+// ---------------------------------------------------------------------------
+
+// E8 · El vocabulario del JSON no puede separarse del de la compuerta
+const listasDeclaradas = [
+  ['madurez_validas', MADUREZ],
+  ['evidencia_validos', EVIDENCIA],
+  ['semaforo_validos', SEMAFORO],
+];
+for (const [campo, esperado] of listasDeclaradas) {
+  const declarado = estado[campo];
+  if (declarado === undefined) {
+    errores.push(`${RUTA_JSON} no declara «${campo}». Los ejes del ADR-0001 son parte del registro.`);
+    continue;
+  }
+  if (JSON.stringify(declarado) !== JSON.stringify(esperado)) {
+    errores.push(
+      `${RUTA_JSON}: «${campo}» no coincide con scripts/compuerta/vocabulario.mjs. ` +
+      'Dos vocabularios distintos para lo mismo es el primer paso de la deriva.'
+    );
+  }
+}
+
+const madureces = new Set(MADUREZ);
+const niveles = new Set(EVIDENCIA);
+const semaforos = new Set(SEMAFORO);
+
+for (const e of estado.entradas) {
+  const donde = `entrada ${e?.id ?? '(sin id)'}`;
+
+  // E9 · Vocabulario de los ejes
+  if (e?.madurez !== undefined && !madureces.has(e.madurez)) {
+    errores.push(`${donde}: madurez «${e.madurez}» fuera del eje. Válidas: ${MADUREZ.join(', ')}.`);
+  }
+  if (e?.evidence_level === undefined) {
+    errores.push(
+      `${donde}: falta «evidence_level». Toda entrada declara con qué se sostiene, aunque sea E0_DECLARED.`
+    );
+  } else if (!niveles.has(e.evidence_level)) {
+    errores.push(`${donde}: evidence_level «${e.evidence_level}» fuera del eje. Válidos: ${EVIDENCIA.join(', ')}.`);
+  }
+  if (e?.semaforo === undefined) {
+    errores.push(`${donde}: falta «semaforo».`);
+  } else if (!semaforos.has(e.semaforo)) {
+    errores.push(`${donde}: semaforo «${e.semaforo}» no es válido. Válidos: ${SEMAFORO.join(', ')}.`);
+  }
+
+  const orden = NIVEL_EVIDENCIA[e?.evidence_level];
+
+  // E10 · Lo que cada nivel exige
+  if (orden !== undefined && orden >= NIVEL_EVIDENCIA.E2_CODE_INSPECTED) {
+    if (!e.verified_at_commit) {
+      errores.push(
+        `${donde}: declara ${e.evidence_level} sin «verified_at_commit». ` +
+        'Una ruta sin commit no es inspección, es referencia.'
+      );
+    } else {
+      try {
+        execSync(`git cat-file -e ${e.verified_at_commit}^{commit}`, { stdio: 'ignore' });
+      } catch {
+        avisos.push(`${donde}: «verified_at_commit» (${String(e.verified_at_commit).slice(0, 12)}) no está en este clon.`);
+      }
+    }
+  }
+  if (orden !== undefined && orden >= NIVEL_EVIDENCIA.E3_REPRODUCIBLE_EXECUTION) {
+    const prueba = e.test_evidence;
+    if (!prueba || typeof prueba !== 'object') {
+      errores.push(
+        `${donde}: declara ${e.evidence_level} sin «test_evidence». E3 es «cualquiera puede volver a correrlo»: ` +
+        'exige comando y resultado.'
+      );
+    } else {
+      if (!String(prueba.comando ?? '').trim()) {
+        errores.push(`${donde}: «test_evidence» sin «comando».`);
+      }
+      if (!String(prueba.resultado ?? '').trim() && !String(prueba.artifact ?? '').trim()) {
+        errores.push(`${donde}: «test_evidence» sin «resultado» ni «artifact»: un comando sin resultado no prueba nada.`);
+      }
+      const artefacto = String(prueba.artifact ?? '').trim();
+      if (artefacto && /\.[a-z0-9]+$/i.test(artefacto) && !existsSync(artefacto)) {
+        errores.push(`${donde}: el artefacto «${artefacto}» citado en «test_evidence» no existe.`);
+      }
+    }
+  }
+
+  // E11 · Cada color exige lo suyo
+  const criterio = String(e?.criterio_cierre ?? '').trim();
+  if ((e?.semaforo === 'ROJO' || e?.semaforo === 'AMARILLO') && criterio.length < 40) {
+    errores.push(
+      `${donde}: semáforo ${e.semaforo} sin «criterio_cierre» sustantivo. ` +
+      'Rojo sin criterio de salida y amarillo sin acción siguiente se vuelven permanentes.'
+    );
+  }
+  if (e?.semaforo === 'GRIS' && !String(e?.condicion_de_arranque ?? '').trim()) {
+    errores.push(`${donde}: semáforo GRIS sin «condicion_de_arranque»: gris significa «no iniciado», y algo lo desbloquea.`);
+  }
+
+  // E12 · Verde es cerrado con evidencia
+  if (e?.semaforo === 'VERDE') {
+    if (e.estado !== 'resuelto') {
+      errores.push(`${donde}: semáforo VERDE con estado «${e.estado}». Verde es cerrado, no casi cerrado.`);
+    }
+    if (orden === undefined || orden < NIVEL_EVIDENCIA.E2_CODE_INSPECTED) {
+      errores.push(`${donde}: semáforo VERDE con evidencia ${e.evidence_level}. E0 y E1 no cierran nada por sí solos.`);
+    }
+    if (!e.verified_at_commit) errores.push(`${donde}: semáforo VERDE sin «verified_at_commit».`);
+    if (criterio.length < 40) errores.push(`${donde}: semáforo VERDE sin criterio de cierre cumplido y escrito.`);
+    if (!String(e.responsable ?? '').trim()) {
+      errores.push(`${donde}: semáforo VERDE sin «responsable». Un cierre sin responsable no es un cierre.`);
+    }
+  }
+
+  // E13 · E5 es incompatible con el estado declarado del sistema
+  if (e?.evidence_level === 'E5_INSTITUTIONAL_OPERATION_VERIFIED') {
+    const runtime = existsSync('contextos/labServer.ts') ? readFileSync('contextos/labServer.ts', 'utf-8') : '';
+    if (runtime.includes("authority: 'NONE'")) {
+      errores.push(
+        `${donde}: declara E5_INSTITUTIONAL_OPERATION_VERIFIED mientras contextos/labServer.ts sigue ` +
+        'declarando authority: NONE. Nada opera institucionalmente con autoridad nula: primero el ADR ' +
+        'que amplía la autoridad, después el nivel de evidencia.'
+      );
+    }
+  }
+}
+
 // Salida
 for (const a of avisos) console.warn(`⚠ ${a}`);
 
@@ -161,6 +304,31 @@ if (errores.length) {
   for (const e of errores) console.error(`  · ${e}`);
   console.error(`\n${errores.length} problema(s). Fuente: ${RUTA_JSON} · guía: CLAUDE.md §2.`);
   process.exit(1);
+}
+
+
+if (process.argv.includes('--semaforo')) {
+  const grupos = { ROJO: [], AMARILLO: [], VERDE: [], GRIS: [] };
+  for (const e of estado.entradas) (grupos[e.semaforo] ?? grupos.GRIS).push(e);
+  const titulo = { VERDE: '🟢 CERRADO', AMARILLO: '🟡 EN PROCESO', ROJO: '🔴 BLOQUEADO', GRIS: '⚪ NO INICIADO' };
+
+  console.log('\nSEMÁFORO GOBERNANZA DIGITAL');
+  console.log(`Registro: ${RUTA_JSON} · actualizado ${estado.actualizado} · ${estado.entradas.length} entradas\n`);
+  for (const color of ['VERDE', 'AMARILLO', 'ROJO', 'GRIS']) {
+    console.log(`${titulo[color]} (${grupos[color].length})`);
+    for (const e of grupos[color]) {
+      console.log(`  · ${e.id} — ${e.titulo}`);
+      console.log(`      evidencia: ${e.evidence_level}${e.madurez ? ` · madurez: ${e.madurez}` : ''} · decide: ${e.decide}`);
+      const siguiente = color === 'GRIS' ? e.condicion_de_arranque : e.criterio_cierre;
+      if (siguiente) console.log(`      ${color === 'GRIS' ? 'arranca con' : 'cierra con'}: ${siguiente}`);
+    }
+    console.log('');
+  }
+  const porNivel = {};
+  for (const e of estado.entradas) porNivel[e.evidence_level] = (porNivel[e.evidence_level] ?? 0) + 1;
+  console.log('EVIDENCIA POR NIVEL');
+  for (const nivel of EVIDENCIA) if (porNivel[nivel]) console.log(`  ${nivel}: ${porNivel[nivel]}`);
+  console.log('');
 }
 
 const abiertas = estado.entradas.filter((e) => e.estado !== 'resuelto');

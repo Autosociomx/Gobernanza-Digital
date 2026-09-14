@@ -1,13 +1,29 @@
 {
   "$schema_nota": "Registro canónico del estado de trabajo del repositorio. Es la parte que CLAUDE.md deliberadamente no carga (las reglas no cambian; el estado sí) y la que más rápido se pudre. Cada sesión de trabajo lo lee al arrancar y lo actualiza al cerrar. Verificado por scripts/verificar-estado.mjs, que falla si el archivo caduca, si una evidencia no existe o si ESTADO.md deja de mencionar una entrada. No reemplaza a docs/marco/modulos/INDICE.json (completitud de código por módulo) ni a docs/orbe/modulos.json (madurez conceptual): esos miden módulos, este mide trabajo.",
   "version": 1,
-  "actualizado": "2026-09-13",
-  "verificado_contra": "d5a78aaca3b11c1d459acab154d66b3db87ef4f5",
+  "actualizado": "2026-09-14",
+  "verificado_contra": "140f11febb1b1d4746daf93a260e3b6cabe78745",
   "vigencia_dias": 21,
-  "tipos_validos": ["bloqueo", "pendiente", "decision"],
-  "estados_validos": ["abierto", "en_curso", "bloqueado", "resuelto"],
-  "prioridades_validas": ["P0", "P1", "P2"],
-  "decide_validos": ["director", "sesion"],
+  "tipos_validos": [
+    "bloqueo",
+    "pendiente",
+    "decision"
+  ],
+  "estados_validos": [
+    "abierto",
+    "en_curso",
+    "bloqueado",
+    "resuelto"
+  ],
+  "prioridades_validas": [
+    "P0",
+    "P1",
+    "P2"
+  ],
+  "decide_validos": [
+    "director",
+    "sesion"
+  ],
   "entradas": [
     {
       "id": "CI-01",
@@ -16,13 +32,25 @@
       "estado": "en_curso",
       "prioridad": "P0",
       "decide": "sesion",
+      "madurez": "VALIDATED",
+      "evidence_level": "E3_REPRODUCIBLE_EXECUTION",
+      "semaforo": "AMARILLO",
+      "verified_at_commit": "13fde75b8469c1569789f8bf0040f6f6f2555284",
       "evidencia": [
         "src/firebase.ts",
         ".gitignore",
         ".github/workflows/guardia-regresiones.yml",
         "netlify.toml"
       ],
-      "bloquea": ["CI-02", "PR-01"],
+      "bloquea": [
+        "CI-02",
+        "PR-01"
+      ],
+      "test_evidence": {
+        "comando": "node scripts/preparar-config-firebase.mjs --placeholder && npm run lint && npx vite build",
+        "resultado": "config materializada, tsc 0 errores, vite build 2208 módulos, dist/assets sin la cadena GEMINI"
+      },
+      "criterio_cierre": "Una corrida de la Guardia en CI real que llegue a «Verificar tipos» y «Compilar» en verde. Hoy no puede comprobarse porque CI-02 impide que el runner ejecute sus pasos.",
       "nota": "Desde c6dbb03 (2026-08-13) firebase-applet-config.json está gitignoreado y src/firebase.ts lo importa directo. En un checkout limpio `npm run lint` falla con TS2307 y `vite build` con «Could not resolve». El workflow ejecuta ambos y no materializa el archivo, así que el job no puede terminar en verde aunque el runner arranque. Verificado localmente: con el archivo ausente tsc falla y vite build aborta; copiando firebase-applet-config.example.json, tsc sale 0 y el build compila 2208 módulos con el bundle limpio de GEMINI. Se corrige en el workflow, no en src/firebase.ts (CLAUDE.md §2 lo prohíbe expresamente)."
     },
     {
@@ -32,8 +60,15 @@
       "estado": "abierto",
       "prioridad": "P0",
       "decide": "director",
-      "evidencia": [".github/workflows/guardia-regresiones.yml"],
-      "bloquea": ["PR-01"],
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "ROJO",
+      "evidencia": [
+        ".github/workflows/guardia-regresiones.yml"
+      ],
+      "bloquea": [
+        "PR-01"
+      ],
+      "criterio_cierre": "Una corrida de «Guardia de regresiones» que dure más de 30 s y deje logs descargables. Comprobado el 14-sep: la corrida 34770532110 (PR #67) se completa en 4 s y falla sin logs. Requiere revisión del director en Settings → Actions y en la facturación de Actions.",
       "nota": "Las 30 corridas más recientes de «Guardia de regresiones» (10-sep hacia atrás) fallan, incluidas tres sobre main. Los jobs se crean y se completan en 3–5 s y la descarga de logs devuelve 404 incluso para corridas de hace tres días: un job que llegara a `npm ci` tardaría decenas de segundos y dejaría logs. El patrón corresponde a un runner que nunca ejecuta sus pasos. Causa a confirmar por el director en Settings → Actions y en la facturación de Actions de la cuenta; no es diagnosticable desde el repositorio. CI-01 es un segundo bloqueo apilado detrás de este: arreglar uno solo no pone la cadena en verde."
     },
     {
@@ -43,8 +78,13 @@
       "estado": "abierto",
       "prioridad": "P0",
       "decide": "director",
-      "evidencia": ["netlify.toml"],
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "ROJO",
+      "evidencia": [
+        "netlify.toml"
+      ],
       "bloquea": [],
+      "criterio_cierre": "Un deploy preview de Netlify que compile y publique, con Lighthouse medido otra vez contra la meta 97+/100/100/100. Depende de CI-01 y de PR-02.",
       "nota": "En el PR #46 (18-ago) los tres checks de Netlify —Redirect rules, Header rules, Pages changed— están en failure; en el #60 (1-sep) siguen en failure. El comando de build de netlify.toml encadena tres tramos y dos están rotos en main: `npm run test:orbe-p0-e2e` falla y además se cuelga (PR-02), y `npm run build` no resuelve la config de Firebase (CI-01). Consecuencia a verificar con el director: el sitio publicado podría estar sirviendo un deploy anterior al 13-ago. Además la meta permanente de Lighthouse (97+/100/100/100) no se está midiendo mientras el preview no compile."
     },
     {
@@ -54,8 +94,13 @@
       "estado": "abierto",
       "prioridad": "P0",
       "decide": "director",
-      "evidencia": ["docs/marco/AUDITORIA_FLUJO_SESIONES.md"],
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "AMARILLO",
+      "evidencia": [
+        "docs/marco/AUDITORIA_FLUJO_SESIONES.md"
+      ],
       "bloquea": [],
+      "criterio_cierre": "Cada PR abierta con una decisión registrada: fusionar, rebasar o cerrar.",
       "nota": "Abiertas: #34 (27-jul), #46, #47, #52, #53, #54 (agosto), #56, #58, #59, #60, #62, #63, #64, #65, #66 (sep). Seis son borrador. Ninguna puede cerrar en verde mientras CI-01 y CI-02 sigan vivos, así que el trabajo terminado se acumula sin integrarse. El triaje (fusionar, rebasar o cerrar cada una) es decisión del director: ver la tabla en AUDITORIA_FLUJO_SESIONES.md §6."
     },
     {
@@ -65,8 +110,25 @@
       "estado": "abierto",
       "prioridad": "P0",
       "decide": "director",
-      "evidencia": ["scripts/test-orbe-p0-e2e.mts", "netlify.toml", "docs/orbe/ORBE_P0_REPORTE.md"],
-      "bloquea": ["CI-03", "ORBE-01"],
+      "madurez": "VALIDATED",
+      "evidence_level": "E3_REPRODUCIBLE_EXECUTION",
+      "semaforo": "AMARILLO",
+      "verified_at_commit": "e0d0c4b733f329dc7f94f26e524501eb8a2c6726",
+      "evidencia": [
+        "scripts/test-orbe-p0-e2e.mts",
+        "netlify.toml",
+        "docs/orbe/ORBE_P0_REPORTE.md"
+      ],
+      "bloquea": [
+        "CI-03",
+        "ORBE-01"
+      ],
+      "test_evidence": {
+        "comando": "npm run test:orbe-p0-e2e",
+        "resultado": "sobre main (d5a78aa): 7/8, caso 8 en FAIL con «'RUNTIME' !== 'ERROR'» y el proceso no termina (matado a los 100 s); sobre la rama del PR #63 (e0d0c4b): 8/8 y salida 0.",
+        "reporte": "artifacts/orbe-p0-e2e-report.md (lo genera la propia corrida; no se versiona)"
+      },
+      "criterio_cierre": "Fusionar el PR #63 y volver a correr la suite sobre main en CI.",
       "nota": "Reproducido sobre main (d5a78aa): `npm run test:orbe-p0-e2e` deja 7/8 casos en PASS y el caso 8 «Runtime caído» en FAIL con «'RUNTIME' !== 'ERROR'» — ORBE afirma haber ejecutado cuando Context.OS está caído, que es justo el invariante que el caso vigila. Peor: tras imprimir el reporte el proceso no termina; el labServer queda huérfano y hubo que matarlo a mano (dos corridas, exit 143 por timeout). netlify.toml corre esa suite antes de `npm run build`, así que el deploy no solo falla: se queda colgado. El PR #63 (6-sep) corrige exactamente esto —stopLabServer() mataba el proceso npx y no el proceso node que escucha el puerto— y sigue sin fusionarse."
     },
     {
@@ -76,6 +138,8 @@
       "estado": "abierto",
       "prioridad": "P1",
       "decide": "director",
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "AMARILLO",
       "evidencia": [
         "CLAUDE.md",
         "Parlamento.MD",
@@ -86,6 +150,7 @@
         "docs/agentes/GABINETE_ESPECIALISTAS.md"
       ],
       "bloquea": [],
+      "criterio_cierre": "Una decisión del director sobre cuál documento es el contexto canónico de sesión, con los demás marcados como históricos.",
       "nota": "Solo CLAUDE.md (26-ago) y el canon congelado del Orbe (3-sep) están al día. Los otros cinco llevan entre 44 y 70 días sin tocarse y ninguno declara estar caducado; NOTA_DE_CONTEXTO_PARA_CLAUDE.md se declara «vigente» desde el 1-ago. Esta PR añade el banner de vigencia a los caducados; retirarlos, fusionarlos o reescribirlos es decisión del director."
     },
     {
@@ -95,8 +160,16 @@
       "estado": "abierto",
       "prioridad": "P1",
       "decide": "director",
-      "evidencia": ["docs/interno/CONTEXTO_MASTER_CLAUDE.md", "docs/interno/README.md"],
-      "bloquea": ["PUB-01"],
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "ROJO",
+      "evidencia": [
+        "docs/interno/CONTEXTO_MASTER_CLAUDE.md",
+        "docs/interno/README.md"
+      ],
+      "bloquea": [
+        "PUB-01"
+      ],
+      "criterio_cierre": "Retirar, reescribir o marcar como histórico CONTEXTO_MASTER_CLAUDE.md. Mientras se ofrezca para pegarse al inicio de una sesión, contradice el semáforo de honestidad en el propio arranque.",
       "nota": "El documento se presenta como «CONTEXTO MAESTRO Y SYSTEM PROMPT PARA CLAUDE» y pide literalmente copiarlo y pegarlo en el primer mensaje de una sesión. Su contenido enmarca la plataforma como herramienta de consolidación política de una candidatura con nombre propio y cifras de aprobación: exactamente lo que el semáforo de CLAUDE.md §3 clasifica en 🔴. Está correctamente clasificado como interno, pero mientras siga descrito como prompt de arranque cualquier sesión que lo use queda alineada contra las reglas del repositorio."
     },
     {
@@ -106,8 +179,15 @@
       "estado": "abierto",
       "prioridad": "P1",
       "decide": "director",
-      "evidencia": ["docs/marco/AUDITORIA_FLUJO_SESIONES.md"],
-      "bloquea": ["CANON-01"],
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "AMARILLO",
+      "evidencia": [
+        "docs/marco/AUDITORIA_FLUJO_SESIONES.md"
+      ],
+      "bloquea": [
+        "CANON-01"
+      ],
+      "criterio_cierre": "Cerrar #47 y #60: fusionar una, cerrar la otra, o fundirlas en una sola propuesta.",
       "nota": "PR #47 «source of truth v0.1» (19-ago, borrador, 1170 líneas en docs/source-of-truth/) y PR #60 «Constitución de arquitectura v0.1» (1-sep, 415 líneas en docs/marco/). Ambas con CI en rojo. Son intentos del mismo problema que este trabajo aborda: mientras no se decida cuál vive, cada intento nuevo crea un canon paralelo más. La decisión —fusionar una, fusionar ambas con jerarquía explícita, o cerrarlas— precede a cualquier canon nuevo."
     },
     {
@@ -117,8 +197,15 @@
       "estado": "abierto",
       "prioridad": "P1",
       "decide": "director",
-      "evidencia": ["public/CONNECTX_SYSTEM_PROMPT.md", "server.ts", "docs/marco/GLOSARIO_OFICIAL.md"],
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "ROJO",
+      "evidencia": [
+        "public/CONNECTX_SYSTEM_PROMPT.md",
+        "server.ts",
+        "docs/marco/GLOSARIO_OFICIAL.md"
+      ],
       "bloquea": [],
+      "criterio_cierre": "Una revisión del system prompt que corre en producción y una decisión escrita del propietario. Cambiarlo altera en caliente lo que el asistente responde a un ciudadano: no es una edición de sesión.",
       "nota": "server.ts:58 carga public/CONNECTX_SYSTEM_PROMPT.md como system prompt de /api/ai/chat: es la voz que un ciudadano recibe hoy. Su segunda sección se titula literalmente «ARQUITECTURA DE COMUNICACIÓN (NLP & ASERCIÓN)» y ordena «Lenguaje de Conquista», «Psicología del Usuario» y que «el cambio no es una opción»; el propio texto se refiere a «el tono comercial de este documento» y define a Aura como «Arquitecto de Casos de Éxito Comerciales». El semáforo clasifica la PNL y la manipulación en 🔴 —se elimina— y exige branding institucional, nunca comercial. El archivo no se toca desde el 14-jul, un mes antes de la purga del 13-ago (c6dbb03) que retiró esa categoría del resto del repositorio: la purga no llegó hasta aquí. Los dos bloques finales del archivo (contexto de página y formato apto para voz) son correctos y deben conservarse. Reescribir la voz del asistente ciudadano es decisión del propietario, no de una sesión: esta entrega lo registra y no lo modifica."
     },
     {
@@ -128,8 +215,14 @@
       "estado": "abierto",
       "prioridad": "P1",
       "decide": "director",
-      "evidencia": ["docs/marco/modulos/INDICE.json", "docs/orbe/modulos.json"],
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "AMARILLO",
+      "evidencia": [
+        "docs/marco/modulos/INDICE.json",
+        "docs/orbe/modulos.json"
+      ],
       "bloquea": [],
+      "criterio_cierre": "Que los dos registros de módulos coincidan en tepictu-salud y pulso-nayarit, o que quede escrito por qué miden cosas distintas.",
       "nota": "CLAUDE.md §5 ordena señalar la contradicción en vez de elegir en silencio. tepictu-salud: el Orbe lo marca `disenado` (no construido) mientras INDICE.json marca el módulo salud como `real` con Firestore detrás (citasSaludService.ts, saludPerfilService.ts) — el registro conceptual va por detrás del código. pulso-nayarit: el Orbe lo marca `desplegado`, el estado más alto de su escala, y no tiene entrada en INDICE.json; existe el directorio pulso-nayarit/ con backend propio, pero «desplegado» necesita URL y fecha para sostenerse en público."
     },
     {
@@ -139,8 +232,14 @@
       "estado": "abierto",
       "prioridad": "P2",
       "decide": "sesion",
-      "evidencia": ["docs/marco/modulos/INDICE.json", "src/components/MunicipalLettersView.tsx"],
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "AMARILLO",
+      "evidencia": [
+        "docs/marco/modulos/INDICE.json",
+        "src/components/MunicipalLettersView.tsx"
+      ],
       "bloquea": [],
+      "criterio_cierre": "Corregir el rango de líneas en INDICE.json y volver a comprobarlo contra el archivo.",
       "nota": "Declara 1-759 y el archivo tiene 760 líneas. Es el único desfase de los 29 módulos: los otros 28 rangos siguen apuntando al componente correcto pese a los 161 commits transcurridos desde el commit de verificación f6536a6 (22-jul). El índice está sano; se corrige de paso al próximo cambio que toque ese módulo."
     },
     {
@@ -150,8 +249,15 @@
       "estado": "abierto",
       "prioridad": "P1",
       "decide": "director",
-      "evidencia": ["docs/orbe/ORBE_P0_REPORTE.md", "docs/orbe/P0_ACCEPTANCE.md"],
+      "madurez": "EXPERIMENTAL",
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "AMARILLO",
+      "evidencia": [
+        "docs/orbe/ORBE_P0_REPORTE.md",
+        "docs/orbe/P0_ACCEPTANCE.md"
+      ],
       "bloquea": [],
+      "criterio_cierre": "Las cinco verificaciones declaradas pendientes en docs/orbe/ORBE_P0_REPORTE.md, cerradas con evidencia. Ver también ORBE-P0-E2E-008.",
       "nota": "El propio reporte fija el criterio: «P0 no se declara terminado hasta que los puntos pendientes estén verificados». Faltan suite verde en Actions sobre el HEAD final, deploy efectivo en Netlify, variables de entorno de la demo, verificación de health y de una solicitud bache/luminaria desde la URL pública, y confirmación de que el frontend muestra el recibo evidenceId. Las tres primeras dependen de CI-01, CI-02 y CI-03."
     },
     {
@@ -161,6 +267,8 @@
       "estado": "abierto",
       "prioridad": "P1",
       "decide": "director",
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "ROJO",
       "evidencia": [
         "docs/interno/README.md",
         "src/components/C5Dashboard.tsx",
@@ -168,6 +276,7 @@
         "docs/marco/PROTOCOLO_SEGURIDAD.md"
       ],
       "bloquea": [],
+      "criterio_cierre": "Retirar los nombres reales de los componentes públicos o sustituir los KPIs inventados por cifras con fuente. Es la categoría 🔴 del semáforo, viva en la UI.",
       "nota": "Levantado el 13-jul y sin resolver desde entonces: GabineteView muestra personas reales con cifras de aprobación inventadas y fotos de stock presentadas como oficiales. Choca con el 🔴 del semáforo y con «branding institucional, nunca personal». El propio docs/interno/README.md lo declara bloqueante de la publicación del repositorio como código abierto. Requiere decisión del propietario: autorización expresa de las personas, o genericización."
     },
     {
@@ -177,8 +286,14 @@
       "estado": "abierto",
       "prioridad": "P1",
       "decide": "director",
-      "evidencia": ["docs/marco/NOTA_DE_CONTEXTO_PARA_CLAUDE.md", "docs/marco/PROTOCOLO_SEGURIDAD.md"],
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "AMARILLO",
+      "evidencia": [
+        "docs/marco/NOTA_DE_CONTEXTO_PARA_CLAUDE.md",
+        "docs/marco/PROTOCOLO_SEGURIDAD.md"
+      ],
       "bloquea": [],
+      "criterio_cierre": "Que cada pendiente heredado del relevo del 1-ago tenga dueño y fecha, o se retire del registro.",
       "nota": "La nota de relevo los lista como pendientes: rotar la llave de Gemini, publicar las reglas de Firestore y Storage en producción, cargar las variables de entorno en Netlify, y decidir sobre la Cloud Function de carga de personal. Ninguno tiene registro posterior que confirme su ejecución. Se listan aquí como «por confirmar», no como incumplidos: solo el director puede cerrarlos."
     },
     {
@@ -188,9 +303,266 @@
       "estado": "abierto",
       "prioridad": "P2",
       "decide": "sesion",
-      "evidencia": ["CLAUDE.md"],
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "AMARILLO",
+      "evidencia": [
+        "CLAUDE.md"
+      ],
       "bloquea": [],
+      "criterio_cierre": "Convención aplicada en los commits nuevos. Lo ya fusionado no se reescribe.",
       "nota": "CLAUDE.md §6 fija Conventional Commits en español. Los 27 commits del bloque ORBE P0 v0.2 (3 y 4 de septiembre) están en inglés («gate Netlify deploy on P0 E2E suite», «freeze canon baseline v0.1»), posteriores al merge de CLAUDE.md en main. El historial no se reescribe: se corrige hacia adelante. Nada que reparar en el pasado; sí que respetar desde la próxima sesión."
+    },
+    {
+      "id": "ORBE-P0-E2E-008",
+      "titulo": "El caso 8 de la suite E2E —degradación segura con Context.OS caído— no está cerrado en CI",
+      "tipo": "bloqueo",
+      "estado": "en_curso",
+      "prioridad": "P0",
+      "decide": "director",
+      "madurez": "VALIDATED",
+      "evidence_level": "E3_REPRODUCIBLE_EXECUTION",
+      "semaforo": "ROJO",
+      "verified_at_commit": "e0d0c4b733f329dc7f94f26e524501eb8a2c6726",
+      "evidencia": [
+        "scripts/test-orbe-p0-e2e.mts",
+        "docs/orbe/P0_ACCEPTANCE.md"
+      ],
+      "bloquea": [
+        "CI-03"
+      ],
+      "test_evidence": {
+        "comando": "npm run test:orbe-p0-e2e",
+        "resultado": "main (d5a78aa): 7/8, caso 8 FAIL «'RUNTIME' !== 'ERROR'», proceso colgado; rama del PR #63 (e0d0c4b): 8/8, salida 0, sin proceso huérfano.",
+        "reporte": "artifacts/orbe-p0-e2e-report.md (lo genera la propia corrida; no se versiona)"
+      },
+      "criterio_cierre": "8/8 en una corrida de CI real sobre main, con el PR #63 fusionado. La evidencia E3 local ya existe y está citada arriba; no basta para cerrar porque el invariante que vigila el caso 8 —que ORBE no afirme haber ejecutado cuando el runtime está caído— es justo el que debe quedar protegido de forma permanente, y hoy CI-02 impide que la protección corra.",
+      "nota": "El caso 8 es el que sostiene la frontera FR-01/FR-02 en la práctica: comprueba que, con Context.OS caído, ORBE degrada a ERROR en vez de afirmar RUNTIME. En main falla con «'RUNTIME' !== 'ERROR'», es decir ORBE afirma una ejecución que no ocurrió, y además la suite deja el labServer huérfano. El PR #63 corrige las dos cosas: mata el grupo de procesos (detached + pid negativo) y deja de confundir un TimeoutError de AbortSignal con un puerto cerrado. Verificado en esta sesión sobre las dos ramas. No se cierra hasta que corra en CI: una prueba que sólo pasa en la máquina de quien la escribió no protege nada."
+    },
+    {
+      "id": "ARCH-01",
+      "titulo": "Compuerta de arquitectura v0.1: impacto, evidencia, autoridad y deriva de canon",
+      "tipo": "pendiente",
+      "estado": "en_curso",
+      "prioridad": "P0",
+      "decide": "director",
+      "madurez": "EXPERIMENTAL",
+      "evidence_level": "E3_REPRODUCIBLE_EXECUTION",
+      "semaforo": "AMARILLO",
+      "verified_at_commit": "140f11febb1b1d4746daf93a260e3b6cabe78745",
+      "evidencia": [
+        "scripts/compuerta-arquitectura.mjs",
+        "docs/marco/fronteras-arquitectura.json",
+        "docs/marco/adr/ADR-0001-compuerta-de-arquitectura.md",
+        "docs/marco/COMPUERTA_ARQUITECTURA.md",
+        ".github/workflows/compuerta-arquitectura.yml",
+        "docs/marco/recibos/ARCH-2026-001.yml"
+      ],
+      "bloquea": [],
+      "test_evidence": {
+        "comando": "npm run test:compuerta && node scripts/compuerta-arquitectura.mjs --solo-canon",
+        "resultado": "34/34 pruebas de las cuatro fases; 10/10 fronteras del canon sin deriva.",
+        "artifact": "docs/marco/recibos/ARCH-2026-001.yml"
+      },
+      "criterio_cierre": "El criterio de la issue #68: una PR de prueba sobre un contrato de Context.OS que sea clasificada, produzca recibo, falle al omitir el impacto contractual, falle al declarar E3 sin prueba reproducible, falle al ampliar autoridad sin ADR y deje estado.json coherente — demostrado en una corrida de CI real, no sólo en local. Depende de CI-02.",
+      "nota": "Fases B a E del plan maestro, implementadas como cuatro comprobaciones sobre el parche más un recibo de arquitectura. Corre en local hoy; en CI no puede demostrarse mientras CI-02 siga vivo, así que su semáforo es AMARILLO y no VERDE. La compuerta no aprueba ampliaciones de autoridad: cuando detecta una, escala a revisión humana."
+    },
+    {
+      "id": "PR-03",
+      "titulo": "El PR #67, que trae el MASTER_STATE y el arreglo de CI-01, sigue sin fusionarse",
+      "tipo": "pendiente",
+      "estado": "en_curso",
+      "prioridad": "P0",
+      "decide": "director",
+      "evidence_level": "E3_REPRODUCIBLE_EXECUTION",
+      "semaforo": "AMARILLO",
+      "verified_at_commit": "13fde75b8469c1569789f8bf0040f6f6f2555284",
+      "evidencia": [
+        "docs/marco/estado.json",
+        "scripts/verificar-estado.mjs",
+        "scripts/preparar-config-firebase.mjs"
+      ],
+      "bloquea": [],
+      "test_evidence": {
+        "comando": "node scripts/verificar-regresiones.mjs && node scripts/verificar-estado.mjs && node scripts/preparar-config-firebase.mjs --placeholder && npm run lint && npm run test:orbe-contextos",
+        "resultado": "Guardia en orden; estado verificado (15 entradas, 5 en P0); config materializada; tsc 0 errores; 45/45 pruebas."
+      },
+      "criterio_cierre": "Fusionar #67 en main, o fusionar esta rama que lo reconcilia. Mientras no ocurra, el MASTER_STATE existe pero no gobierna.",
+      "nota": "Los cuatro comandos de la sección «Verificación» de #67 se reprodujeron en esta sesión sobre su árbol y salieron en verde. Lo que #67 no puede resolver por sí solo lo declara él mismo: CI-02 y PR-02. Esta rama lo reconcilia por fusión, no copiando sus archivos, para que no queden dos registros del mismo estado."
+    },
+    {
+      "id": "NEXT-01",
+      "titulo": "El PR #66 construye una segunda arquitectura paralela en next/ sin ADR que la justifique",
+      "tipo": "decision",
+      "estado": "abierto",
+      "prioridad": "P1",
+      "decide": "director",
+      "madurez": "PROPOSED",
+      "evidence_level": "E2_CODE_INSPECTED",
+      "semaforo": "ROJO",
+      "verified_at_commit": "ea0643fbc88641f4dcef99900900a6d67790189a",
+      "evidencia": [
+        "contextos/contracts.ts",
+        "contextos/policyEngine.ts",
+        "contextos/evidence.ts",
+        "#66"
+      ],
+      "bloquea": [],
+      "criterio_cierre": "O un ADR que explique por qué next/ no reutiliza contextos/ y shared/semantic/ y cómo convergen, o que next/ pase a construirse sobre el runtime existente. Mientras haya dos policy engines y dos emisores de evidencia, el canon describe uno y el código tiene dos.",
+      "nota": "Revisado el parche de #66 (ea0643f): next/contracts/agent.ts vuelve a declarar ExecutionMode, next/modules/context/agent.ts es un segundo motor de política y next/modules/evidence/agent.ts un segundo emisor de evidencia con SHA-256, ninguno conectado a contextos/ ni a shared/semantic/. Además su política admite executionMode INSTITUTIONAL cuando el actor declara assurance institucional, que es una ruta de ampliación de autoridad sin ADR. La PR es borrador y su propio README dice que no reemplaza nada; el riesgo no es el experimento sino que se fusione sin decidir cuál de los dos runtimes es el canónico."
+    },
+    {
+      "id": "CTX-01",
+      "titulo": "Context.OS es multidominio en el diseño y monodominio en el código: un solo contrato activo",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P1",
+      "decide": "director",
+      "madurez": "EXPERIMENTAL",
+      "evidence_level": "E2_CODE_INSPECTED",
+      "semaforo": "AMARILLO",
+      "verified_at_commit": "d5a78aaca3b11c1d459acab154d66b3db87ef4f5",
+      "evidencia": [
+        "shared/semantic/registry.ts",
+        "shared/semantic/contracts/publicWorksReport.ts",
+        "contextos/serviceCatalog.ts"
+      ],
+      "bloquea": [],
+      "criterio_cierre": "Un segundo contrato semántico activo, con su servicio y su adapter, pasando la suite E2E. Hasta entonces «multidominio» es diseño, no capacidad.",
+      "nota": "shared/semantic/registry.ts registra un único contrato (PUBLIC_WORKS_REPORT_SEMANTIC_CONTRACT) y el catálogo tiene un solo servicio. Eso es exactamente el alcance declarado del vertical slice v0.1 y no es un defecto; se registra para que ninguna presentación lo describa como plataforma multidominio en operación."
+    },
+    {
+      "id": "ID-01",
+      "titulo": "Identity Gateway e Institutional Graph siguen en borrador (PR #64), sin identidad real detrás",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P1",
+      "decide": "director",
+      "madurez": "PROPOSED",
+      "evidence_level": "E1_DOCUMENTED",
+      "semaforo": "AMARILLO",
+      "evidencia": [
+        "#64",
+        "docs/marco/AUDITORIA_FLUJO_SESIONES.md"
+      ],
+      "bloquea": [],
+      "criterio_cierre": "Decidir el PR #64 y, si entra, declarar qué identidad autentica y con qué evidencia. Sin eso, un gateway de identidad no autentica a nadie.",
+      "nota": "El PR #64 lleva en borrador desde el 8-sep y su corrida de CI es una de las que terminan en segundos. No se ha auditado su contenido en esta sesión: la entrada registra el pendiente, no evalúa el diseño. Depende de EXT-01 para significar algo institucionalmente."
+    },
+    {
+      "id": "EXT-01",
+      "titulo": "Identidad institucional real —Llave MX, RENAPO, e.firma— no conectada",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P2",
+      "decide": "director",
+      "evidence_level": "E0_DECLARED",
+      "semaforo": "GRIS",
+      "evidencia": [
+        "docs/orbe/canon/v0.1/ORBE_BRECHAS.md"
+      ],
+      "bloquea": [],
+      "condicion_de_arranque": "Convenio con la institución que opera el servicio de identidad y credenciales de acceso a su ambiente de pruebas.",
+      "criterio_cierre": "Una identidad verificada de extremo a extremo en un ambiente de pruebas oficial, con evidencia reproducible.",
+      "nota": "No existe código, no hay integración y no se ha auditado: gris, no amarillo. Se registra porque varias afirmaciones de madurez institucional dependen de esto y conviene que la dependencia esté escrita en vez de suponerse."
+    },
+    {
+      "id": "EXT-02",
+      "titulo": "Adapters municipales reales: el único adapter que existe es de laboratorio",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P2",
+      "decide": "director",
+      "madurez": "PROPOSED",
+      "evidence_level": "E2_CODE_INSPECTED",
+      "semaforo": "GRIS",
+      "verified_at_commit": "d5a78aaca3b11c1d459acab154d66b3db87ef4f5",
+      "evidencia": [
+        "contextos/adapters/publicWorksReportAdapter.ts",
+        "contextos/serviceCatalog.ts"
+      ],
+      "bloquea": [],
+      "condicion_de_arranque": "Un sistema municipal receptor con interfaz documentada y autorización del ayuntamiento para escribir en él.",
+      "criterio_cierre": "Un adapter que cree una orden de trabajo real, con ADR previo que amplíe la autoridad y evidencia de la operación.",
+      "nota": "publicWorksReportAdapter rechaza cualquier executionMode distinto de LAB_MOCK y devuelve un folio de laboratorio que él mismo declara que no es orden de trabajo municipal. Es la frontera FR-01 y está bien puesta: salir de ahí es una decisión institucional, no técnica."
+    },
+    {
+      "id": "EXT-03",
+      "titulo": "La evidencia lleva checksum, no firma institucional",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P2",
+      "decide": "director",
+      "madurez": "EXPERIMENTAL",
+      "evidence_level": "E2_CODE_INSPECTED",
+      "semaforo": "GRIS",
+      "verified_at_commit": "d5a78aaca3b11c1d459acab154d66b3db87ef4f5",
+      "evidencia": [
+        "contextos/evidence.ts",
+        "contextos/contracts.ts",
+        "docs/marco/fronteras-arquitectura.json"
+      ],
+      "bloquea": [],
+      "condicion_de_arranque": "Una autoridad certificadora y una política de firma aprobadas por el ayuntamiento.",
+      "criterio_cierre": "Evidencia firmada y verificable por un tercero. Hasta entonces integrityAssurance sigue siendo CHECKSUM_ONLY y la documentación no debe insinuar otra cosa.",
+      "nota": "contextos/evidence.ts declara integrityAssurance: CHECKSUM_ONLY. Un SHA-256 prueba que el contenido no cambió entre dos lecturas; no prueba autoría, no prueba inmutabilidad y no es firma digital. Frontera FR-03, vigilada por la compuerta."
+    },
+    {
+      "id": "EXT-04",
+      "titulo": "Operación institucional verificada (E5) y piloto gubernamental completo",
+      "tipo": "pendiente",
+      "estado": "abierto",
+      "prioridad": "P2",
+      "decide": "director",
+      "evidence_level": "E0_DECLARED",
+      "semaforo": "GRIS",
+      "evidencia": [
+        "docs/orbe/P0_ACCEPTANCE.md",
+        "docs/marco/MARCO_CUMPLIMIENTO_LNETB.md"
+      ],
+      "bloquea": [],
+      "condicion_de_arranque": "Un convenio de piloto con el ayuntamiento, autoridad delegada por escrito y un responsable con nombre.",
+      "criterio_cierre": "Trámites reales resueltos por el sistema, con trazabilidad institucional auditable. Ninguna entrada de este registro puede declarar E5 mientras el runtime declare authority: NONE.",
+      "nota": "E5 es el único nivel de evidencia que no depende del repositorio sino de la institución. Se registra en gris para que quede explícito que hoy nada del sistema opera con autoridad, y para que la compuerta tenga dónde apuntar cuando alguien declare E5 antes de tiempo."
+    },
+    {
+      "id": "DRIVE-01",
+      "titulo": "Sincronización Drive ↔ GitHub: mencionada en el plan, sin rastro auditable en el repositorio",
+      "tipo": "decision",
+      "estado": "abierto",
+      "prioridad": "P2",
+      "decide": "director",
+      "evidence_level": "E0_DECLARED",
+      "semaforo": "GRIS",
+      "evidencia": [
+        "docs/marco/GOBERNANZA_REPOSITORIO.md"
+      ],
+      "bloquea": [],
+      "condicion_de_arranque": "Que el director diga qué documentos viven en Drive y cuáles deben terminar versionados aquí.",
+      "criterio_cierre": "Una regla escrita sobre qué se sincroniza, en qué dirección y quién resuelve los conflictos; o la decisión de no sincronizar nada.",
+      "nota": "Se registra en gris a propósito: no se encontró en el repositorio ningún script, workflow ni documento que describa esta sincronización, así que no hay nada que auditar. Gris significa aquí «no verificado», no «no importante»."
     }
-  ]
+  ],
+  "madurez_validas": [
+    "PROPOSED",
+    "EXPERIMENTAL",
+    "VALIDATED",
+    "PILOT",
+    "PRODUCTION",
+    "INSTITUTIONAL"
+  ],
+  "evidencia_validos": [
+    "E0_DECLARED",
+    "E1_DOCUMENTED",
+    "E2_CODE_INSPECTED",
+    "E3_REPRODUCIBLE_EXECUTION",
+    "E4_DEPLOYED_VERIFIED",
+    "E5_INSTITUTIONAL_OPERATION_VERIFIED"
+  ],
+  "semaforo_validos": [
+    "VERDE",
+    "AMARILLO",
+    "ROJO",
+    "GRIS"
+  ],
+  "$nota_ejes": "Madurez y evidencia son ejes independientes y no deben confundirse: un componente EXPERIMENTAL puede tener evidencia E3, y uno PILOT puede seguir en E1. «madurez» sólo se declara donde la entrada describe un componente; «evidence_level» y «semaforo» se declaran siempre. Regla de honestidad: ninguna sesión sube un evidence_level por su cuenta. E2 exige ruta y commit; E3 exige comando reproducible y resultado en «test_evidence»; E4 y E5 no son verificables desde un clon y los fija una persona. Verificado por scripts/verificar-estado.mjs (E8–E12)."
 }
