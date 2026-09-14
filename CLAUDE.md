@@ -59,23 +59,31 @@ Copia `firebase-applet-config.example.json` y llénalo, o pídeselo al usuario.
 | `node scripts/verificar-regresiones.mjs` | **La Guardia** — corre esto antes de entregar |
 | `node scripts/verificar-estado.mjs` | Verifica `docs/marco/estado.json` (caducidad, evidencias, coherencia con `ESTADO.md`) |
 | `node scripts/preparar-config-firebase.mjs` | Materializa `firebase-applet-config.json` desde `FIREBASE_APPLET_CONFIG`, o desde el ejemplo con `--placeholder` |
+| `npm run compuerta:canon` | Detector de deriva entre el canon y el código (no necesita PR) |
+| `npm run compuerta:arquitectura` | Compuerta completa sobre `origin/main…HEAD`; con `--cuerpo=<archivo>` lee la declaración de la PR |
+| `npm run test:compuerta` | Pruebas de las cuatro fases de la compuerta |
+| `npm run estado:semaforo` | Imprime el semáforo generado desde `estado.json` |
 
 > `npx tsc` instala un paquete distinto y falso. Usa `npm run lint` o
 > `./node_modules/.bin/tsc --noEmit`.
 
 ### Antes de dar por terminado cualquier cambio
 
-Los cuatro en verde, sin excepción:
+Los cinco en verde, sin excepción:
 
 ```bash
 node scripts/verificar-regresiones.mjs
 node scripts/verificar-estado.mjs
+npm run compuerta:canon
 npm run lint
 npx vite build
 ```
 
 Si tocaste `contextos/`, `shared/semantic/` o `src/orbe/`, añade
-`npm run test:orbe-contextos`.
+`npm run test:orbe-contextos` y **declara el impacto arquitectónico en el cuerpo
+del PR**: sin el bloque `arquitectura` la compuerta falla. Formato en
+`.github/pull_request_template.md`, manual en
+`docs/marco/COMPUERTA_ARQUITECTURA.md`.
 
 Y antes de cerrar la sesión, actualiza la entrada que trabajaste en
 `docs/marco/estado.json` y sube su fecha. Un cambio que no deja el estado al día
@@ -119,7 +127,12 @@ Referencia normativa: `docs/marco/PROTOCOLO_SEGURIDAD.md`.
 Cambiar cualquiera de estos exige mención explícita en la descripción del PR:
 `index.html`, `vite.config.ts`, `netlify.toml`, `public/robots.txt`,
 `src/App.tsx`, `server.ts`, `docs/` completo,
-`scripts/verificar-regresiones.mjs`, `.github/workflows/`.
+`scripts/verificar-regresiones.mjs`, `.github/workflows/`,
+`docs/marco/fronteras-arquitectura.json`.
+
+`docs/marco/fronteras-arquitectura.json` merece un párrafo aparte: bajar o
+retirar una frontera de ahí es mover el canon, y exige ADR. Actualizar una ruta
+porque un archivo se renombró es mantenimiento y basta con mencionarlo.
 
 `docs/marco/estado.json` es la excepción dentro de `docs/`: se actualiza en cada
 sesión y no requiere mención especial **mientras el cambio sea de estado**
@@ -311,7 +324,9 @@ endpoints del servidor o el lazy loading: es una regresión, no una mejora.
 ├── storage.rules
 ├── scripts/
 │   ├── verificar-regresiones.mjs   La Guardia (R1–R8)
-│   ├── verificar-estado.mjs        Verificador del estado canónico (E1–E7)
+│   ├── verificar-estado.mjs        Verificador del estado canónico (E1–E13)
+│   ├── compuerta-arquitectura.mjs  Compuerta de arquitectura (impacto/evidencia/autoridad/deriva)
+│   ├── compuerta/                  Las cuatro fases, el vocabulario y el recibo
 │   ├── preparar-config-firebase.mjs  Materializa la config de Firebase en CI/deploy
 │   └── test-firestore-rules.mjs    Pruebas de reglas contra el emulador
 ├── src/
@@ -332,6 +347,10 @@ endpoints del servidor o el lazy loading: es una regresión, no una mejora.
 └── docs/
     ├── marco/                  Gobernanza pública: glosario, biblioteca legal,
     │                           protocolo de seguridad, actas, fichas de módulo
+    │   ├── estado.json         MASTER_STATE: el trabajo, con madurez y evidencia
+    │   ├── fronteras-arquitectura.json  El canon en forma ejecutable
+    │   ├── adr/                Decisiones de arquitectura (no se borran)
+    │   └── recibos/            Recibos de arquitectura conservados
     ├── plataforma/             Visión de producto y manual de desarrolladores
     ├── orbe/                   Grafo de módulos + herramientas HTML
     ├── agentes/                Gabinete de especialistas, inventario de skills
@@ -358,6 +377,9 @@ En este orden:
 6. `docs/plataforma/05-MANUAL-DESARROLLADORES.md` — qué APIs existen hoy.
 7. `contextos/README.md` — alcance exacto del runtime y, sobre todo, **lo que
    no hace**.
+8. `docs/marco/adr/ADR-0001-compuerta-de-arquitectura.md` — los dos ejes
+   (madurez y evidencia), el semáforo y por qué no se creó otro canon;
+   `docs/marco/COMPUERTA_ARQUITECTURA.md` es su manual de uso.
 
 `docs/marco/NOTA_DE_CONTEXTO_PARA_CLAUDE.md` salió de esta lista: es el relevo de
 sesión del 1 de agosto y describe un `main` anterior a Context.OS, al registro
