@@ -8,8 +8,8 @@ documentación) está en español — mantén ese idioma en todo lo que produzca
 
 ## 1. Qué es este proyecto
 
-**Nayarit Digital · ConnectX · SOATM** (Sistema Operativo de Atención y
-Tramitación Municipal) de Tepic, Nayarit: plataforma de gobierno digital
+**Nayarit Digital · ConnectX · SOATM** (Sistema Operativo de Administración
+Territorial) de Tepic, Nayarit: plataforma de gobierno digital
 municipal de código abierto. Un solo repositorio contiene tres cosas que
 conviven pero no son lo mismo:
 

@@ -7,7 +7,7 @@ Fecha: 2026-08-01 · Estatus: vigente
 
 ## 1. Qué es este proyecto
 
-**Nayarit Digital · ConnectX** es el SOATM (Sistema Operativo de Atención y Tramitación Municipal) de Tepic, Nayarit: una plataforma de gobierno digital municipal, de código abierto, dirigida por Miguel Alexis. Stack: React 19 + TypeScript + Vite 6 + Tailwind 4 + Firebase (Firestore/Auth) + Netlify.
+**Nayarit Digital · ConnectX** es el SOATM (Sistema Operativo de Administración Territorial) de Tepic, Nayarit: una plataforma de gobierno digital municipal, de código abierto, dirigida por Miguel Alexis. Stack: React 19 + TypeScript + Vite 6 + Tailwind 4 + Firebase (Firestore/Auth) + Netlify.
 
 **La tesis central (no negociable):** el SOATM no es una invención del proyecto. La LNETB federal (Arts. 2, 3, 66–76) y la Ley de Gobierno Digital del Estado de Nayarit (Arts. 2, 5 y 6) **ya lo ordenan**. *"La ley ya lo mandaba; nosotros lo descubrimos y lo convertimos en software abierto."* Toda comunicación parte de ahí.
 
