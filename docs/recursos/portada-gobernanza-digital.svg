@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="900" height="380"
+     role="img" aria-labelledby="tituloPortada descPortada">
+
+  <title id="tituloPortada">Gobernanza Digital — atención ciudadana y evidencia verificable</title>
+  <desc id="descPortada">Banner institucional sobre fondo azul noche. A la izquierda, el título "Gobernanza Digital" con el subtítulo "Atención ciudadana y evidencia verificable". A la derecha, un orbe central rotulado "Ciudadanía" conectado con seis componentes del ecosistema: ORBE, Context.OS, Evidence.OS, SOATM, ID.mx y CodeLens. Las líneas continuas turquesa indican una conexión ya implementada en el repositorio: ORBE, Context.OS, Evidence.OS y SOATM. Las líneas punteadas grises indican una conexión propuesta y todavía no implementada: ID.mx y CodeLens. Una leyenda al pie explica ambos significados.</desc>
+
+  <defs>
+    <radialGradient id="fondoOrbe" cx="66%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#143349"/>
+      <stop offset="100%" stop-color="#0A1626"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Fondo propio: el banner se ve igual en tema claro y en tema oscuro de GitHub -->
+  <rect width="900" height="380" fill="#0A1626"/>
+  <rect width="900" height="380" fill="url(#fondoOrbe)"/>
+
+  <!-- ===================== Bloque de título (izquierda) ===================== -->
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+
+    <text x="40" y="88" font-size="24" font-weight="600" letter-spacing="2.4" fill="#5EEAD4">NAYARIT DIGITAL</text>
+
+    <text x="40" y="152" font-size="52" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">Gobernanza</text>
+    <text x="40" y="206" font-size="52" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">Digital</text>
+
+    <rect x="40" y="228" width="84" height="3" fill="#D4AF37"/>
+
+    <text x="40" y="270" font-size="26" fill="#A8C0D4">Atención ciudadana</text>
+    <text x="40" y="302" font-size="26" fill="#A8C0D4">y evidencia verificable</text>
+  </g>
+
+  <!-- ===================== Orbe del ecosistema (derecha) =====================
+       Centro (600,160). Satélites sobre una elipse rx=105 ry=110.
+       Para mover un componente basta cambiar su par de coordenadas aquí. -->
+  <g>
+    <!-- Conexiones implementadas: línea continua -->
+    <g stroke="#5EEAD4" stroke-width="2" fill="none">
+      <line x1="600" y1="160" x2="509" y2="105"/>  <!-- ORBE -->
+      <line x1="600" y1="160" x2="691" y2="105"/>  <!-- Context.OS -->
+      <line x1="600" y1="160" x2="691" y2="215"/>  <!-- Evidence.OS -->
+      <line x1="600" y1="160" x2="509" y2="215"/>  <!-- SOATM -->
+    </g>
+
+    <!-- Conexiones propuestas: línea punteada -->
+    <g stroke="#7C93A8" stroke-width="2" stroke-dasharray="5 6" fill="none">
+      <line x1="600" y1="160" x2="600" y2="50"/>   <!-- ID.mx -->
+      <line x1="600" y1="160" x2="600" y2="270"/>  <!-- CodeLens -->
+    </g>
+
+    <!-- Orbe central: la ciudadanía -->
+    <circle cx="600" cy="160" r="78" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.28"/>
+    <circle cx="600" cy="160" r="64" fill="#102C42" stroke="#D4AF37" stroke-width="2"/>
+    <text x="600" y="169" text-anchor="middle" font-size="24" font-weight="600" fill="#FFFFFF"
+          font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">Ciudadanía</text>
+
+    <!-- Nodos de conexión implementada -->
+    <g fill="#0A1626" stroke="#5EEAD4" stroke-width="2.5">
+      <circle cx="509" cy="105" r="9"/>
+      <circle cx="691" cy="105" r="9"/>
+      <circle cx="691" cy="215" r="9"/>
+      <circle cx="509" cy="215" r="9"/>
+    </g>
+
+    <!-- Nodos de conexión propuesta -->
+    <g fill="#0A1626" stroke="#7C93A8" stroke-width="2.5">
+      <circle cx="600" cy="50"  r="9"/>
+      <circle cx="600" cy="270" r="9"/>
+    </g>
+
+    <!-- Rótulos de los componentes -->
+    <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+       font-size="24" font-weight="500">
+      <text x="493" y="111" text-anchor="end"    fill="#FFFFFF">ORBE</text>
+      <text x="707" y="111" text-anchor="start"  fill="#FFFFFF">Context.OS</text>
+      <text x="707" y="221" text-anchor="start"  fill="#FFFFFF">Evidence.OS</text>
+      <text x="493" y="221" text-anchor="end"    fill="#FFFFFF">SOATM</text>
+      <text x="600" y="29"  text-anchor="middle" fill="#A8C0D4">ID.mx</text>
+      <text x="600" y="297" text-anchor="middle" fill="#A8C0D4">CodeLens</text>
+    </g>
+  </g>
+
+  <!-- ===================== Leyenda ===================== -->
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+     font-size="24">
+    <line x1="420" y1="332" x2="462" y2="332" stroke="#5EEAD4" stroke-width="2"/>
+    <text x="476" y="340" fill="#A8C0D4">conexión implementada</text>
+
+    <line x1="420" y1="360" x2="462" y2="360" stroke="#7C93A8" stroke-width="2" stroke-dasharray="5 6"/>
+    <text x="476" y="368" fill="#A8C0D4">conexión propuesta</text>
+  </g>
+</svg>
