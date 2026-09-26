@@ -2,7 +2,7 @@
 
 **Nayarit Digital / ConnectX** · Documento normativo · v1.0
 **Cámara:** DECISIÓN · **Antecedente:** Acta 004 (ampliación a 5 sillas)
-**Documentos hermanos:** `docs/agentes/GABINETE_ESPECIALISTAS.md` (cámara de trabajo) · `docs/marco/GOBERNANZA_REPOSITORIO.md` (flujo de cambios)
+**Documentos hermanos:** `docs/agentes/GABINETE_ESPECIALISTAS.md` (cámara de trabajo) · `docs/marco/GOBERNANZA_REPOSITORIO.md` (flujo de cambios) · `docs/agentes/PARLAMENTO_MINUTA_SESION_01.md` (minuta fundacional de la sesión 01)
 
 ---
 
