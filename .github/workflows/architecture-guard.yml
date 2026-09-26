@@ -1,0 +1,35 @@
+name: Guardia arquitectónica
+
+"on":
+  pull_request:
+    branches: [main]
+  push:
+    branches:
+      - main
+      - 'codex/**'
+      - 'agent/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  architecture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Contratos Context.OS
+        run: npm run test:contextos
+      - name: Registro semántico
+        run: npm run test:semantic-registry
+      - name: Integración ORBE–Context.OS
+        run: npm run test:orbe-contextos
+      - name: Recordatorio de alcance
+        run: |
+          echo 'CI valida comportamiento automatizado; no certifica despliegue institucional ni cambia el estado de madurez.' >> "$GITHUB_STEP_SUMMARY"
