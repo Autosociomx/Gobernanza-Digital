@@ -1,0 +1,25 @@
+name: Sonda de runner
+
+"on":
+  workflow_dispatch:
+  push:
+    branches:
+      - 'codex/**'
+      - 'agent/**'
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Confirmar arranque del runner
+        run: |
+          echo "runner_started=true"
+          echo "sha=$GITHUB_SHA"
+          uname -a
+      - uses: actions/checkout@v4
+      - name: Confirmar checkout
+        run: git rev-parse HEAD
