@@ -25,9 +25,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          version=1.7.7
-          curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v${version}/actionlint_${version}_linux_x86_64.tar.gz" -o /tmp/actionlint.tar.gz
-          tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint
-          /tmp/actionlint -version
+          bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          ./actionlint -version
       - name: Validar GitHub Actions
-        run: /tmp/actionlint .github/workflows/*.yml .github/workflows/*.yaml
+        run: ./actionlint .github/workflows/
