@@ -1,0 +1,32 @@
+name: Evidencia CI
+
+"on":
+  push:
+    branches:
+      - main
+      - 'codex/**'
+      - 'agent/**'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Generar manifiesto
+        run: node scripts/ci-evidence.mjs
+      - name: Conservar manifiesto
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-evidence-${{ github.sha }}
+          path: artifacts/ci-evidence.json
+          retention-days: 30
