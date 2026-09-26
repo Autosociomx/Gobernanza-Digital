@@ -1,0 +1,33 @@
+name: Validación de workflows
+
+"on":
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+  push:
+    branches:
+      - 'codex/**'
+      - 'agent/**'
+    paths:
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar actionlint
+        shell: bash
+        run: |
+          set -euo pipefail
+          version=1.7.7
+          curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v${version}/actionlint_${version}_linux_x86_64.tar.gz" -o /tmp/actionlint.tar.gz
+          tar -xzf /tmp/actionlint.tar.gz -C /tmp actionlint
+          /tmp/actionlint -version
+      - name: Validar GitHub Actions
+        run: /tmp/actionlint .github/workflows/*.yml .github/workflows/*.yaml
