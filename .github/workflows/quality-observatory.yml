@@ -1,0 +1,48 @@
+name: Observatorio de calidad
+
+"on":
+  workflow_dispatch:
+  schedule:
+    - cron: '17 12 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  observatory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Medir estructura de pruebas
+        run: node scripts/ci-metrics.mjs
+      - name: Registrar auditoría completa sin convertirla en gate
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          npm audit --json > artifacts/npm-audit.json || true
+      - name: Resumen
+        shell: bash
+        run: |
+          {
+            echo '# Observatorio de calidad'
+            echo
+            echo 'Este workflow busca deuda aunque la Guardia esté verde. No eleva madurez ni bloquea por sí solo.'
+            echo
+            echo '## Métricas'
+            echo '```json'
+            cat artifacts/ci-metrics.json
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Conservar observaciones
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-observatory-${{ github.sha }}
+          path: artifacts/
+          retention-days: 30
