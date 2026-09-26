@@ -1,9 +1,8 @@
-name: Guardia de regresiones
+name: Guardia de calidad y regresiones
 
-# Protege el repositorio de las regresiones que los pushes desde AI Studio
-# ya introdujeron cuatro veces: llave de API en el bundle del navegador,
-# metadatos genéricos, pérdida de code-splitting y borrado de archivos de
-# despliegue. Referencia: docs/marco/PROTOCOLO_SEGURIDAD.md
+# La CI no existe para fabricar un botón verde. Cada capa produce una señal
+# independiente: reproducibilidad, calidad, pruebas, seguridad y build.
+# Un fallo debe indicar qué garantía se perdió.
 
 "on":
   push:
@@ -19,49 +18,168 @@ permissions:
   contents: read
 
 concurrency:
-  group: guardia-regresiones-${{ github.event.pull_request.number || github.ref }}
+  group: guardia-calidad-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  NODE_VERSION: '22'
+
 jobs:
-  guardia:
+  preflight:
+    name: 01 · Reproducibilidad
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
-
-      - name: Instalar dependencias
+      - name: Instalar exactamente desde lockfile
         run: npm ci
-
-      - name: Verificar regresiones (config y archivos)
+      - name: Verificar regresiones estructurales
         run: node scripts/verificar-regresiones.mjs
 
-      - name: Verificar tipos
+  quality:
+    name: 02 · Tipos y calidad
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: TypeScript estricto
         run: npm run lint
 
-      - name: Probar integración ORBE–Context.OS
+  tests:
+    name: 03 · Tests y contratos
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Suite completa
+        run: npm test
+      - name: Integración ORBE–Context.OS
         run: npm run test:orbe-contextos
-
-      - name: Probar vertical slice ORBE P0 extremo a extremo
+      - name: Vertical slice ORBE P0 E2E
         run: npm run test:orbe-p0-e2e
-
-      - name: Conservar reporte ORBE P0 E2E
+      - name: Conservar evidencia ORBE P0
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: orbe-p0-e2e-report
+          name: orbe-p0-e2e-${{ github.sha }}
           path: artifacts/orbe-p0-e2e-report.md
           if-no-files-found: warn
+          retention-days: 30
 
-      - name: Compilar y verificar que la llave no esté en el bundle
+  security:
+    name: 04 · Seguridad
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Auditoría de dependencias de producción
+        run: npm audit --omit=dev --audit-level=high
+      - name: Buscar secretos comunes versionados
+        shell: bash
         run: |
-          npx vite build
-          if grep -rl "GEMINI" dist/assets/; then
-            echo "::error::La cadena GEMINI aparece en el bundle del navegador — la llave estaría expuesta."
+          set -euo pipefail
+          if git grep -nEI '(AIza[0-9A-Za-z_-]{20,}|sk_live_[0-9A-Za-z]+|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----)' -- ':!package-lock.json'; then
+            echo '::error::Se detectó un patrón compatible con un secreto versionado.'
             exit 1
           fi
-          echo "Bundle limpio: la llave no viaja al cliente."
+          echo 'Sin patrones comunes de secretos en archivos versionados.'
+
+  build:
+    name: 05 · Build y bundle
+    needs: [quality, tests, security]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Compilar desde checkout limpio
+        run: npm run build
+      - name: Verificar que secretos Gemini no viajen al cliente
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RIlE '(GEMINI_API_KEY|AIza[0-9A-Za-z_-]{20,})' dist/assets/; then
+            echo '::error::Se detectó una referencia sensible de Gemini en el bundle del navegador.'
+            exit 1
+          fi
+          echo 'Bundle sin patrones sensibles de Gemini.'
+      - name: Inventario reproducible del build
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          {
+            echo '# Evidencia de build'
+            echo
+            echo "- SHA: $GITHUB_SHA"
+            echo "- Run: $GITHUB_RUN_ID"
+            echo "- Node: $(node --version)"
+            echo "- npm: $(npm --version)"
+            echo
+            echo '## Archivos dist'
+            find dist -type f -printf '%p %s bytes\n' | sort
+          } > artifacts/ci-build-evidence.md
+      - name: Conservar evidencia del build
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-build-evidence-${{ github.sha }}
+          path: artifacts/ci-build-evidence.md
+          if-no-files-found: warn
+          retention-days: 30
+
+  summary:
+    name: 06 · Resumen de garantías
+    if: always()
+    needs: [preflight, quality, tests, security, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publicar resumen
+        shell: bash
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          # Guardia de calidad
+
+          El color global no sustituye las señales individuales.
+
+          | Garantía | Resultado |
+          |---|---|
+          | Reproducibilidad | ${{ needs.preflight.result }} |
+          | Tipos/calidad | ${{ needs.quality.result }} |
+          | Tests/contratos | ${{ needs.tests.result }} |
+          | Seguridad | ${{ needs.security.result }} |
+          | Build/bundle | ${{ needs.build.result }} |
+
+          SHA evaluado: \`${{ github.sha }}\`
+          EOF
+
+          test '${{ needs.preflight.result }}' = success
+          test '${{ needs.quality.result }}' = success
+          test '${{ needs.tests.result }}' = success
+          test '${{ needs.security.result }}' = success
+          test '${{ needs.build.result }}' = success
