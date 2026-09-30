@@ -37,7 +37,7 @@ Escala 1–5. Criterios: **Fun**ciona (pruebas ejecutadas en verde) · **Ver**if
 | **Academia para servidores públicos** | `src/components/ConnectXAcademy.tsx` (161), `StrategicAcademyView.tsx` | 161+ | Ninguna | 1 | 1 | 2 | 1 | 2 | 3 | PROPUESTO. `INDICE.json` los marca `maqueta`. |
 | **ORBE asesor** (Aura + piloto Context.OS) | `src/hooks/useAuraChat.ts`, `server.ts:/api/ai/chat`, `src/components/orbe/` (218) | — | Bridge unit; Aura sin pruebas | 2 | 2 | 3 | 2 | 3 | 2 | EXPERIMENTAL. Puente apagado por defecto. Lenguas originarias: `ESTADO_MADUREZ_TECNOLOGICA.md` las marca 🔴 "strings hardcodeados sin validar". |
 | **SOATM / C5 / CitizenApp** | `src/components/` | >3 700 en dos archivos | Ninguna de UI | 2 | 2 | 4 | 2 | 2 | 2 | PROPUESTO/EXPERIMENTAL. `INDICE.json`: 15 de 29 módulos `maqueta`, 2 `riesgo`. |
-| **CodeLens** | — | 0 | — | 1 | 1 | 1 | 1 | 1 | 1 | **No existe** en el repositorio (grep sin resultados, ni como documento de diseño). PENDIENTE: origen del diseño. |
+| **CodeLens** | — | 0 | — | 1 | 1 | 1 | 1 | 1 | 1 | **No está en este repositorio** (grep sin resultados). Existe un repositorio aparte, `Autosociomx/codelens` (público; último push 2026-09-03 según el listado de GitHub), **no examinado**. NO_VERIFICADO. |
 
 Catálogo de servicios de Tepic (`data/municipality/tepic/services.json`): 8 servicios con modelo de estatus `verificado / por_verificar / demo / propuesto`; las oficinas y competencias aparecen "por verificar". No es un catálogo oficial.
 

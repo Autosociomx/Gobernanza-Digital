@@ -308,15 +308,15 @@
     "pendiente": "Decidir retiro"
   },
   {
-    "afirmacion": "CodeLens no existe en el repositorio.",
+    "afirmacion": "CodeLens no está en el repositorio Gobernanza-digital-; existe un repo aparte Autosociomx/codelens (no examinado).",
     "fuente": "Búsqueda en repositorio (grep)",
-    "url": "",
-    "estado_fuente": "EJECUTADA_EN_REPOSITORIO",
+    "url": "https://github.com/Autosociomx/codelens",
+    "estado_fuente": "LOCALIZADA_EN_LISTADO_GITHUB",
     "fecha_consulta": "2026-09-30",
     "fragmento_citado": null,
     "contradiccion": null,
     "confianza": "alta",
-    "pendiente": "Responsable humano: dónde está el diseño"
+    "pendiente": "Examinar el repositorio"
   },
   {
     "afirmacion": "ADR-0004 (escala de madurez) no está en el repositorio.",
