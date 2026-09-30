@@ -1,4 +1,5 @@
 import { createLabContextOSRuntime } from '../../contextos/factory';
+import type { RuntimeRequest } from '../../contextos/contracts';
 
 interface NetlifyEnv {
   get(name: string): string | undefined;
@@ -159,7 +160,7 @@ export default async (request: Request) => {
       return json({ error: 'JSON_OBJECT_REQUIRED' }, 400, cors);
     }
 
-    const result = await getRuntime().execute(body as Parameters<ReturnType<typeof createLabContextOSRuntime>['execute']>[0]);
+    const result = await getRuntime().execute(body as RuntimeRequest);
     const status =
       result.status === 'EXECUTED' ? 200 :
       result.status === 'NEEDS_INPUT' || result.status === 'NEEDS_CONSENT' ? 422 :
