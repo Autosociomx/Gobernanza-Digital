@@ -328,5 +328,60 @@
     "contradiccion": null,
     "confianza": "alta",
     "pendiente": "Localizar el ADR"
+  },
+  {
+    "afirmacion": "Click por Tepic dejará de existir al terminar la administración actual porque no pertenece al municipio.",
+    "fuente": "Responsable humano (afirmación oral)",
+    "url": "",
+    "estado_fuente": "SIN_FUENTE_OFICIAL",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": null,
+    "contradiccion": "No se halló contrato, convenio ni aviso de privacidad de la app",
+    "confianza": "baja",
+    "pendiente": "Solicitud de transparencia al Ayuntamiento de Tepic"
+  },
+  {
+    "afirmacion": "Bahía de Banderas ofrece una aplicación móvil propia de reportes.",
+    "fuente": "Responsable humano (afirmación oral)",
+    "url": "https://www.bahiadebanderas.gob.mx/servicios-en-linea/",
+    "estado_fuente": "SIN_FUENTE_OFICIAL",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": null,
+    "contradiccion": "Solo se localizaron portales web de trámites y pagos",
+    "confianza": "baja",
+    "pendiente": "Nombre de la app y tienda"
+  },
+  {
+    "afirmacion": "La LNETB obliga a compartir con la autoridad nacional el código de soluciones propias o de terceros para el Repositorio Nacional.",
+    "fuente": "LNETB",
+    "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LNETB.pdf",
+    "estado_fuente": "LOCALIZADA",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": null,
+    "contradiccion": null,
+    "confianza": "media",
+    "pendiente": "Leer y citar el artículo exacto"
+  },
+  {
+    "afirmacion": "La Ley Municipal de Nayarit exige entregar al ayuntamiento entrante el sitio web y el portal de transparencia con respaldos y manuales, sin mención visible de aplicaciones móviles.",
+    "fuente": "Ley Municipal para el Estado de Nayarit",
+    "url": "https://congresonayarit.gob.mx/wp-content/uploads/QUE_HACEMOS/LEGISLACION_ESTATAL/marco_juridico_municipal/municipal_para_el_estado_de_nayarit_ley.pdf",
+    "estado_fuente": "LOCALIZADA",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": null,
+    "contradiccion": null,
+    "confianza": "baja",
+    "pendiente": "Leer artículos de entrega-recepción y confirmar el vacío sobre apps"
+  },
+  {
+    "afirmacion": "El repositorio no contiene archivo LICENSE ni campo license en package.json.",
+    "fuente": "Búsqueda en repositorio",
+    "url": "",
+    "estado_fuente": "EJECUTADA_EN_REPOSITORIO",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": null,
+    "contradiccion": null,
+    "confianza": "alta",
+    "pendiente": "Decisión humana sobre licencia"
   }
 ]

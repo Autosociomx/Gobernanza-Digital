@@ -14,6 +14,10 @@ Fecha: 2026-09-30. Se listan sin resolver. La decisión es del responsable human
 | D8 | Reforma local de Nayarit | El prompt: aprobada el 17-sep-2026 | Coincide con el resumen del buscador, sin leer el decreto | Leer el decreto |
 | D9 | Estado de módulos | `docs/marco/modulos/salud.md` dice `real`; `docs/orbe/modulos/TEPICTU_SALUD.md` dice "diseñado" | Ya señalada en `docs/plataforma/03-DOCUMENTACION-FUNCIONAL.md` | Decisión humana (CLAUDE.md §5: señalar, no elegir) |
 | D10 | Ubicación de entregables | El prompt no fija carpeta | `CLAUDE.md` pide `docs/marco/` por PR; `docs/` es área protegida | Mención explícita en la descripción del PR |
+| D11 | Destino de las apps municipales al terminar la administración | El responsable humano afirma que Click por Tepic (y una app de Bahía de Banderas) se acaban con el periodo | No hallé contrato, convenio ni aviso de privacidad de Click por Tepic, ni la app de Bahía (C1, C2) | Solicitud de transparencia; revisar tiendas de apps y la Plataforma Nacional de Transparencia |
+| D12 | Licencia | `ESTRATEGIA_ESTANDAR_ABIERTO.md` §3 prevé publicar con AGPL-3.0 | No hay `LICENSE` en la raíz ni `license` en `package.json` | Decisión humana sobre licencia y titular |
+| D13 | Titularidad | Objetivo declarado: que pertenezca al municipio, no a una persona | Repo en organización personal; docs nombran fundador/originador; la estrategia plantea marca "propiedad exclusiva" y candados de dependencia | Decisión humana: a quién se cede qué, y cuándo |
+| D14 | Reporte ciudadano como "duplicado" | Mi primera versión de la matriz trataba Click por Tepic como cobertura suficiente (INTEGRAR) | Si C1 se confirma, la cobertura no es durable | Resolver C1; la matriz ya lo marca condicionado |
 
 ## Afirmaciones que Codex debe atacar
 1. Que los componentes 2 y 3 de `COMPONENTES_PARA_SENADO.md` son los más sólidos.

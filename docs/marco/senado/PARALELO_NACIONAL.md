@@ -46,7 +46,20 @@ Consecuencia, aplicando la regla 2 del prompt: **ninguna fuente de este document
 | N5 | Bahía de Banderas: portal de trámites, portal de pagos en línea (multas, impuestos), pago de predial en línea con descuentos 2026, organismo de agua OROMAPAS. | pagosenlinea.bahiadebanderas.gob.mx · tramites.bahiadebanderas.gob.mx · bahiadebanderas.gob.mx/no-hagas-filas-… | LOCALIZADA | Pago en línea de predial/agua ya existe. |
 | N6 | Sitios `pesqueria.gob.mx/…predial…` aparecen en resultados sobre predial de Bahía de Banderas. No parecen fuente del ayuntamiento. | pesqueria.gob.mx | **SIN_FUENTE_OFICIAL** (origen dudoso) | No usar. |
 
-## D. Lo que este documento no afirma
+## D. Titularidad y continuidad institucional (aporte del responsable humano, 2026-09-30)
+
+**Afirmación recibida (no verificada):** las aplicaciones municipales actuales (Click por Tepic; en Bahía de Banderas "ofrecen otra") dependen de convenios ligados a la administración en turno y **dejarían de existir al concluir el periodo**, porque no pertenecen al municipio como institución. El objetivo del proyecto es **una sola aplicación cuya titularidad sea del municipio, no de una persona**. Se audita el cargo y la dependencia, no a personas.
+
+| # | Hallazgo | Fuente | Estado | Notas |
+|---|---|---|---|---|
+| C1 | Titularidad, contrato o convenio, desarrollador y fecha de término de Click por Tepic. | — | **SIN_FUENTE_OFICIAL** | Dos búsquedas no devolvieron ningún aviso de privacidad, contrato ni convenio de la app. **No confirmo ni desmiento la afirmación.** Ruta: solicitud de transparencia al Ayuntamiento de Tepic (contrato/convenio, titular de derechos patrimoniales, acceso al código y a la base de datos, vigencia) y revisar la Plataforma Nacional de Transparencia. |
+| C2 | Bahía de Banderas: aplicación móvil de reportes. | bahiadebanderas.gob.mx/servicios-en-linea/ | **SIN_FUENTE_OFICIAL** (para la app) | Solo encontré portales web de trámites y pagos (N5). La app que mencionas no apareció. PENDIENTE: nombre de la app y tienda. |
+| C3 | La LNETB obliga a los sujetos obligados a compartir con la autoridad nacional el código fuente de soluciones desarrolladas por ellos **o por terceros**, para integrarlas al Repositorio Nacional. | diputados.gob.mx/LeyesBiblio/pdf/LNETB.pdf · gob.mx/atdt/comunicacion/atdt-repositorio-nacional-… | LOCALIZADA | Es el ancla legal más fuerte para la tesis "el código es del Estado". Artículo exacto PENDIENTE (resumen del buscador). Si aplica a Click por Tepic, el código debería estar o llegar al Repositorio Nacional: verificarlo en F7. |
+| C4 | Ley Municipal de Nayarit: en el cambio de administración el ayuntamiento entrante debe recibir el sitio web, el portal de transparencia y el sistema de acceso a la información "en funcionamiento", con respaldos y manuales; el síndico elabora el acta de entrega-recepción. | congresonayarit.gob.mx/…/municipal_para_el_estado_de_nayarit_ley.pdf | LOCALIZADA | Cubre sitio y transparencia; **el resumen no menciona aplicaciones móviles ni código fuente** → posible vacío que explicaría la tesis. Artículo PENDIENTE. |
+| C5 | Ley de Gobierno Digital de Nayarit: sujetos obligados cumplen normas y directrices técnicas del Consejo (estandarización de datos y plataformas comunes). | congresonayarit.gob.mx/…/gobierno_digital_para_el_estado_de_nayarit_ley_de.pdf | LOCALIZADA | Base para exigir interoperabilidad y continuidad; sin lectura. |
+| C6 | Existen apps estatales con aviso de privacidad propio (p. ej. Secretaría de Movilidad de Nayarit). | semovi.nayarit.gob.mx/aviso-de-privacidad-apps-semovi-nayarit/ | LOCALIZADA | Modelo de documento a exigir para cualquier app municipal. |
+
+## E. Lo que este documento no afirma
 
 1. No afirma que algo "funcione" en Llave MX, Click por Tepic o los portales (no los probé).
 2. No ordena a los estados por avance (E5 pendiente).

@@ -30,6 +30,12 @@ Se proponen **cuatro** componentes (el prompt pedía 3 a 5). Ninguno llega a PIL
 - **Objeción (hipótesis):** trazabilidad y rendición de cuentas de sistemas automatizados. Fuente oficial: **PENDIENTE**.
 - **No prometer:** "inmutable", "firmado", "con validez jurídica" ni "Evidence OS" como producto: es `CHECKSUM_ONLY`, sin firma ni sellado de tiempo, y no es un componente independiente.
 
+## Tesis transversal: titularidad institucional (aún no es un componente)
+- **Para un legislador:** "La plataforma debe ser del municipio como institución: si cambia la administración, el código, los datos y las llaves se quedan."
+- **Por qué no la propongo como componente:** hoy no hay prueba. No existe `LICENSE` en la raíz del repositorio, el repositorio está en una organización personal y la estrategia interna (`ESTRATEGIA_ESTANDAR_ABIERTO.md`) propone "candados" (certificación de personas, costo político de cambiar de proveedor, marca de propiedad exclusiva) que **contradicen** la tesis: ante un legislador se leerían como dependencia del proveedor, que es justamente lo que se quiere evitar.
+- **Objeción a la que respondería (hipótesis):** dependencia de un proveedor y pérdida de continuidad al cambiar la administración. Anclas localizadas, sin leer: LNETB (código de terceros al Repositorio Nacional) y Ley Municipal (entrega-recepción). Fuente de la objeción en el Senado: **PENDIENTE**.
+- **No prometer:** que sea "del municipio" mientras no exista la cesión o el acuerdo; que Click por Tepic "desaparece" (no verificado, C1).
+
 ## Orden de solidez (mi juicio, sujeto a contraauditoría de Codex)
 3 > 2 > 1 > 4. El 2 y el 3 son los únicos con pruebas ejecutadas y reproducibles sin depender de una falla abierta.
 

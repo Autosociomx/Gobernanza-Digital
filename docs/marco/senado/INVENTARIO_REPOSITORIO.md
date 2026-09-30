@@ -54,5 +54,7 @@ Catálogo de servicios de Tepic (`data/municipality/tepic/services.json`): 8 ser
 | 7 | Cualquier cifra de `PARALELO_NACIONAL.md` (20.5 millones, 168 sistemas, 13→10 trámites…) | Fuente `LOCALIZADA`, no leída | Cifra sin lectura |
 | 8 | Demo "constancia-residencia" y el sitio `tepic.netlify.app` presentados como oficiales | Ver `demo/`; `docs/orbe/README.md` lo enlaza; el sitio no es institucional | Dominio/identidad |
 | 9 | Hablar de "lenguas originarias" como capacidad | `ESTADO_MADUREZ_TECNOLOGICA.md` 🔴 | Capacidad no validada |
+| 10 | Decir "código abierto" o "del municipio" | No hay archivo `LICENSE`; `package.json` no declara `license`. Sin licencia, por defecto el código no es reutilizable por terceros. | Afirmación sin respaldo |
+| 11 | La estrategia de "cuatro candados" de `ESTRATEGIA_ESTANDAR_ABIERTO.md` | Plantea lock-in (certificación, marca exclusiva, costo de cambiar de proveedor): contradice la tesis de titularidad municipal | Mensaje contradictorio |
 
 Límite: no audité cada componente de `src/` en busca de cifras sin etiqueta; `NO_VERIFICADO` para el resto de la UI.
