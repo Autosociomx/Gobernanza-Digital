@@ -36,6 +36,14 @@ Se proponen **cuatro** componentes (el prompt pedía 3 a 5). Ninguno llega a PIL
 - **Objeción a la que respondería (hipótesis):** dependencia de un proveedor y pérdida de continuidad al cambiar la administración. Anclas localizadas, sin leer: LNETB (código de terceros al Repositorio Nacional) y Ley Municipal (entrega-recepción). Fuente de la objeción en el Senado: **PENDIENTE**.
 - **No prometer:** que sea "del municipio" mientras no exista la cesión o el acuerdo; que Click por Tepic "desaparece" (no verificado, C1).
 
+## Actualización 2026-09-30: lo más fuerte está en ramas sin fusionar
+Tras revisar las 84 ramas (ver `INVENTARIO_REPOSITORIO.md` §4), los candidatos con más sustancia para el encuadre de "interoperabilidad cívica" **no están en `main`**:
+- **Federación** (`feat/federated-intent-runtime-v01`): 58 pruebas en verde, incluida la de que no se fabrica un folio oficial.
+- **Identidad** (`feat/identity-institutional-graph-p1`): 61 pruebas; Llave MX como proveedor `NOT_CONNECTED` (integra, no sustituye; coherente con el ADR-0004 real).
+- **Degradación segura** (`fix/orbe-p0-e2e-008-safe-degradation`): E2E 8/8.
+- **Agentes con `REQUIRE_HUMAN`** (`premio-innovacion-…`): 57 pruebas; el agente de salud no diagnostica (pero su triaje es de 7 frases).
+Antes de llevarlos al Senado hay que fusionarlos pasando la Guardia y el CI. Hasta entonces, lo presentable con prueba en `main` sigue siendo lo listado arriba.
+
 ## Orden de solidez (mi juicio, sujeto a contraauditoría de Codex)
 3 > 2 > 1 > 4. El 2 y el 3 son los únicos con pruebas ejecutadas y reproducibles sin depender de una falla abierta.
 

@@ -37,7 +37,7 @@ Escala 1–5. Criterios: **Fun**ciona (pruebas ejecutadas en verde) · **Ver**if
 | **Academia para servidores públicos** | `src/components/ConnectXAcademy.tsx` (161), `StrategicAcademyView.tsx` | 161+ | Ninguna | 1 | 1 | 2 | 1 | 2 | 3 | PROPUESTO. `INDICE.json` los marca `maqueta`. |
 | **ORBE asesor** (Aura + piloto Context.OS) | `src/hooks/useAuraChat.ts`, `server.ts:/api/ai/chat`, `src/components/orbe/` (218) | — | Bridge unit; Aura sin pruebas | 2 | 2 | 3 | 2 | 3 | 2 | EXPERIMENTAL. Puente apagado por defecto. Lenguas originarias: `ESTADO_MADUREZ_TECNOLOGICA.md` las marca 🔴 "strings hardcodeados sin validar". |
 | **SOATM / C5 / CitizenApp** | `src/components/` | >3 700 en dos archivos | Ninguna de UI | 2 | 2 | 4 | 2 | 2 | 2 | PROPUESTO/EXPERIMENTAL. `INDICE.json`: 15 de 29 módulos `maqueta`, 2 `riesgo`. |
-| **CodeLens** | — | 0 | — | 1 | 1 | 1 | 1 | 1 | 1 | **No está en este repositorio** (grep sin resultados). Existe un repositorio aparte, `Autosociomx/codelens` (público; último push 2026-09-03 según el listado de GitHub), **no examinado**. NO_VERIFICADO. |
+| **CodeLens** | rama `codex/evidence-index-v01`: `contextos/codelens/` (gate, contratos) | ver §4 | 75 pruebas en esa rama (incluye `codelens.test.ts`) | 3 | 3 | 1 | 2 | 2 | 3 | EXPERIMENTAL **solo en rama sin fusionar**; no está en `main`. Existe además el repo `Autosociomx/codelens` (no examinado). |
 
 Catálogo de servicios de Tepic (`data/municipality/tepic/services.json`): 8 servicios con modelo de estatus `verificado / por_verificar / demo / propuesto`; las oficinas y competencias aparecen "por verificar". No es un catálogo oficial.
 
@@ -58,3 +58,29 @@ Catálogo de servicios de Tepic (`data/municipality/tepic/services.json`): 8 ser
 | 11 | La estrategia de "cuatro candados" de `ESTRATEGIA_ESTANDAR_ABIERTO.md` | Plantea lock-in (certificación, marca exclusiva, costo de cambiar de proveedor): contradice la tesis de titularidad municipal | Mensaje contradictorio |
 
 Límite: no audité cada componente de `src/` en busca de cifras sin etiqueta; `NO_VERIFICADO` para el resto de la UI.
+
+
+## 4. Ramas sin fusionar del mismo repositorio (hallazgo del 2026-09-30)
+
+`Autosociomx/Gobernanza-Digital` **es el mismo repositorio** que `Gobernanza-digital-` (mismo `main` `d5a78aa`, mismas ramas; renombrado en GitHub). Tiene 84 ramas. Clon superficial de solo lectura; cada rama se probó en un árbol de trabajo aparte, con `node_modules` de esta rama (las dependencias difieren poco). **Nada de esto está en `main`.** Fecha: 2026-09-30.
+
+| Rama (último commit) | Qué añade | Comando | Resultado literal |
+|---|---|---|---|
+| `premio-innovacion-2026-agentic-rebuild` (2026-09-13) | Carpeta `next/`: 8 agentes (`context-policy`, `evidence`, `soatm-routing`, `health-triage`…), decisión `REQUIRE_HUMAN`, demo LAB_MOCK con evidencia y sha256 | `npx vitest run` · `npm run demo:lab-mock` | `Test Files 6 passed (6)` · `Tests 57 passed (57)` · demo imprime `ALLOW`/`LAB_MOCK_ROUTE_FOUND` con `evidenceId` |
+| `fix/orbe-p0-e2e-008-safe-degradation` (2026-09-06) | Arregla el caso 8: `detached` + matar el grupo de procesos (proceso nieto de `npx`); prueba de `waitForPortClosed` | `npm run test:orbe-p0-e2e` · `npx vitest run scripts` | `8/8 casos ORBE P0 E2E pasan.` EXIT=0 · `Tests 5 passed (5)` |
+| `codex/evidence-index-v01` (2026-08-28) | `contextos/codelens/`, índice de evidencia | `npx vitest run` | `Test Files 6 passed` · `Tests 75 passed (75)` |
+| `feat/federated-intent-runtime-v01` (2026-08-21) | `shared/federation/` (catálogo, runtime, rutas); prueba "no se fabrica un folio oficial" | `npx vitest run` | `Test Files 5 passed` · `Tests 58 passed (58)` |
+| `feat/identity-institutional-graph-p1` (2026-09-07) | `identity/` con proveedor Llave MX en estado `NOT_CONNECTED`; ADR-0002 | `npx vitest run` | `Test Files 7 passed` · `Tests 61 passed (61)` |
+| `codex/orbe-advisor-core-v0.1` (2026-09-04) | Flujo informativo de acta de nacimiento con escalamiento seguro; política de capacidades | `npx vitest run` | `Test Files 6 passed` · `Tests 61 passed (61)` |
+| `p0.6-provider-portability` (2026-08-31) | Portabilidad de proveedor de IA, auditor de evidencia, esquemas JSON | `npx vitest run` | **3 pruebas fallan** en `tests/provider-portability/schema-validator.test.ts` (`expected 2 to be +0`). Causa no investigada → NO_VERIFICADO |
+| `agent/source-of-truth-v01` (2026-08-19) | `docs/source-of-truth/` con registro de ADR (0001–0009) | lectura | Ver D4 |
+| `codex/ci-quality-gates-v1` (2026-09-26) | CODEOWNERS, `architecture-guard.yml`, dependabot | lectura | no ejecutado |
+
+Observaciones sobre `next/` (lectura de código):
+- `health-triage-agent` **no emite diagnóstico** (`diagnosticOutput: null`, siempre `REQUIRE_HUMAN`). Pero su "triaje" es búsqueda de 7 frases en el texto; el README menciona Manchester y CIE-10/11, y el código solo reenvía el sistema de codificación pedido. Es una sobredeclaración del README.
+- `evidenceRefs: []` en los resultados de la demo: la evidencia se anexa aparte.
+
+### Riesgos de una rama pública que hoy no están en `main`
+- **42 ramas conservan `firebase-applet-config.json`** en su historia (incluye `projectId`, `apiKey`, `appId`; valores no copiados aquí). `CLAUDE.md` lo trata como hallazgo E3. Las claves web de Firebase son identificadores de cliente protegidos por reglas, pero el protocolo del proyecto las considera sensibles y el repositorio es público.
+- **Ramas con nombres político-electorales visibles públicamente** (p. ej. `claude/nayarit-governor-candidates-egujsj`, `claude/reunion-galvan-page-kmd6t2`; no examinadas). Quien revise el repositorio para el Senado puede verlas.
+- Las ramas `feature/national-infra-proposal-*` y otras traen miles de líneas de contenido no revisado.

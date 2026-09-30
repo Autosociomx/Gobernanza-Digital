@@ -319,7 +319,7 @@
     "pendiente": "Examinar el repositorio"
   },
   {
-    "afirmacion": "ADR-0004 (escala de madurez) no está en el repositorio.",
+    "afirmacion": "ADR-0004 (escala de madurez) no está en main; ver ADR-0004 real en rama agent/source-of-truth-v01.",
     "fuente": "Búsqueda en repositorio (grep)",
     "url": "",
     "estado_fuente": "EJECUTADA_EN_REPOSITORIO",
@@ -383,5 +383,93 @@
     "contradiccion": null,
     "confianza": "alta",
     "pendiente": "Decisión humana sobre licencia"
+  },
+  {
+    "afirmacion": "La rama fix/orbe-p0-e2e-008-safe-degradation hace pasar el E2E 8/8 y termina.",
+    "fuente": "Ejecución local en rama",
+    "url": "",
+    "estado_fuente": "EJECUTADA_EN_REPOSITORIO",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": "8/8 casos ORBE P0 E2E pasan.",
+    "contradiccion": null,
+    "confianza": "alta",
+    "pendiente": "Fusionar a main"
+  },
+  {
+    "afirmacion": "La rama premio-innovacion-2026-agentic-rebuild tiene 57 pruebas en verde y agentes con REQUIRE_HUMAN.",
+    "fuente": "Ejecución local en rama",
+    "url": "",
+    "estado_fuente": "EJECUTADA_EN_REPOSITORIO",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": "Tests 57 passed (57)",
+    "contradiccion": null,
+    "confianza": "alta",
+    "pendiente": "Fusionar; corregir README (Manchester/CIE no implementados)"
+  },
+  {
+    "afirmacion": "La rama feat/federated-intent-runtime-v01 tiene 58 pruebas en verde.",
+    "fuente": "Ejecución local en rama",
+    "url": "",
+    "estado_fuente": "EJECUTADA_EN_REPOSITORIO",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": "Tests 58 passed (58)",
+    "contradiccion": null,
+    "confianza": "alta",
+    "pendiente": "Fusionar"
+  },
+  {
+    "afirmacion": "La rama feat/identity-institutional-graph-p1 tiene 61 pruebas en verde.",
+    "fuente": "Ejecución local en rama",
+    "url": "",
+    "estado_fuente": "EJECUTADA_EN_REPOSITORIO",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": "Tests 61 passed (61)",
+    "contradiccion": null,
+    "confianza": "alta",
+    "pendiente": "Fusionar"
+  },
+  {
+    "afirmacion": "La rama codex/evidence-index-v01 (incluye CodeLens) tiene 75 pruebas en verde.",
+    "fuente": "Ejecución local en rama",
+    "url": "",
+    "estado_fuente": "EJECUTADA_EN_REPOSITORIO",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": "Tests 75 passed (75)",
+    "contradiccion": null,
+    "confianza": "alta",
+    "pendiente": "Fusionar"
+  },
+  {
+    "afirmacion": "La rama p0.6-provider-portability falla 3 pruebas.",
+    "fuente": "Ejecución local en rama",
+    "url": "",
+    "estado_fuente": "EJECUTADA_EN_REPOSITORIO",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": "expected 2 to be +0",
+    "contradiccion": null,
+    "confianza": "alta",
+    "pendiente": "Investigar la causa"
+  },
+  {
+    "afirmacion": "ADR-0004 del registro es 'ID.mx no sustituye Llave MX', no la escala de madurez.",
+    "fuente": "Ejecución local en rama",
+    "url": "",
+    "estado_fuente": "EJECUTADA_EN_REPOSITORIO",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": "ADR-0004 — ID.mx no sustituye Llave MX",
+    "contradiccion": null,
+    "confianza": "alta",
+    "pendiente": "Decidir qué ADR formaliza la escala"
+  },
+  {
+    "afirmacion": "42 ramas del repositorio público conservan firebase-applet-config.json.",
+    "fuente": "Ejecución local en rama",
+    "url": "",
+    "estado_fuente": "EJECUTADA_EN_REPOSITORIO",
+    "fecha_consulta": "2026-09-30",
+    "fragmento_citado": null,
+    "contradiccion": null,
+    "confianza": "alta",
+    "pendiente": "Decisión humana sobre limpieza del historial"
   }
 ]
