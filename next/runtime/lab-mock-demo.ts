@@ -25,7 +25,12 @@ export interface LabMockDemoOutput {
   evidence: readonly EvidenceRecord[];
 }
 
-export async function runLabMockDemo(now: () => string = () => new Date().toISOString()): Promise<LabMockDemoOutput> {
+export const DEMO_TEXT = 'Quiero reportar una luminaria apagada en Tepic';
+
+export async function runLabMockDemo(
+  now: () => string = () => new Date().toISOString(),
+  text: string = DEMO_TEXT,
+): Promise<LabMockDemoOutput> {
   const evidence = new InMemoryEvidenceAgent();
   const policyGate = new ContextPolicyAgent();
   const dependencies = { policyGate, evidenceSink: evidence, now };
@@ -39,7 +44,7 @@ export async function runLabMockDemo(now: () => string = () => new Date().toISOS
     requestedCapability: 'intent.parse',
     riskLevel: 'LOW',
     executionMode: 'LAB_MOCK',
-    payload: { text: 'Quiero reportar un bache en Tepic', channel: 'text' },
+    payload: { text, channel: 'text' },
   };
 
   const orbeResult = await new AgentWorker(new OrbeAgent(), dependencies).process(input);
