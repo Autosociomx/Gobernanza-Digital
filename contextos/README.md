@@ -35,6 +35,22 @@ Caso: reporte ciudadano de **bache o luminaria** en Tepic.
 - no sustituye Context.OS Observatory;
 - no expone un conector institucional real.
 
+## Evidence Index — inventario de evidencia
+
+`contextos/evidence-index/` cataloga en solo lectura los documentos y contratos
+que ya existen en el repositorio: `evidence_id` determinístico, ruta, versión,
+fecha, tipo y checksum, más un reporte de cobertura (`npm run evidencia:reporte`).
+No descarga nada, no inventa metadatos y no toca el runtime. Alimenta a CodeLens
+sin cambiarle una regla. Detalle: `contextos/evidence-index/README.md`.
+
+## CodeLens — compuerta de calidad
+
+`contextos/codelens/` evalúa *candidatos* a conocimiento (procedencia,
+reproducibilidad, contradicción, riesgo y utilidad) y devuelve un veredicto.
+No promueve, no borra, no ejecuta y no guarda nada: el estado canónico, la
+evidencia y la decisión humana siguen siendo de Context.OS. Toda promoción exige
+`HUMAN_SIGNATURE_REQUIRED`. Detalle y límites: `contextos/codelens/README.md`.
+
 ## Servidor de laboratorio
 
 Ejecutar:

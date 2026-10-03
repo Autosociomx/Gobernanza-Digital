@@ -1,0 +1,7 @@
+{
+  "$schema_nota": "Fixture sintético del registro conceptual del Orbe.",
+  "version": "2.0",
+  "modulos": [
+    { "id": "fixture-orbe", "nombre": "Módulo conceptual de prueba", "estado": "propuesta" }
+  ]
+}
