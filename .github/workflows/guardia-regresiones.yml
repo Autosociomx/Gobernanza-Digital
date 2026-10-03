@@ -40,6 +40,26 @@ jobs:
       - name: Verificar regresiones (config y archivos)
         run: node scripts/verificar-regresiones.mjs
 
+      # `firebase-applet-config.json` está gitignorado (hallazgo E3 del Acta 006:
+      # la llave real no vuelve al repositorio). CI es un clon limpio, así que sin
+      # este paso `tsc` y `vite build` fallan con TS2307 (entrada CI-01 de
+      # docs/marco/ESTADO.md). No se commitea ningún archivo: se genera en el
+      # runner y se descarta. Mismo arreglo que la rama
+      # claude/fix-guardia-config-firebase, adaptado al workflow actual.
+      - name: Preparar configuración de Firebase (no se commitea)
+        env:
+          FIREBASE_APPLET_CONFIG: ${{ secrets.FIREBASE_APPLET_CONFIG }}
+        run: |
+          if [ -f firebase-applet-config.json ]; then
+            echo "Config ya presente en el árbol de trabajo; no se toca."
+          elif [ -n "$FIREBASE_APPLET_CONFIG" ]; then
+            printf '%s' "$FIREBASE_APPLET_CONFIG" > firebase-applet-config.json
+            echo "Config tomada del secreto FIREBASE_APPLET_CONFIG."
+          else
+            cp firebase-applet-config.example.json firebase-applet-config.json
+            echo "::notice::Sin secreto FIREBASE_APPLET_CONFIG: se compila con la plantilla de ejemplo. El bundle de CI verifica regresiones, no se despliega."
+          fi
+
       - name: Verificar tipos
         run: npm run lint
 
