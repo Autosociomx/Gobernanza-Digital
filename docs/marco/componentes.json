@@ -1,0 +1,122 @@
+{
+  "schema_version": "componentes.v1",
+  "actualizado": "2026-10-03",
+  "escala_madurez": ["PROPOSED", "EXPERIMENTAL", "VALIDATED", "PILOT", "PRODUCTION", "INSTITUTIONAL"],
+  "nota": "Registro canónico de los componentes empaquetados. La prueba contextos/__tests__/componentes.test.ts falla si un punto de entrada, un README, un comando de prueba o una versión declarada aquí deja de coincidir con el código.",
+  "componentes": [
+    {
+      "id": "context-os",
+      "nombre": "Context.OS",
+      "nombre_completo": "Context.OS — plano de control institucional",
+      "proposito": "Decidir, con reglas escritas en código y sin inteligencia artificial, si una solicitud ciudadana puede proceder, con qué consentimiento y hacia qué servicio, y dejar constancia verificable de la decisión.",
+      "pregunta_que_responde": "¿Esta acción puede ejecutarse, bajo qué regla y con qué permiso?",
+      "entrada": "RuntimeRequest (IntentEnvelope con intención, jurisdicción y datos mínimos)",
+      "salida": "RuntimeResponse (EXECUTED, NEEDS_INPUT, NEEDS_CONSENT, DENIED o ERROR) más un EvidenceRecord",
+      "ubicacion": "contextos/",
+      "punto_de_entrada": "contextos/index.ts",
+      "readme": "contextos/README.md",
+      "version": { "constante": "CONTEXTOS_SCHEMA_VERSION", "archivo": "contextos/contracts.ts", "valor": "contextos.v0.1" },
+      "madurez": "EXPERIMENTAL",
+      "pruebas": ["test:contextos", "test:orbe-p0-e2e"],
+      "no_hace": [
+        "No autoriza actos administrativos ni crea órdenes municipales reales.",
+        "No usa un modelo de lenguaje para decidir.",
+        "No integra Llave MX ni persiste el expediente ciudadano.",
+        "Sus adaptadores responden siempre en modo LAB_MOCK, sin efectos institucionales."
+      ]
+    },
+    {
+      "id": "evidence-records",
+      "nombre": "Evidence (registros)",
+      "nombre_completo": "Evidence — registros de evidencia del runtime",
+      "proposito": "Convertir cada decisión del runtime en un registro con identificador, regla aplicada, resultado y huella SHA-256, sin guardar los datos personales de la solicitud.",
+      "pregunta_que_responde": "¿Qué se decidió, cuándo, con qué regla, y el registro fue alterado después?",
+      "entrada": "Decisión de política y, si la hubo, resultado de ejecución",
+      "salida": "EvidenceRecord con hash; verifyEvidenceRecord indica si coincide",
+      "ubicacion": "contextos/evidence.ts",
+      "punto_de_entrada": "contextos/index.ts",
+      "readme": "contextos/README.md",
+      "version": { "constante": "CONTEXTOS_SCHEMA_VERSION", "archivo": "contextos/contracts.ts", "valor": "contextos.v0.1" },
+      "madurez": "EXPERIMENTAL",
+      "pruebas": ["test:contextos"],
+      "no_hace": [
+        "La huella no es firma digital, sello de tiempo ni prueba de inmutabilidad frente a quien tenga acceso de escritura (CHECKSUM_ONLY).",
+        "No persiste: devuelve el registro; guardarlo en un almacén de solo anexado es el siguiente incremento."
+      ]
+    },
+    {
+      "id": "evidence-index",
+      "nombre": "Evidence Index",
+      "nombre_completo": "Evidence Index — inventario de evidencia documental",
+      "proposito": "Catalogar en solo lectura los documentos y contratos del repositorio con identificador determinístico, huella, versión y fecha, y reportar qué está incompleto o cambió.",
+      "pregunta_que_responde": "¿En qué documentos se apoya el sistema, cuáles están incompletos y cuáles cambiaron?",
+      "entrada": "Archivos de una lista blanca de rutas del repositorio",
+      "salida": "EvidenceIndex, reporte de cobertura y comparación entre dos índices",
+      "ubicacion": "contextos/evidence-index/",
+      "punto_de_entrada": "contextos/evidence-index/index.ts",
+      "readme": "contextos/evidence-index/README.md",
+      "version": { "constante": "EVIDENCE_INDEX_SCHEMA_VERSION", "archivo": "contextos/evidence-index/contracts.ts", "valor": "contextos.evidence-index.v0.1" },
+      "madurez": "EXPERIMENTAL",
+      "pruebas": ["test:evidence-index"],
+      "no_hace": [
+        "No descarga fuentes externas ni inventa metadatos: lo que un documento no declara se reporta ausente.",
+        "No decide si algo es verdad: VERIFICADO solo con marcador humano explícito."
+      ]
+    },
+    {
+      "id": "codelens-gate",
+      "nombre": "CodeLens Gate",
+      "nombre_completo": "CodeLens Gate — compuerta de calidad del conocimiento",
+      "proposito": "Evaluar si una afirmación candidata tiene respaldo suficiente para volverse conocimiento del sistema: procedencia, reproducibilidad, contradicciones y posibles datos personales.",
+      "pregunta_que_responde": "¿Esta afirmación tiene respaldo suficiente para volverse conocimiento oficial del sistema?",
+      "entrada": "CodeLensCandidate (afirmación, referencias de evidencia, origen y acción solicitada) e índice de evidencia",
+      "salida": "Veredicto green, yellow, red o pending_review, con motivos y registro con huella",
+      "ubicacion": "contextos/codelens/",
+      "punto_de_entrada": "contextos/codelens/index.ts",
+      "readme": "contextos/codelens/README.md",
+      "version": { "constante": "CODELENS_GATE_VERSION", "archivo": "contextos/codelens/contracts.ts", "valor": "contextos.codelens.gate.v0.1" },
+      "madurez": "EXPERIMENTAL",
+      "pruebas": ["test:codelens"],
+      "no_hace": [
+        "No promueve, borra ni edita: toda promoción exige firma humana.",
+        "No consulta un modelo de lenguaje; la detección de contradicciones es léxica y siempre se revisa por una persona."
+      ]
+    },
+    {
+      "id": "codelens-analyzer",
+      "nombre": "CodeLens Analyzer",
+      "nombre_completo": "CodeLens Analyzer (@autosocio/codelens) — analizador de repositorios",
+      "externo": true,
+      "repositorio": "https://github.com/Autosociomx/codelens",
+      "proposito": "Analizar un repositorio sin ejecutarlo ni modificarlo y recomendar, con evidencia, qué cuestionar, eliminar, simplificar, acelerar o automatizar.",
+      "pregunta_que_responde": "¿Qué código sobra, qué es demasiado complejo y qué falta probar?",
+      "entrada": "Ruta de un repositorio local y sus puntos de entrada",
+      "salida": "Recomendaciones por fase con prioridad, ubicación y evidencia (texto o JSON)",
+      "version": { "valor": "0.1.0" },
+      "madurez": "EXPERIMENTAL",
+      "no_hace": [
+        "No ejecuta código del repositorio analizado ni escribe en él.",
+        "Sus recomendaciones requieren revisión humana."
+      ]
+    },
+    {
+      "id": "soatm-routing",
+      "nombre": "SOATM",
+      "nombre_completo": "SOATM — Sistema Operativo de Atención de Trámites Mexicanos (agente de enrutamiento)",
+      "proposito": "Indicar qué dependencia, y en Tepic qué unidad, atiende una necesidad ciudadana, con el artículo y la fracción que lo fundamentan, consultando solo el registro verificado de los tres órdenes de gobierno.",
+      "pregunta_que_responde": "¿Quién atiende esto y con qué fundamento legal?",
+      "entrada": "Texto de la necesidad y jurisdicción",
+      "salida": "FOUND, AMBIGUOUS, ATTRIBUTION_UNVERIFIED (escala a una persona) o NOT_FOUND, con fundamento y fuente",
+      "ubicacion": "next/modules/soatm/",
+      "punto_de_entrada": "next/modules/soatm/index.ts",
+      "readme": "data/dependencias/README.md",
+      "version": { "constante": "SOATM_ROUTING_VERSION", "archivo": "next/modules/soatm/agent.ts", "valor": "0.2.0" },
+      "madurez": "EXPERIMENTAL",
+      "pruebas": ["test:soatm"],
+      "no_hace": [
+        "No ejecuta trámites ni produce efectos jurídicos.",
+        "No adivina una dependencia cuando el reglamento no asigna la atribución de forma expresa."
+      ]
+    }
+  ]
+}

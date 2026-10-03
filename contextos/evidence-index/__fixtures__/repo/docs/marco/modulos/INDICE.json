@@ -1,0 +1,8 @@
+{
+  "$schema_nota": "Fixture sintético del registro de módulos del código.",
+  "version": "1.0",
+  "fecha": "2026-08-01",
+  "modulos": [
+    { "id": "fixture-modulo", "nombre": "Módulo de prueba", "estado": "maqueta" }
+  ]
+}

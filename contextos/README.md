@@ -35,6 +35,33 @@ Caso: reporte ciudadano de **bache o luminaria** en Tepic.
 - no sustituye Context.OS Observatory;
 - no expone un conector institucional real.
 
+## Evidence Index — inventario de evidencia
+
+`contextos/evidence-index/` cataloga en solo lectura los documentos y contratos
+que ya existen en el repositorio: `evidence_id` determinístico, ruta, versión,
+fecha, tipo y checksum, más un reporte de cobertura (`npm run evidencia:reporte`).
+No descarga nada, no inventa metadatos y no toca el runtime. Alimenta a CodeLens
+sin cambiarle una regla. Detalle: `contextos/evidence-index/README.md`.
+
+## CodeLens — compuerta de calidad
+
+`contextos/codelens/` evalúa *candidatos* a conocimiento (procedencia,
+reproducibilidad, contradicción, riesgo y utilidad) y devuelve un veredicto.
+No promueve, no borra, no ejecuta y no guarda nada: el estado canónico, la
+evidencia y la decisión humana siguen siendo de Context.OS. Toda promoción exige
+`HUMAN_SIGNATURE_REQUIRED`. Detalle y límites: `contextos/codelens/README.md`.
+
+## Punto de entrada público
+
+Importar siempre desde `contextos/index.ts`:
+
+```ts
+import { createLabContextOSRuntime, evidence, evidenceIndex, codelens } from './contextos';
+```
+
+Qué es cada componente, qué pregunta responde y qué no hace: `docs/marco/COMPONENTES.md`.
+Registro legible por máquina (validado por `contextos/__tests__/componentes.test.ts`): `docs/marco/componentes.json`.
+
 ## Servidor de laboratorio
 
 Ejecutar:
@@ -55,7 +82,10 @@ La respuesta de un adapter siempre indica `executionMode: LAB_MOCK` para impedir
 ## Pruebas
 
 ```bash
-npm run test:contextos
+npm run test:contextos       # runtime
+npm run test:codelens        # CodeLens Gate
+npm run test:evidence-index  # Evidence Index
+npm run test:componentes     # todos los componentes y su registro
 ```
 
 ## Próximo incremento
