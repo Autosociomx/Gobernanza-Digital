@@ -114,7 +114,7 @@ export const PlatformLanding = ({ onNavigate }: PlatformLandingProps) => {
             transition={{ duration: 1, delay: 1 }}
             className="text-[#a0aec0] text-xs tracking-[0.2em] uppercase mt-20"
           >
-            Julio 2026 · Sistema Operativo de Administración Territorial (SOATM) · v3.0
+            Julio 2026 · Sistema Operativo de Atención de Trámites Mexicanos (SOATM) · v3.0
           </motion.p>
         </main>
       </div>
@@ -133,7 +133,7 @@ export const PlatformLanding = ({ onNavigate }: PlatformLandingProps) => {
                El SOATM no es un invento: es el nombre técnico de lo que la ley ya ordena. La LNETB (Arts. 2 y 3) exige Portal Ciudadano Único, Llave MX, Expediente Digital y Repositorio Nacional; la Ley de Gobierno Digital de Nayarit (Arts. 2, 5 y 6) obliga a los Ayuntamientos a operar con interoperabilidad, expediente digital y simplificación administrativa.
             </p>
             <p className="text-[#4a5568] text-lg leading-relaxed mb-8">
-               Nosotros lo descubrimos y lo convertimos en software abierto: un Sistema Operativo de Administración Territorial que transiciona a ventanillas únicas eficientes, seguras y libres de papel, bajo una óptica de territorio y bienestar — y que le pertenece al municipio, no a un proveedor ni a una administración.
+               Nosotros lo descubrimos y lo convertimos en software abierto: un Sistema Operativo de Atención de Trámites Mexicanos que transiciona a ventanillas únicas eficientes, seguras y libres de papel, bajo una óptica de territorio y bienestar — y que le pertenece al municipio, no a un proveedor ni a una administración.
             </p>
 
             <div className="space-y-6">
