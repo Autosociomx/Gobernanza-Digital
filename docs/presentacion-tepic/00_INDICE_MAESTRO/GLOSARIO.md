@@ -7,7 +7,7 @@ Vocabulario normativo del proyecto. Toda superficie pública (componentes, docs,
 | Capa | Forma oficial | Prohibido / corregir |
 |---|---|---|
 | Programa público | **Nayarit Digital · ConnectX** | "ConnectX" a secas en material institucional |
-| Arquitectura | **SOATM — Sistema Operativo de Administración Territorial** | "la plataforma", "el sistema" a secas en docs formales |
+| Arquitectura | **SOATM — Sistema Operativo de Atención de Trámites Mexicanos** | "la plataforma", "el sistema" a secas en docs formales |
 | Núcleo técnico | Orbe Central (Aura) | Usar "Aura" como si fuera el producto público |
 | Identidad municipal | Nayarit ID | "ID Nayarit", "NayaritID" (variantes) |
 

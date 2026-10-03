@@ -64,7 +64,7 @@ export function Whitepaper() {
               La Ley Nacional para Eliminar Trámites Burocráticos (LNETB) — ley federal — exige a los municipios transicionar hacia ventanillas únicas eficientes y libres de papel. Esto impulsa a los ayuntamientos a adoptar herramientas de identidad digital, interoperabilidad gubernamental y trazabilidad en beneficio de la ciudadanía.
             </p>
             <p className="text-slate-600 leading-relaxed mb-8 text-[15px]">
-              El SOATM (Sistema Operativo de Administración Territorial) no es una invención del proyecto: es la implementación en software abierto de obligaciones que ya existen en los tres órdenes de gobierno — la LNETB federal (Arts. 2, 3, 66-76), la Ley de Gobierno Digital de Nayarit (Arts. 2, 5 y 6) y el marco normativo municipal de Tepic. La ley ya lo mandaba; nosotros lo descubrimos y lo programamos.
+              El SOATM (Sistema Operativo de Atención de Trámites Mexicanos) no es una invención del proyecto: es la implementación en software abierto de obligaciones que ya existen en los tres órdenes de gobierno — la LNETB federal (Arts. 2, 3, 66-76), la Ley de Gobierno Digital de Nayarit (Arts. 2, 5 y 6) y el marco normativo municipal de Tepic. La ley ya lo mandaba; nosotros lo descubrimos y lo programamos.
             </p>
             <div className="bg-rose-50 border-l-4 border-rose-500 p-6 rounded-r-xl">
               <p className="text-xl font-serif font-medium text-slate-800 italic">

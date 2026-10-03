@@ -99,7 +99,7 @@ Cada fila conecta: problema → obligación → solución → evidencia → brec
 | **Laboratorio** | Prototipo en entorno controlado — sin efectos jurídicos |
 | **Piloto** | Prueba autorizada con alcance limitado — requiere aprobación del Ayuntamiento |
 | **Producción** | Sistema oficialmente operativo — solo después de todas las autorizaciones |
-| **SOATM** | Sistema Operativo de Administración Territorial — arquitectura del proyecto |
+| **SOATM** | Sistema Operativo de Atención de Trámites Mexicanos — arquitectura del proyecto |
 | **Proponente** | Quien desarrolla y presenta la propuesta (no es autoridad) |
 | **Sujeto obligado** | El Ayuntamiento de Tepic — quien debe cumplir la LNETB |
 
