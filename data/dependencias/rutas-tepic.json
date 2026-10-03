@@ -1,0 +1,105 @@
+{
+  "schema_version": "0.1",
+  "jurisdiccion": "Tepic, Nayarit",
+  "generado": "2026-10-03",
+  "descripcion": "Rutas de servicios ciudadanos hacia la unidad responsable, tomadas del Reglamento de la Administración Pública Municipal de Tepic vigente (Gaceta Municipal Extraordinaria núm. 27, 22-12-2025). Una ruta solo es 'verificado' si el Reglamento asigna la atribución de forma expresa; si no, es 'no_expresa' y el agente escala a una persona.",
+  "fuente": {
+    "url": "https://www.tepic.gob.mx/assets/img/galerias/gacetas/105GAC_GACETA%20EXTRAORDINARIA%20NO.%2027%20REGLAMENTO%20DE%20LA%20ADMINISTRACI%C3%93N%20P%C3%9ABLICA.pdf",
+    "emisor": "Gaceta Municipal Extraordinaria núm. 27 del H. XLIII Ayuntamiento de Tepic",
+    "fecha_consulta": "2026-10-03"
+  },
+  "rutas": [
+    {
+      "id": "tepic.alumbrado_publico",
+      "servicio": "Reporte de luminaria o alumbrado público",
+      "palabras_clave": ["luminaria", "alumbrado", "lampara", "poste de luz", "foco de la calle", "calle oscura"],
+      "dependencia_id": "tep.servicios_publicos_municipales",
+      "unidad": "Departamento de Alumbrado Público",
+      "fundamento": { "articulo": "42", "fraccion": "VI", "complementario": "art. 41, fracc. XV y XVI" },
+      "estado_atribucion": "verificado"
+    },
+    {
+      "id": "tepic.recoleccion_residuos",
+      "servicio": "Recolección de basura y limpieza de calles",
+      "palabras_clave": ["basura", "recoleccion", "residuos", "camion de la basura", "aseo publico", "basurero"],
+      "dependencia_id": "tep.servicios_publicos_municipales",
+      "unidad": "Dirección de Aseo Público",
+      "fundamento": { "articulo": "42", "fraccion": "I", "complementario": "art. 41, fracc. V y VII" },
+      "estado_atribucion": "verificado"
+    },
+    {
+      "id": "tepic.areas_verdes",
+      "servicio": "Parques, jardines y áreas verdes",
+      "palabras_clave": ["parque", "jardin", "area verde", "arbol", "poda", "reforestacion"],
+      "dependencia_id": "tep.servicios_publicos_municipales",
+      "unidad": "Dirección General de Servicios Públicos Municipales",
+      "fundamento": { "articulo": "41", "fraccion": "VIII", "complementario": "art. 41, fracc. IX" },
+      "estado_atribucion": "verificado"
+    },
+    {
+      "id": "tepic.mercados",
+      "servicio": "Mercados municipales",
+      "palabras_clave": ["mercado", "tianguis", "locatario"],
+      "dependencia_id": "tep.servicios_publicos_municipales",
+      "unidad": "Departamento de Mercados",
+      "fundamento": { "articulo": "42", "fraccion": "V", "complementario": "art. 41, fracc. XIII y XIV" },
+      "estado_atribucion": "verificado"
+    },
+    {
+      "id": "tepic.panteones",
+      "servicio": "Panteones municipales",
+      "palabras_clave": ["panteon", "cementerio", "fosa", "inhumacion"],
+      "dependencia_id": "tep.servicios_publicos_municipales",
+      "unidad": "Departamento de Panteones",
+      "fundamento": { "articulo": "42", "fraccion": "IV", "complementario": "art. 41, fracc. XII" },
+      "estado_atribucion": "verificado"
+    },
+    {
+      "id": "tepic.rastro",
+      "servicio": "Rastro municipal",
+      "palabras_clave": ["rastro", "sacrificio de ganado"],
+      "dependencia_id": "tep.servicios_publicos_municipales",
+      "unidad": "Departamento de Rastro Municipal",
+      "fundamento": { "articulo": "42", "fraccion": "III", "complementario": "art. 41, fracc. XI" },
+      "estado_atribucion": "verificado"
+    },
+    {
+      "id": "tepic.predial",
+      "servicio": "Impuesto predial y catastro",
+      "palabras_clave": ["predial", "catastro", "clave catastral", "avaluo"],
+      "dependencia_id": "tep.tesoreria_municipal",
+      "unidad": "Dirección de Catastro e Impuesto Predial",
+      "fundamento": { "articulo": "33", "fraccion": "VI" },
+      "estado_atribucion": "verificado"
+    },
+    {
+      "id": "tepic.registro_civil",
+      "servicio": "Registro Civil (actas de nacimiento, matrimonio, defunción)",
+      "palabras_clave": ["acta de nacimiento", "registro civil", "acta de matrimonio", "acta de defuncion", "oficialia"],
+      "dependencia_id": "tep.ayuntamiento",
+      "unidad": "Dirección del Registro Civil y sus oficialías",
+      "fundamento": { "articulo": "29", "fraccion": "III", "complementario": "art. 28, fracc. XVI" },
+      "estado_atribucion": "verificado"
+    },
+    {
+      "id": "tepic.agua_potable",
+      "servicio": "Agua potable, drenaje y alcantarillado",
+      "palabras_clave": ["agua potable", "fuga de agua", "sin agua", "drenaje", "alcantarillado", "recibo de agua"],
+      "dependencia_id": "tep.sistema_integral_de_agua_potable_y_alcantarillado_siapa_tepic",
+      "unidad": "Sistema Integral de Agua Potable y Alcantarillado (SIAPA-Tepic)",
+      "fundamento": { "articulo": "57", "fraccion": "II" },
+      "estado_atribucion": "verificado",
+      "nota": "Organismo descentralizado; sus atribuciones detalladas están en su decreto o acuerdo de creación (art. 58)."
+    },
+    {
+      "id": "tepic.bacheo",
+      "servicio": "Reporte de bache",
+      "palabras_clave": ["bache", "hoyo en la calle", "pavimento", "socavon"],
+      "dependencia_id": null,
+      "unidad": null,
+      "fundamento": null,
+      "estado_atribucion": "no_expresa",
+      "nota": "El Reglamento vigente no asigna de forma expresa la atención de baches a ninguna unidad. No se adivina: se escala a una persona hasta verificarlo."
+    }
+  ]
+}

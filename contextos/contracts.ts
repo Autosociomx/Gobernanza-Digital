@@ -75,6 +75,12 @@ export interface ConsentGrant {
   revokedAt?: string;
 }
 
+export interface InstitutionalTargetRef {
+  organizationId: string;
+  postId: string;
+  resolutionMode: 'LAB_STATIC' | 'INSTITUTIONAL_DIRECTORY';
+}
+
 export interface ServiceDescriptor {
   id: string;
   version: string;
@@ -91,6 +97,7 @@ export interface ServiceDescriptor {
   allowedJurisdictions: string[];
   requiredFields: string[];
   allowedSubjects: string[];
+  institutionalTarget?: InstitutionalTargetRef;
 }
 
 export interface ExecutionRequest {
