@@ -46,6 +46,9 @@ jobs:
       - name: Probar integración ORBE–Context.OS
         run: npm run test:orbe-contextos
 
+      - name: Probar P1 Identity Gateway + Institutional Graph
+        run: npm run test:p1
+
       - name: Probar vertical slice ORBE P0 extremo a extremo
         run: npm run test:orbe-p0-e2e
 

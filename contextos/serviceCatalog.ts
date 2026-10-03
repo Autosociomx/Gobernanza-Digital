@@ -1,5 +1,9 @@
 import type { ServiceDescriptor } from './contracts';
 import { PUBLIC_WORKS_REPORT_SEMANTIC_CONTRACT } from '../shared/semantic/contracts/publicWorksReport';
+import {
+  TEPIC_LAB_ORGANIZATION,
+  TEPIC_PUBLIC_SERVICES_LAB_POST,
+} from '../institutional-graph/tepicLab';
 
 const SEMANTIC = PUBLIC_WORKS_REPORT_SEMANTIC_CONTRACT;
 
@@ -16,6 +20,11 @@ export const PUBLIC_WORKS_REPORT_SERVICE: ServiceDescriptor = {
   riskLevel: SEMANTIC.riskLevel,
   adapterId: 'lab.public-works-report.v1',
   executionMode: 'LAB_MOCK',
+  institutionalTarget: {
+    organizationId: TEPIC_LAB_ORGANIZATION.organizationId,
+    postId: TEPIC_PUBLIC_SERVICES_LAB_POST.postId,
+    resolutionMode: 'LAB_STATIC',
+  },
   allowedJurisdictions: [
     jurisdictionCode(
       SEMANTIC.jurisdiction.country,
