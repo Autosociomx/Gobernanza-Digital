@@ -57,9 +57,66 @@ function startLabServer() {
       CONTEXTOS_ALLOWED_ORIGINS: 'http://localhost:3000',
     },
     stdio: ['ignore', 'pipe', 'pipe'],
+    // ORBE-P0-E2E-008: "npx tsx <archivo>" crea un proceso nieto (el node/tsx
+    // real que escucha el puerto) distinto del handle que spawn() devuelve.
+    // Sin detached:true, matar solo ese handle puede dejar vivo el proceso
+    // real -reparentado a init- respondiendo HTTP incluso despues de que
+    // stopLabServer() se da por completado. detached:true convierte este
+    // proceso en lider de su propio grupo para poder matar el grupo entero.
+    detached: process.platform !== 'win32',
   });
   server.stdout?.on('data', (chunk) => process.stdout.write(`[LAB] ${chunk}`));
   server.stderr?.on('data', (chunk) => process.stderr.write(`[LAB] ${chunk}`));
+}
+
+function killProcessTree(child: ChildProcess, signal: NodeJS.Signals) {
+  if (process.platform !== 'win32' && typeof child.pid === 'number') {
+    try {
+      // pid negativo = señal a todo el grupo de procesos (npx + su hijo
+      // real node/tsx), no solo al handle inmediato.
+      process.kill(-child.pid, signal);
+      return;
+    } catch {
+      // El grupo ya pudo haber desaparecido: intentar con el pid directo.
+    }
+  }
+  child.kill(signal);
+}
+
+// Exportadas para prueba de regresion directa (scripts/__tests__/waitForPortClosed.test.ts):
+// ORBE-P0-E2E-008 / hallazgo P2 de la revision del PR #63.
+export function isRealConnectionRefusal(error: unknown): boolean {
+  // fetch() lanza dos errores muy distintos aqui y hay que distinguirlos:
+  // - Nadie escucha en el puerto: TypeError con cause.code === 'ECONNREFUSED'.
+  //   Esa es la unica prueba real de que el puerto esta cerrado.
+  // - AbortSignal.timeout(500) se cumplio: TimeoutError. Esto NO prueba que
+  //   el puerto este cerrado, solo que el servidor tardo en responder -sigue
+  //   vivo y aceptando conexiones-. Tratarlo como cierre fue el defecto P2
+  //   encontrado en la revision del PR #63: con un servidor vivo que
+  //   respondia en ~750ms, waitForPortClosed lo declaraba cerrado a los
+  //   ~517ms y una peticion inmediata despues seguia obteniendo HTTP 200.
+  const code = (error as { cause?: { code?: string } } | undefined)?.cause?.code;
+  return code === 'ECONNREFUSED' || code === 'ECONNRESET';
+}
+
+export async function waitForPortClosed(timeoutMs = 5_000, targetBaseUrl: string = baseUrl) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    try {
+      await fetch(`${targetBaseUrl}/api/contextos/v0.1/health`, { signal: AbortSignal.timeout(500) });
+      // Respondio (aunque tarde): el proceso sigue vivo. Seguir esperando.
+    } catch (error) {
+      if (isRealConnectionRefusal(error)) {
+        return; // La conexion fue rechazada de verdad: el puerto ya esta cerrado.
+      }
+      // TimeoutError (u otro error que no sea un rechazo de conexion): la
+      // corrida es inconclusa, no una prueba de cierre. Seguir esperando.
+    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  throw new Error(
+    `labServer sigue respondiendo en ${baseUrl} ${timeoutMs}ms despues de intentar apagarlo (ver ORBE-P0-E2E-008).`,
+  );
 }
 
 async function stopLabServer() {
@@ -68,15 +125,20 @@ async function stopLabServer() {
   if (!child || child.killed || child.exitCode !== null) return;
   await new Promise<void>((resolve) => {
     const timer = setTimeout(() => {
-      child.kill('SIGKILL');
+      killProcessTree(child, 'SIGKILL');
       resolve();
     }, 3_000);
     child.once('exit', () => {
       clearTimeout(timer);
       resolve();
     });
-    child.kill('SIGTERM');
+    killProcessTree(child, 'SIGTERM');
   });
+  // No confiar solo en el evento 'exit' del handle que devolvio spawn(): con
+  // "npx tsx <archivo>" ese handle puede no ser el proceso que realmente
+  // escucha el puerto. Verificar el cierre real del puerto evita declarar el
+  // runtime apagado cuando en realidad sigue respondiendo (ORBE-P0-E2E-008).
+  await waitForPortClosed();
 }
 
 const httpExecutor: RuntimeExecutor = async (request: RuntimeRequest): Promise<RuntimeResponse> => {
@@ -284,4 +346,9 @@ async function main() {
   }
 }
 
-void main();
+// Solo correr la suite E2E completa cuando este archivo se ejecuta
+// directamente (`npm run test:orbe-p0-e2e`), no cuando otra prueba lo
+// importa por sus funciones exportadas (ver scripts/__tests__/waitForPortClosed.test.ts).
+if (import.meta.url === `file://${process.argv[1]}`) {
+  void main();
+}
