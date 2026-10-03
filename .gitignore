@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Configuración de Firebase con llave real: nunca se versiona (Acta 006, E3)
+firebase-applet-config.json
