@@ -51,6 +51,17 @@ No promueve, no borra, no ejecuta y no guarda nada: el estado canónico, la
 evidencia y la decisión humana siguen siendo de Context.OS. Toda promoción exige
 `HUMAN_SIGNATURE_REQUIRED`. Detalle y límites: `contextos/codelens/README.md`.
 
+## Punto de entrada público
+
+Importar siempre desde `contextos/index.ts`:
+
+```ts
+import { createLabContextOSRuntime, evidence, evidenceIndex, codelens } from './contextos';
+```
+
+Qué es cada componente, qué pregunta responde y qué no hace: `docs/marco/COMPONENTES.md`.
+Registro legible por máquina (validado por `contextos/__tests__/componentes.test.ts`): `docs/marco/componentes.json`.
+
 ## Servidor de laboratorio
 
 Ejecutar:
@@ -71,7 +82,10 @@ La respuesta de un adapter siempre indica `executionMode: LAB_MOCK` para impedir
 ## Pruebas
 
 ```bash
-npm run test:contextos
+npm run test:contextos       # runtime
+npm run test:codelens        # CodeLens Gate
+npm run test:evidence-index  # Evidence Index
+npm run test:componentes     # todos los componentes y su registro
 ```
 
 ## Próximo incremento

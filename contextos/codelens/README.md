@@ -1,4 +1,6 @@
-# CodeLens v0.1 — compuerta de calidad de Context.OS
+# CodeLens Gate v0.1 — compuerta de calidad de Context.OS
+
+> No confundir con **CodeLens Analyzer** (`@autosocio/codelens`, repositorio aparte), que analiza código. Esta compuerta evalúa conocimiento. Ver `docs/marco/COMPONENTES.md`.
 
 CodeLens **no es memoria, no es un agente autónomo y no es una arquitectura
 paralela**. Es una función determinística que evalúa *candidatos* a conocimiento

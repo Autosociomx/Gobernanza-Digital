@@ -15,6 +15,8 @@
     "test:semantic-registry": "vitest run shared/semantic/__tests__/registry.test.ts",
     "test:codelens": "vitest run contextos/__tests__/codelens.test.ts",
     "test:evidence-index": "vitest run contextos/__tests__/evidenceIndex.test.ts",
+    "test:soatm": "vitest run next/modules/soatm",
+    "test:componentes": "vitest run contextos/__tests__ next/modules/soatm",
     "test:orbe-contextos": "vitest run contextos/__tests__/runtime.test.ts contextos/__tests__/codelens.test.ts contextos/__tests__/evidenceIndex.test.ts src/orbe/__tests__/contextosBridge.test.ts shared/semantic/__tests__/registry.test.ts",
     "test:orbe-p0-e2e": "tsx scripts/test-orbe-p0-e2e.mts",
     "test:p1": "vitest run identity/__tests__/contracts.test.ts institutional-graph/__tests__/contracts.test.ts contextos/__tests__/institutionalTarget.test.ts",

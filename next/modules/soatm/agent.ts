@@ -11,6 +11,9 @@ import {
   type RegistroRutas,
 } from './registry';
 
+/** Versión del agente de enrutamiento SOATM (Sistema Operativo de Atención de Trámites Mexicanos). */
+export const SOATM_ROUTING_VERSION = '0.2.0' as const;
+
 type RoutingPayload = { serviceQuery: string; jurisdiction?: string };
 
 export type RouteStatus = 'FOUND' | 'AMBIGUOUS' | 'ATTRIBUTION_UNVERIFIED' | 'NOT_FOUND';
@@ -55,7 +58,7 @@ export interface RoutingData {
  */
 export class SoatmRoutingAgent implements Agent<RoutingPayload, RoutingData> {
   id = 'soatm-routing-agent';
-  version = '0.2.0';
+  version = SOATM_ROUTING_VERSION;
 
   constructor(
     private readonly rutasMunicipales: RegistroRutas = RUTAS_TEPIC,
