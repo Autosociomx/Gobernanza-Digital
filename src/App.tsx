@@ -1,5 +1,6 @@
 import React, { useState, lazy, Suspense } from 'react';
 import { PlatformLanding } from './components/PlatformLanding';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Las vistas pesadas se cargan bajo demanda: el visitante de la landing
 // no descarga el dashboard, la app ciudadana ni sus librerías (recharts,
@@ -49,7 +50,7 @@ function getInitialStateFromUrl() {
 }
 const initialUrlState = getInitialStateFromUrl();
 
-function App() {
+function AppContent() {
   const [currentView, setCurrentView] = useState<ViewType>(initialUrlState.view);
   const [citizenTab, setCitizenTab] = useState<any>(initialUrlState.tab);
   const [citizenAction, setCitizenAction] = useState<any>(null);
@@ -97,6 +98,16 @@ function App() {
         setCurrentView(view);
       }} />
     </div>
+  );
+}
+
+// Un fallo en una vista muestra la pantalla de "Interrupción de Sistema"
+// en vez de dejar la aplicación en blanco.
+function App() {
+  return (
+    <ErrorBoundary>
+      <AppContent />
+    </ErrorBoundary>
   );
 }
 
