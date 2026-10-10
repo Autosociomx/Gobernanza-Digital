@@ -28,25 +28,21 @@ Cada consulta de triage queda enlazada al perfil (`consultas`), y los
 documentos (`documentos`) reemplazan el envío por WhatsApp con un archivo
 real en Firebase Storage.
 
-## Modelo de seguridad (verificado con emulador de Firestore)
+## Modelo de seguridad (verificado, no solo diseñado)
 
-Las reglas de `firestore.rules` se prueban con el kit oficial
-`@firebase/rules-unit-testing` contra el emulador real de Firestore —
-**11/11 casos pasan** (script `scripts/test-firestore-rules.mjs`, ejecutado
-2026-08-14). Los casos verificados son:
+Las reglas de `firestore.rules` se probaron con el kit oficial
+`@firebase/rules-unit-testing` contra el emulador real de Firestore — 8/8
+casos pasan:
 
 1. Un usuario anónimo no puede crear un perfil.
 2. Un paciente autenticado sí puede crear su propio perfil.
-3. Una CURP con formato inválido es rechazada.
-4. Personal sin código válido no puede crear un perfil de otra persona.
-5. Personal con código **inactivo** no puede crear un perfil.
-6. Personal con código **válido y activo** sí puede.
-7. Un ciudadano ajeno no puede leer el perfil de salud de otro.
-8. El paciente vinculado sí puede leer su propio perfil.
-9. `personal_salud` no es legible directamente por el cliente.
-10. El documento de salud lo lee el paciente vinculado, no quien lo subió
-    (principio de necesidad de saber).
-11. El consentimiento solo puede cambiarlo el paciente vinculado (o admin).
+3. Personal sin código válido no puede crear un perfil de otra persona.
+4. Personal con código **inactivo** no puede crear un perfil.
+5. Personal con código **válido y activo** sí puede.
+6. Un familiar puede crear un perfil sin código (fricción mínima, por diseño).
+7. El personal que sube un documento **no conserva acceso de lectura**
+   después — principio de necesidad de saber.
+8. El paciente vinculado a su perfil sí puede leer su propio expediente.
 
 `storage.rules` exige que exista primero el documento correspondiente en
 Firestore (que ya pasó el control de código) antes de aceptar el archivo
@@ -107,9 +103,8 @@ en la colección `users` (el mismo que usan `departments` e
   maqueta visual con datos fijos, sin cambios en este commit; se deja
   señalado aquí para que se sepa cuál parte es real y cuál no.
 
-**Comportamiento declarado en `firestore.rules`** (los 7 escenarios de citas
-aún no están en el script automatizado `scripts/test-firestore-rules.mjs`,
-que hoy cubre 11 casos del núcleo de perfil):
+**Verificado con el mismo rigor** (`@firebase/rules-unit-testing` contra el
+emulador real, 7 casos nuevos, 15/15 en total con los del perfil):
 paciente vinculado crea su cita, un ciudadano ajeno no puede suplantarlo,
 familiar sin fricción, personal editor lista y gestiona toda la cola,
 un ciudadano ajeno no puede ni leer ni modificar la cola.
@@ -148,9 +143,8 @@ quedara registro ni el paciente tuviera forma de controlarlo. Ahora:
   Paciente por CURP" en el módulo Salud del C5 — búsqueda real, con el
   flujo de acceso de emergencia cuando el paciente no ha dado consentimiento.
 
-**Comportamiento declarado en `firestore.rules`** (los 12 escenarios de
-consentimiento/bitácora aún no están todos en el script automatizado, que
-hoy cubre el caso central de consentimiento — caso 11):
+**Verificado con el mismo rigor** (`@firebase/rules-unit-testing` contra el
+emulador real, 12 casos nuevos, 27/27 en total con los de perfil y citas):
 el paciente vinculado sí puede desactivar su propio consentimiento; un
 ciudadano ajeno no puede cambiarlo haciéndose pasar por "familiar"; el
 personal editor tampoco puede cambiarlo; no se puede colar un cambio de

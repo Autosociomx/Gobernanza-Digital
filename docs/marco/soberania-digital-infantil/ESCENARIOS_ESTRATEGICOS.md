@@ -13,7 +13,7 @@
 |---|---|---|
 | **Nayarit ID (RUTA Digital)** | Diseñado en el ecosistema Nayarit Digital: una cuenta ciudadana para predial, obras, reportes y salud | El **laboratorio vivo**: un estado completo donde probar identidad + servicios reales con gobierno aliado |
 | **Llave MX (federal, CURP)** | Identidad digital del Gobierno de México para personas adultas, anclada al CURP | La **autenticación del tutor**: el padre o madre ya tendrá (o tiene) una identidad federal; no hay que crearle otra |
-| **Hospital central CURP + expediente médico** | Ya construido en este repo (`MODULO_SALUD_CURP.md`): perfil de salud ligado a CURP, portal de citas piloto Tepic, reglas de acceso verificadas con emulador (11/11) | El **caso de uso que la gente ama**: nadie pelea contra un expediente que evita repetir estudios y cargar papeles |
+| **Hospital central CURP + expediente médico** | Ya construido y verificado en este repo (`MODULO_SALUD_CURP.md`): perfil de salud ligado a CURP, portal de citas piloto Tepic, reglas de acceso probadas 8/8 | El **caso de uso que la gente ama**: nadie pelea contra un expediente que evita repetir estudios y cargar papeles |
 | **Identidad digital infantil (SINISI / Llave de Protección)** | Propuesta aterrizada en este módulo: doble anonimato, consentimiento parental, ficha legislativa | El **foso defensivo (moat)**: la capa que ningún privado puede replicar, porque exige validación presencial estatal del vínculo tutor-menor |
 
 La tesis: **el CURP es el eje, el tutor es la llave, el menor es el
@@ -96,7 +96,7 @@ operativos.
 
 | Riesgo | Gravedad | Seguro contratado |
 |---|---|---|
-| **Fuga de datos de salud infantil** | Existencial — un solo incidente mata el proyecto y la marca | Nunca ser dueños del dato: el expediente vive en infraestructura del Estado; nosotros integramos. Reglas de acceso verificadas con emulador (11/11) como cultura, no como excepción |
+| **Fuga de datos de salud infantil** | Existencial — un solo incidente mata el proyecto y la marca | Nunca ser dueños del dato: el expediente vive en infraestructura del Estado; nosotros certificamos e integramos. Reglas de acceso ya probadas con tests (8/8) como cultura, no como excepción |
 | **La federación construye sin nosotros** | Alta — Llave MX podría absorber la idea | Estándar abierto (`ESTRATEGIA_ESTANDAR_ABIERTO.md`): si el estándar es nuestro y es público, cualquier implementación federal nos valida en lugar de desplazarnos |
 | **Cambio político 2027** | Alta | Anclar en Ley General (no en programa de gobierno) + caso de uso de salud que ningún gobierno entrante quiere apagar |
 | **Percepción "el Estado vigila a los niños"** | Media-alta | Doble anonimato auditable + código abierto + prohibición penal de uso indebido del padrón. La narrativa correcta: *protegemos al niño DE las plataformas, no lo vigilamos* |

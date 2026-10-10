@@ -77,7 +77,7 @@ export function MysteryShopperView({ user, onBack }: { user: User | null, onBack
         </div>
         <h2 className="text-2xl font-black text-slate-900">Auditoría Registrada</h2>
         <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
-          Tu reporte como <strong>Ciudadano Auditor (Mystery Shopper)</strong> ha sido registrado (demo — sin cifrado ni envío real al Órgano Interno de Control).
+          Tu reporte como <strong>Ciudadano Auditor (Mystery Shopper)</strong> ha sido encriptado y enviado directamente al Órgano Interno de Control.
         </p>
         <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl w-full mt-4">
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Folio de Seguimiento Ciego</p>

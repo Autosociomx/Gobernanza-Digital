@@ -195,7 +195,7 @@
 
 <script>
 "use strict";
-const GH = "https://github.com/Autosociomx/Gobernanza-digital-/blob/main/";
+const GH = "https://github.com/Autosociomx/Gobernanza-digital-/blob/claude/soberania-digital-infantil-sbyj67/";
 const REPO = "Autosociomx/Gobernanza-digital-";
 
 const ESTADOS = {
@@ -216,7 +216,7 @@ const MODS = [
   {id:"expediente-familiar", ico:"📋", nm:"Expediente Familiar", full:"Expediente Digital Familiar — padres y niños, CURP", st:"piloto",
    desc:"Expediente de salud ligado al CURP: perfil, consultas, documentos y citas del hospital central. En modo pediátrico, solo se abre con la llave del tutor.",
    kw:["expediente","hospital","citas","cita","medico","paciente","cartilla","vacun","pediatr","documentos","salud curp","rayos","estudios","laboratorio"],
-   files:[["docs/orbe/modulos/EXPEDIENTE_FAMILIAR.md","ficha del módulo"],["docs/marco/MODULO_SALUD_CURP.md","documento técnico"],["firestore.rules","reglas de acceso (11/11 tests emulador)"],["src/components/SaludNayaritID.tsx","componente principal"]],
+   files:[["docs/orbe/modulos/EXPEDIENTE_FAMILIAR.md","ficha del módulo"],["docs/marco/MODULO_SALUD_CURP.md","documento técnico"],["firestore.rules","reglas de acceso (8/8 tests)"],["src/components/SaludNayaritID.tsx","componente principal"]],
    pend:["Modo pediátrico: expediente de menor exige llave del tutor","Habilitar Cloud Storage (consola Firebase)","Sembrar códigos de personal","Cartilla de vacunación digital"],
    con:["Nayarit ID · Llave — consentimiento del tutor","TEPICTU Salud — el triaje deriva a cita","Bienestar — casos vulnerables al DIF"]},
   {id:"tepictu-salud", ico:"🩺", nm:"TEPICTU Salud", full:"TEPICTU Salud — triaje con IA sin internet", st:"disenado",
@@ -348,7 +348,7 @@ function fileList(m){
 }
 function editPrompt(m,txt){
   const files=m.files.map(f=>f[0]).join(", ");
-  return `En el repo ${REPO} (rama main), quiero editar el módulo "${m.full}".\n\nPetición: ${txt}\n\nArchivos del módulo: ${files}\n\nSigue la convención del Orbe (docs/orbe/README.md): un círculo = un módulo = un archivo; si cambian nombre, estado o conexiones, actualiza también docs/orbe/modulos.json y el diagrama del README.`;
+  return `En el repo ${REPO} (rama claude/soberania-digital-infantil-sbyj67), quiero editar el módulo "${m.full}".\n\nPetición: ${txt}\n\nArchivos del módulo: ${files}\n\nSigue la convención del Orbe (docs/orbe/README.md): un círculo = un módulo = un archivo; si cambian nombre, estado o conexiones, actualiza también docs/orbe/modulos.json y el diagrama del README.`;
 }
 function offerPrompt(m,txt){
   const p=editPrompt(m,txt);
@@ -378,7 +378,7 @@ function respond(t){
     botSay("No identifiqué a qué círculo llevarte. Cuéntame con tus palabras qué necesitas — salud, pagos, un reporte en tu calle, protección de tus hijos, identidad — o nombra un módulo (<i>TEPICTU, Nayarit ID, Obras…</i>).");
     return;
   }
-  if(/archivo|donde|codigo|fuente|github/.test(q)){ botSay(`<b>${m.nm}</b> vive en:`+fileList(m)+`Cada enlace abre el archivo en GitHub (rama main).`); return; }
+  if(/archivo|donde|codigo|fuente|github/.test(q)){ botSay(`<b>${m.nm}</b> vive en:`+fileList(m)+`Cada enlace abre el archivo en GitHub (rama del PR #29).`); return; }
   if(/pendiente|falta|todo|siguiente/.test(q)){ botSay("<b>Pendientes:</b><ul>"+m.pend.map(p=>`<li>${p}</li>`).join("")+"</ul>"); return; }
   if(/conexion|integra|habla|flujo/.test(q)){ botSay("<b>Conexiones</b> (siempre a través del núcleo, nunca directo entre bases):<ul>"+m.con.map(c=>`<li>${c}</li>`).join("")+"</ul>"); return; }
   if(/mejorar|cambiar|editar|agregar|quitar|quiero|modificar|arquitectura|redisen/.test(q)){

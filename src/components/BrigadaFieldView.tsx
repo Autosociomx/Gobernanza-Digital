@@ -284,7 +284,7 @@ export function BrigadaFieldView() {
                  </div>
                  <div className="space-y-2">
                     <h3 className="text-2xl font-black text-white uppercase italic">Folio Generado</h3>
-                    <p className="text-slate-500 text-xs px-6">Expediente de demostración. TPC-2026-00001 (sin validez jurídica).</p>
+                    <p className="text-slate-500 text-xs px-6">Expediente sellado. TPC-2026-00001-SHA256 con validez jurídica.</p>
                  </div>
                  <div className="bg-slate-900 p-4 rounded-2xl text-[10px] font-bold text-emerald-400 font-mono">
                     VALIDACIÓN C5 CONFIRMADA

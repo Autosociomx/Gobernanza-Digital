@@ -1,6 +1,6 @@
 {
   "name": "Nayarit Digital",
-  "description": "Estándar de Gestión Pública y Gobernanza Digital Certificada. Ecosistema municipal de alto impacto respaldado por Google Cloud, Gemini y Claude AI para una administración transparente y eficiente.",
-  "requestFramePermissions": ["geolocation", "camera"],
+  "description": "Estándar de Gestión Pública y Gobernanza Digital Certificada con la Carpeta Presidencial de 15 Agentes Digitales para la Presidencia de la República (presidenta.gob.mx). Ecosistema municipal y estatal de alto impacto.",
+  "requestFramePermissions": ["geolocation", "camera", "microphone"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

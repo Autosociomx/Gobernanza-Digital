@@ -29,7 +29,8 @@ import {
   Brain,
   Mic,
   Volume2,
-  VolumeX
+  VolumeX,
+  Folder
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
@@ -41,6 +42,7 @@ import { useAuraVoice } from '../hooks/useAuraVoice';
 import { listarColaCitas, actualizarEstadoCita, type CitaSalud, type EstadoCita } from '../services/citasSaludService';
 import { obtenerPerfil, registrarAcceso, esCurpValido, type PerfilSalud } from '../services/saludPerfilService';
 import { useAuth } from './FirebaseProvider';
+import { UniversalOrderNav } from './UniversalOrderNav';
 
 type Language = 'es' | 'cora' | 'wixarika';
 
@@ -62,115 +64,216 @@ import {
 
 type ModuleType = 'tesoreria' | 'obras' | 'servicios' | 'salud' | 'bienestar' | 'ia' | 'agrovision' | 'observatorio' | 'metricas' | 'parlamento' | 'analisis_politico' | 'interoperabilidad' | 'gabinete';
 
+interface ModuleGroup {
+  folderName: string;
+  badgeColor: string;
+  modules: Array<{
+    id: ModuleType;
+    name: string;
+    icon: any;
+    color: string;
+    bg: string;
+  }>;
+}
+
 export function C5Dashboard({ onLogout, initialModule }: { onLogout: () => void; initialModule?: ModuleType }) {
   const [activeModule, setActiveModule] = useState<ModuleType>(() => initialModule || (localStorage.getItem('activeModule') as ModuleType) || 'tesoreria');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Auto open sidebar on desktop
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+      setSidebarOpen(true);
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('activeModule', activeModule);
   }, [activeModule]);
 
-  const modules = [
-    { id: 'tesoreria', name: 'Tesorería Digital', icon: Building2, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-    { id: 'obras', name: 'Trazabilidad Obras', icon: MapIcon, color: 'text-amber-500', bg: 'bg-amber-500/10' },
-    { id: 'servicios', name: 'Servicios Públicos', icon: AlertTriangle, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-    { id: 'salud', name: 'Salud Inteligente Nayarit ID', icon: Activity, color: 'text-rose-500', bg: 'bg-rose-500/10' },
-    { id: 'bienestar', name: 'Bienestar Social', icon: HeartHandshake, color: 'text-pink-500', bg: 'bg-pink-500/10' },
-    { id: 'gabinete', name: 'Gabinete en Tiempo Real', icon: Users, color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
-    { id: 'ia', name: 'Asistente IA', icon: Bot, color: 'text-purple-500', bg: 'bg-purple-500/10' },
-    { id: 'agrovision', name: 'Agrovisión 3D', icon: TrendingUp, color: 'text-green-500', bg: 'bg-green-500/10' },
-    { id: 'observatorio', name: 'Observatorio Digital', icon: Activity, color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
-    { id: 'metricas', name: 'Métricas Integrales', icon: TrendingUp, color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
-    { id: 'parlamento', name: 'Parlamento Municipal', icon: Users, color: 'text-indigo-400', bg: 'bg-indigo-400/10' },
-    { id: 'analisis_politico', name: 'Análisis Estratégico', icon: Brain, color: 'text-purple-400', bg: 'bg-purple-400/10' },
-    { id: 'interoperabilidad', name: 'Nodo Transparencia', icon: Building2, color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
-  ] as const;
+  const moduleGroups: ModuleGroup[] = [
+    {
+      folderName: "📂 1. Finanzas & Gobernanza",
+      badgeColor: "text-emerald-400 border-emerald-500/30",
+      modules: [
+        { id: 'tesoreria', name: 'Tesorería Digital', icon: Building2, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+        { id: 'gabinete', name: 'Gabinete en Tiempo Real', icon: Users, color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
+        { id: 'interoperabilidad', name: 'Nodo Transparencia', icon: Building2, color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
+        { id: 'metricas', name: 'Métricas Integrales', icon: TrendingUp, color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
+      ]
+    },
+    {
+      folderName: "📂 2. Infraestructura & Mantenimiento",
+      badgeColor: "text-amber-400 border-amber-500/30",
+      modules: [
+        { id: 'obras', name: 'Trazabilidad Obras', icon: MapIcon, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+        { id: 'servicios', name: 'Servicios Públicos', icon: AlertTriangle, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+        { id: 'agrovision', name: 'Agrovisión 3D', icon: TrendingUp, color: 'text-green-500', bg: 'bg-green-500/10' },
+      ]
+    },
+    {
+      folderName: "📂 3. Salud & Bienestar Social",
+      badgeColor: "text-rose-400 border-rose-500/30",
+      modules: [
+        { id: 'salud', name: 'Salud Inteligente Nayarit ID', icon: Activity, color: 'text-rose-500', bg: 'bg-rose-500/10' },
+        { id: 'bienestar', name: 'Bienestar Social', icon: HeartHandshake, color: 'text-pink-500', bg: 'bg-pink-500/10' },
+      ]
+    },
+    {
+      folderName: "📂 4. Inteligencia & Análisis",
+      badgeColor: "text-purple-400 border-purple-500/30",
+      modules: [
+        { id: 'ia', name: 'Asistente IA Aura', icon: Bot, color: 'text-purple-500', bg: 'bg-purple-500/10' },
+        { id: 'observatorio', name: 'Observatorio Digital', icon: Activity, color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
+        { id: 'parlamento', name: 'Parlamento Municipal', icon: Users, color: 'text-indigo-400', bg: 'bg-indigo-400/10' },
+        { id: 'analisis_politico', name: 'Análisis Estratégico', icon: Brain, color: 'text-purple-400', bg: 'bg-purple-400/10' },
+      ]
+    }
+  ];
+
+  const currentModuleName = moduleGroups.flatMap(g => g.modules).find(m => m.id === activeModule)?.name || activeModule;
 
   return (
-    <div className="min-h-screen bg-[#0f1115] text-slate-300 font-sans flex overflow-hidden">
-      {/* Sidebar */}
-      <AnimatePresence>
+    <div className="min-h-screen bg-[#0f1115] text-slate-300 font-sans flex flex-col overflow-x-hidden">
+      
+      {/* Universal Order & Navigation Bar - Present across whole app */}
+      <UniversalOrderNav
+        currentView="c5"
+        currentSubItem={currentModuleName}
+        onNavigate={(view) => {
+          if (view === 'landing') onLogout();
+          else if (typeof window !== 'undefined') {
+            window.location.href = `?view=${view}`;
+          }
+        }}
+      />
+
+      <div className="flex-1 flex overflow-hidden relative">
+        {/* Mobile Backdrop for Drawer */}
         {sidebarOpen && (
-          <motion.div 
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 280, opacity: 1 }}
-            exit={{ width: 0, opacity: 0 }}
-            className="h-screen bg-[#161920] border-r border-slate-800 flex flex-col flex-shrink-0 relative z-20"
-          >
-            <div className="p-6 border-b border-slate-800">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded bg-gradient-to-br from-purple-500 to-rose-500 flex items-center justify-center font-bold text-white shadow-lg">
-                  N
+          <div 
+            onClick={() => setSidebarOpen(false)}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-30 lg:hidden"
+          />
+        )}
+
+        {/* Sidebar */}
+        <AnimatePresence>
+          {sidebarOpen && (
+            <motion.div 
+              initial={{ x: -280, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -280, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-y-0 left-0 lg:relative z-40 lg:z-20 w-[280px] h-full bg-[#161920] border-r border-slate-800 flex flex-col flex-shrink-0 shadow-2xl lg:shadow-none"
+            >
+              <div className="p-4 border-b border-slate-800 flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-slate-900 border border-amber-500/40 flex items-center justify-center font-bold text-amber-400 shadow-md">
+                    N
+                  </div>
+                  <div>
+                    <h1 className="font-serif font-black text-sm text-white tracking-tight leading-none mb-1">Nayarit Digital</h1>
+                    <p className="text-[10px] text-slate-400 font-mono tracking-widest uppercase">C5 Governance Hub</p>
+                  </div>
                 </div>
-                <div>
-                  <h1 className="font-serif font-black text-lg text-white tracking-tight leading-none mb-1">Nayarit Digital</h1>
-                  <p className="text-[10px] text-slate-500 font-mono tracking-widest uppercase">C5 Governance Hub</p>
-                </div>
+                <button 
+                  onClick={() => setSidebarOpen(false)}
+                  className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-800/80"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Categorized Modules in Folders */}
+              <div className="flex-1 overflow-y-auto py-4 px-3 space-y-5">
+                {moduleGroups.map((group, groupIdx) => (
+                  <div key={groupIdx} className="space-y-1.5">
+                    <div className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider px-2 flex items-center justify-between">
+                      <span>{group.folderName}</span>
+                    </div>
+
+                    <div className="space-y-1">
+                      {group.modules.map((m) => {
+                        const isActive = activeModule === m.id;
+                        return (
+                          <button
+                            key={m.id}
+                            onClick={() => {
+                              setActiveModule(m.id);
+                              if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+                                setSidebarOpen(false);
+                              }
+                            }}
+                            className={cn(
+                              "w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-150 group text-left",
+                              isActive 
+                                ? "bg-slate-800 text-white border border-slate-700/80 shadow-sm" 
+                                : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200"
+                            )}
+                          >
+                            <div className={cn("p-1.5 rounded-lg transition-colors shrink-0", isActive ? m.bg : "bg-slate-800/60 group-hover:bg-slate-800")}>
+                              <m.icon className={cn("w-3.5 h-3.5", isActive ? m.color : "text-slate-400")} />
+                            </div>
+                            <span className="truncate">{m.name}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-3 border-t border-slate-800">
+                <button 
+                  onClick={onLogout}
+                  className="w-full flex items-center justify-between px-3 py-2 text-xs text-slate-400 hover:text-white transition-colors rounded-xl hover:bg-slate-800 font-mono font-bold"
+                >
+                  <span className="flex items-center gap-2">
+                    <LogOut className="w-4 h-4 text-slate-500" />
+                    Portal Público
+                  </span>
+                  <ChevronRight size={14} />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#0a0a0c]">
+          {/* Top Sub-Header */}
+          <header className="h-14 border-b border-slate-800 flex items-center justify-between px-4 sm:px-6 bg-[#161920]/60 backdrop-blur-md sticky top-0 z-10 shrink-0">
+            <div className="flex items-center gap-3 overflow-hidden">
+              <button 
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="text-slate-300 hover:text-white transition-colors bg-slate-800/80 p-2 rounded-xl border border-slate-700/60 shrink-0"
+                title="Toggle Menú de Módulos"
+              >
+                <Menu className="w-4 h-4" />
+              </button>
+              <div className="h-4 w-px bg-slate-800 shrink-0 hidden sm:block" />
+              <div className="truncate text-xs font-mono">
+                <span className="text-slate-500">Módulo Activo: </span>
+                <span className="text-amber-400 font-bold">{currentModuleName}</span>
               </div>
             </div>
-
-            <div className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
-              <div className="text-xs font-semibold text-slate-500 mb-4 px-2 tracking-wider">MÓDULOS DEL ECOSISTEMA</div>
-              {modules.map((m) => (
-                <button
-                  key={m.id}
-                  onClick={() => setActiveModule(m.id as ModuleType)}
-                  className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group text-left",
-                    activeModule === m.id 
-                      ? "bg-slate-800/50 text-white" 
-                      : "text-slate-400 hover:bg-slate-800/30 hover:text-slate-200"
-                  )}
-                >
-                  <div className={cn("p-1.5 rounded-md transition-colors", activeModule === m.id ? m.bg : "bg-slate-800/50 group-hover:bg-slate-800")}>
-                    <m.icon className={cn("w-4 h-4", activeModule === m.id ? m.color : "text-slate-400")} />
-                  </div>
-                  {m.name}
-                </button>
-              ))}
+            
+            <div className="flex items-center gap-3 shrink-0">
+              <div className="hidden sm:flex items-center gap-2 bg-slate-900/90 px-3 py-1 rounded-full border border-slate-800">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
+                <span className="text-[10px] font-mono text-emerald-400 font-bold">ESTADO: OPERATIVO</span>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-slate-800 border border-amber-500/50 overflow-hidden shrink-0">
+                 <img 
+                   src="/geraldine-perfil.jpg" 
+                   alt="Profile" 
+                   className="w-full h-full object-cover" 
+                   onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1586996292898-71f4036c4e07?w=100&h=100&fit=crop&crop=faces" }}
+                 />
+              </div>
             </div>
-
-            <div className="p-4 border-t border-slate-800">
-              <button 
-                onClick={onLogout}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-500 hover:text-white transition-colors rounded-lg hover:bg-slate-800"
-              >
-                <LogOut className="w-4 h-4" />
-                Salir a Portal Público
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#0a0a0c]">
-        {/* Header */}
-        <header className="h-16 border-b border-slate-800 flex items-center justify-between px-6 bg-[#161920]/50 backdrop-blur-md sticky top-0 z-10">
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="text-slate-400 hover:text-white transition-colors bg-slate-800/50 p-1.5 rounded-md"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-            <div className="h-4 w-px bg-slate-800"></div>
-            <h2 className="text-sm font-medium text-slate-200 flex items-center gap-2">
-              <span className="text-slate-500">Módulo /</span> 
-              {modules.find(m => m.id === activeModule)?.name}
-            </h2>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-700/50">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse"></div>
-              <span className="text-xs font-mono text-emerald-400">STATE: ONLINE</span>
-            </div>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-rose-400 to-orange-400 border-2 border-slate-800 overflow-hidden">
-               <img src="/geraldine-perfil.jpg" alt="Profile" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1586996292898-71f4036c4e07?w=100&h=100&fit=crop&crop=faces" }}/>
-            </div>
-          </div>
-        </header>
+          </header>
 
         {/* Dashboard Canvas */}
         <main className="flex-1 overflow-y-auto p-6 md:p-8">
@@ -201,7 +304,8 @@ export function C5Dashboard({ onLogout, initialModule }: { onLogout: () => void;
         </main>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 // --- SUB-VIEWS --- //
@@ -212,7 +316,7 @@ function InteroperabilidadView() {
       <div className="space-y-2">
         <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.4em]">Infraestructura Digital ConnectX</p>
         <h3 className="text-4xl font-serif font-black text-white tracking-tighter">Nodo de Transparencia Activa</h3>
-        <p className="text-slate-500 text-sm max-w-2xl leading-relaxed">Arquitectura de bus de servicios (propuesta de interoperabilidad). La integridad de datos bajo la Ley de Gobierno Digital del Estado de Nayarit está diseñada, no implementada.</p>
+        <p className="text-slate-500 text-sm max-w-2xl leading-relaxed">Arquitectura de bus de servicios interoperables. Garantía de integridad de datos bajo la Ley de Gobierno Digital del Estado de Nayarit.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

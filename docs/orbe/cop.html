@@ -869,7 +869,7 @@ CONFIDENCE_SCORE: (calcula un estimado % de qué tan seguro es este cambio basad
 [AI_DIRECTIVE]
 (Un párrafo final estricto donde le ordenas a la IA que consumirá esto que no asuma nada fuera de este contexto y respete estrictamente los límites establecidos.)`;
 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
 
             const payload = {
                 contents: [{ parts: [{ text: userPrompt }] }],

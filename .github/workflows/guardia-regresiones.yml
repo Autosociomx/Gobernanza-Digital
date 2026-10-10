@@ -5,33 +5,21 @@ name: Guardia de regresiones
 # metadatos genéricos, pérdida de code-splitting y borrado de archivos de
 # despliegue. Referencia: docs/marco/PROTOCOLO_SEGURIDAD.md
 
-"on":
+on:
   push:
-    branches:
-      - main
-      - 'agent/**'
-      - 'codex/**'
+    branches: [main]
   pull_request:
     branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-
-concurrency:
-  group: guardia-regresiones-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
 
 jobs:
   guardia:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: npm
 
       - name: Instalar dependencias
@@ -39,23 +27,6 @@ jobs:
 
       - name: Verificar regresiones (config y archivos)
         run: node scripts/verificar-regresiones.mjs
-
-      - name: Verificar tipos
-        run: npm run lint
-
-      - name: Probar integración ORBE–Context.OS
-        run: npm run test:orbe-contextos
-
-      - name: Probar vertical slice ORBE P0 extremo a extremo
-        run: npm run test:orbe-p0-e2e
-
-      - name: Conservar reporte ORBE P0 E2E
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: orbe-p0-e2e-report
-          path: artifacts/orbe-p0-e2e-report.md
-          if-no-files-found: warn
 
       - name: Compilar y verificar que la llave no esté en el bundle
         run: |

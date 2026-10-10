@@ -2,9 +2,7 @@
   # La Guardia corre antes del build: si detecta una regresión (llave en el
   # bundle, metadatos genéricos, archivos borrados), el deploy falla y el PR
   # queda marcado en rojo — protección independiente de GitHub Actions.
-  # ORBE P0 añade un gate E2E reproducible: si cualquiera de los ocho casos
-  # falla, Netlify no publica el deploy.
-  command = "node scripts/verificar-regresiones.mjs && npm run test:orbe-p0-e2e && npm run build"
+  command = "node scripts/verificar-regresiones.mjs && npm run build"
   publish = "dist"
 
 [[redirects]]

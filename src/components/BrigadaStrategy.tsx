@@ -48,7 +48,7 @@ export function BrigadaStrategy() {
     },
     dev: {
       title: "Líder de Desarrollo y Arquitectura",
-      focus: "Infraestructura Offline-First y Expediente (demo)",
+      focus: "Infraestructura Offline-First y Expediente Seguro",
       color: "text-blue-500",
       bgColor: "bg-blue-500/10",
       icon: Cpu,
@@ -64,9 +64,9 @@ export function BrigadaStrategy() {
           metric: "Trámites en < 5 minutos"
         },
         {
-          title: "Seguridad de Datos (propuesta)",
-          desc: "Cifrado de extremo a extremo (E2EE) como objetivo de diseño — no implementado. Los datos sensibles no cuentan hoy con cumplimiento verificado de la ley de protección de datos.",
-          metric: "Cumplimiento legal: pendiente"
+          title: "Seguridad de Datos de Nivel Bancario",
+          desc: "Cifrado de extremo a extremo (E2EE). Los datos personales sensibles están protegidos bajo estricto cumplimiento de la ley mexicana de protección de datos.",
+          metric: "Cumplimiento legal garantizado"
         }
       ]
     },

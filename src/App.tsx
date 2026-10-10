@@ -10,14 +10,14 @@ const C5Dashboard = lazy(() =>
 const CitizenApp = lazy(() =>
   import('./components/CitizenApp').then((m) => ({ default: m.CitizenApp }))
 );
-const OrbeContextPilot = lazy(() =>
-  import('./components/orbe/OrbeContextPilot').then((m) => ({ default: m.OrbeContextPilot }))
-);
 const DeveloperChecklist = lazy(() =>
   import('./components/DeveloperChecklist').then((m) => ({ default: m.DeveloperChecklist }))
 );
 const ExecutiveFolder = lazy(() =>
   import('./components/ExecutiveFolder').then((m) => ({ default: m.ExecutiveFolder }))
+);
+const OrbeCentralView = lazy(() =>
+  import('./components/OrbeCentralView').then((m) => ({ default: m.OrbeCentralView }))
 );
 
 function ViewFallback() {
@@ -28,7 +28,7 @@ function ViewFallback() {
   );
 }
 
-const VALID_VIEWS = ['landing', 'c5', 'citizen', 'dev', 'executive'] as const;
+const VALID_VIEWS = ['landing', 'c5', 'citizen', 'dev', 'executive', 'orbe'] as const;
 type ViewType = (typeof VALID_VIEWS)[number];
 
 // Enlace profundo: ?view=c5&modulo=agrovision o ?view=citizen&tab=services
@@ -66,7 +66,6 @@ function App() {
     return (
       <Suspense fallback={<ViewFallback />}>
         <CitizenApp onLogout={() => setCurrentView('landing')} initialTab={citizenTab} initialAction={citizenAction} />
-        <OrbeContextPilot />
       </Suspense>
     );
   }
@@ -83,6 +82,21 @@ function App() {
     return (
       <Suspense fallback={<ViewFallback />}>
         <ExecutiveFolder onBack={() => setCurrentView('landing')} />
+      </Suspense>
+    );
+  }
+
+  if (currentView === 'orbe') {
+    return (
+      <Suspense fallback={<ViewFallback />}>
+        <OrbeCentralView 
+          onNavigate={(targetView: any, options?: { tab?: string; modulo?: string }) => {
+            if (targetView === 'citizen' && options?.tab) {
+              setCitizenTab(options.tab);
+            }
+            setCurrentView(targetView);
+          }} 
+        />
       </Suspense>
     );
   }

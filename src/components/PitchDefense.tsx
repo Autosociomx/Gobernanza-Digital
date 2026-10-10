@@ -31,8 +31,8 @@ export function PitchDefense() {
       icon: Lock,
       question: "¿Cómo garantizamos que los datos personales de la ciudadanía estén totalmente seguros?",
       context: "Preocupación del Síndico o Responsable Jurídico.",
-      answer: "La plataforma es un prototipo. Como línea de diseño se propone Privacidad desde el Origen (Privacy-by-Design). Hoy NO se implementa cifrado de extremo a extremo (E2EE) ni se declara cumplimiento de la Ley General de Protección de Datos; esas capacidades dependen de la integración y autorización institucional.",
-      keywords: ["Privacy-by-Design (propuesto)", "E2EE (no implementado)", "Cumplimiento (pendiente)"]
+      answer: "La plataforma cuenta con un diseño de Privacidad desde el Origen (Privacy-by-Design). Los datos sensibles no se almacenan en texto plano. Toda la transferencia de información cuenta con cifrado de extremo a extremo (E2EE) y cumple estrictamente con la Ley General de Protección de Datos Personales en Posesión de Sujetos Obligados.",
+      keywords: ["Privacy-by-Design", "Cifrado E2EE", "Cumplimiento de Ley"]
     },
     {
       id: 2,

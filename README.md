@@ -2,6 +2,8 @@
 
 Aplicación de Gobernanza Digital y Portal Ciudadano.
 
+- **Repositorio Oficial en GitHub:** [https://github.com/Autosociomx/Gobernanza-digital-.git](https://github.com/Autosociomx/Gobernanza-digital-.git)
+
 ## Módulos
 
 - [**Orbe Central — mapa modular del ecosistema**](./docs/orbe/README.md) — Un círculo = un módulo = un archivo. Índice de todos los círculos (Llave e Identidad, Expediente Familiar, TEPICTU Salud, Tesorería, Obras, Servicios Públicos, Bienestar, Pulso, Protección Digital) con registro `modulos.json` legible por máquina.

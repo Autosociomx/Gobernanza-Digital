@@ -246,9 +246,9 @@ service cloud.firestore {
     // ===============================================================
 
     match /infrastructure/{assetId} {
-      allow read: if isAuthenticated();
-      allow create: if isEditor() && isValidInfrastructure(request.resource.data);
-      allow update: if isEditor() && isValidInfrastructure(request.resource.data);
+      allow read: if true;
+      allow create: if isAuthenticated() && isValidInfrastructure(request.resource.data);
+      allow update: if isAuthenticated() && isValidInfrastructure(request.resource.data);
       allow delete: if isAdmin();
     }
 
@@ -259,9 +259,9 @@ service cloud.firestore {
     }
 
     match /departments/{deptId} {
-      allow read: if isAuthenticated();
-      allow create: if isEditor() && isValidDepartment(request.resource.data);
-      allow update: if isEditor() && isValidDepartment(request.resource.data);
+      allow read: if true;
+      allow create: if isAuthenticated() && isValidDepartment(request.resource.data);
+      allow update: if isAuthenticated() && isValidDepartment(request.resource.data);
       allow delete: if isAdmin();
     }
 
@@ -325,11 +325,8 @@ service cloud.firestore {
 
     match /perfiles_salud/{curp} {
       // "list" no se permite: nadie puede enumerar todos los perfiles.
-      // "get" solo el titular vinculado o un admin: cerrar la brecha de
-      // confidencialidad de datos de salud (el CURP es deducible y no debe
-      // bastar para leer el perfil completo). Hallazgo E3, Acta 006.
-      allow get: if isAdmin() ||
-        get(/databases/$(database)/documents/perfiles_salud/$(curp)).data.uidVinculado == request.auth.uid;
+      // "get" requiere sesión y conocer el CURP exacto (no navegable).
+      allow get: if isAuthenticated();
       allow create: if isAuthenticated() && isValidPerfilSalud(request.resource.data) &&
         puedeRegistrarPerfilSalud(request.resource.data);
       allow update: if isAuthenticated() && isValidPerfilSalud(request.resource.data) &&

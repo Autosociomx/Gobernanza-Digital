@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously, signOut } from 'firebase/auth';
 import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import firebaseConfig from '../firebase-applet-config.json';
@@ -65,5 +65,19 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
   throw new Error(JSON.stringify(errInfo));
 }
 
-export const login = () => signInWithPopup(auth, googleProvider);
+export const login = async () => {
+  try {
+    return await signInWithPopup(auth, googleProvider);
+  } catch (error: any) {
+    console.warn("Google Sign-In exception, checking fallback:", error);
+    try {
+      return await signInAnonymously(auth);
+    } catch (anonError: any) {
+      console.warn("Anonymous login restricted or unavailable. Entering Local Demo mode:", anonError?.message || anonError);
+      return null;
+    }
+  }
+};
+
 export const logout = () => signOut(auth);
+

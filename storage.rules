@@ -13,12 +13,12 @@ service firebase.storage {
 
     match /salud/{curp}/{fileName} {
       function perfilExiste() {
-        return firestore.exists(/databases/ai-studio-2d0cecbc-0674-45dc-aadf-d5ea5c5b31d9/documents/perfiles_salud/$(curp));
+        return firestore.exists(/databases/(default)/documents/perfiles_salud/$(curp));
       }
 
       function esPropietarioVinculado() {
         return request.auth != null &&
-          firestore.get(/databases/ai-studio-2d0cecbc-0674-45dc-aadf-d5ea5c5b31d9/documents/perfiles_salud/$(curp)).data.uidVinculado == request.auth.uid;
+          firestore.get(/databases/(default)/documents/perfiles_salud/$(curp)).data.uidVinculado == request.auth.uid;
       }
 
       // Nadie navega/enumera archivos ajenos; solo el paciente vinculado

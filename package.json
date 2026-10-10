@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Autosociomx/Gobernanza-digital-.git"
+  },
   "scripts": {
     "dev": "tsx server.ts",
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
@@ -10,13 +14,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "test": "vitest run",
-    "test:contextos": "vitest run contextos/__tests__/runtime.test.ts",
-    "test:semantic-registry": "vitest run shared/semantic/__tests__/registry.test.ts",
-    "test:orbe-contextos": "vitest run contextos/__tests__/runtime.test.ts src/orbe/__tests__/contextosBridge.test.ts shared/semantic/__tests__/registry.test.ts",
-    "test:orbe-p0-e2e": "tsx scripts/test-orbe-p0-e2e.mts",
-    "contextos:lab": "tsx contextos/labServer.ts",
-    "test:firestore-rules": "JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 npx firebase emulators:exec --only firestore \"node scripts/test-firestore-rules.mjs\""
+    "test": "vitest run"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
@@ -26,6 +24,7 @@
     "@tailwindcss/vite": "^4.1.14",
     "@vis.gl/react-google-maps": "^1.8.3",
     "@vitejs/plugin-react": "^5.0.4",
+    "@vladmandic/face-api": "^1.7.15",
     "better-sqlite3": "^12.4.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
@@ -48,12 +47,10 @@
     "vite": "^6.2.0"
   },
   "devDependencies": {
-    "@firebase/rules-unit-testing": "^5.0.1",
     "@types/express": "^4.17.21",
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.28.0",
-    "firebase-tools": "^15.26.0",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

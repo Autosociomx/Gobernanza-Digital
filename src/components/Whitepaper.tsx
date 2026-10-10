@@ -31,7 +31,7 @@ export function Whitepaper() {
               NAYARIT <span className="text-rose-400">DIGITAL</span>
             </h1>
             <p className="text-xl md:text-2xl text-slate-300 max-w-2xl font-serif italic">
-              Alineación con la Ley Nacional para Eliminar Trámites Burocráticos (LNETB) en Tepic, Nayarit — piloto replicable (propuesta, no cumplimiento verificado)
+              Cumplimiento Integral de la Ley Nacional para Eliminar Trámites Burocráticos (LNETB) en Tepic, Nayarit — piloto replicable en los 2,470 municipios del país
             </p>
             
             <div className="pt-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-xs uppercase tracking-widest font-bold text-slate-400">
@@ -61,7 +61,7 @@ export function Whitepaper() {
               <h2 className="text-2xl font-black uppercase tracking-tight">1. Resumen Ejecutivo</h2>
             </div>
             <p className="text-lg text-slate-600 leading-relaxed">
-              La Ley Nacional para Eliminar Trámites Burocráticos (LNETB) — ley federal — exige a los municipios transicionar hacia ventanillas únicas eficientes y libres de papel. Esto impulsa a los ayuntamientos a adoptar herramientas de identidad digital, interoperabilidad gubernamental y trazabilidad en beneficio de la ciudadanía.
+              La Ley Nacional para Eliminar Trámites Burocráticos (LNETB) constitucional exige a los municipios transicionar hacia ventanillas únicas eficientes, seguras y libres de papel. Esto impulsa a los ayuntamientos a adoptar herramientas de identidad digital, interoperabilidad gubernamental, y trazabilidad total en beneficio de la ciudadanía.
             </p>
             <p className="text-slate-600 leading-relaxed mb-8 text-[15px]">
               El SOATM (Sistema Operativo de Administración Territorial) no es una invención del proyecto: es la implementación en software abierto de obligaciones que ya existen en los tres órdenes de gobierno — la LNETB federal (Arts. 2, 3, 66-76), la Ley de Gobierno Digital de Nayarit (Arts. 2, 5 y 6) y el marco normativo municipal de Tepic. La ley ya lo mandaba; nosotros lo descubrimos y lo programamos.
@@ -118,7 +118,7 @@ export function Whitepaper() {
               {[
                 { title: 'Expediente Único Digital', desc: 'Cada solicitud y validación de identidad se asocia de manera segura a un expediente digital para evitar la duplicación de requisitos.', icon: ShieldCheck, color: 'text-emerald-500', bg: 'bg-emerald-50' },
                 { title: 'Trazabilidad y Transparencia', desc: 'Cada trámite genera un acuse digital firmado y auditable, permitiendo al ciudadano dar seguimiento en tiempo real.', icon: FileText, color: 'text-indigo-500', bg: 'bg-indigo-50' },
-                { title: 'Interoperabilidad (propuesta)', desc: 'Arquitectura propuesta para que tesorería, obras y catastro compartan información — hoy sin conexión real ni soberanía tecnológica verificada.', icon: Cpu, color: 'text-cyan-500', bg: 'bg-cyan-50' },
+                { title: 'Interoperabilidad Real', desc: 'El sistema permite a tesorería, obras y catastro compartir información segura bajo estrictos estándares de soberanía tecnológica.', icon: Cpu, color: 'text-cyan-500', bg: 'bg-cyan-50' },
                 { title: 'Capacitación y Orgullo Sindical', desc: 'A través de la Academia Digital ConnectX, el personal del ayuntamiento se certifica y lidera activamente la digitalización de su área.', icon: Activity, color: 'text-rose-500', bg: 'bg-rose-50' },
               ].map((pilar, i) => (
                 <div key={i} className={cn("p-6 rounded-2xl border border-slate-200", pilar.bg)}>

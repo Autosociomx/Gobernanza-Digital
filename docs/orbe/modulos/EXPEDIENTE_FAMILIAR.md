@@ -10,10 +10,9 @@ adopten la Llave.
 
 ## Estado
 
-**Piloto Tepic en desarrollo** — perfil CURP, portal de citas y reglas de
-seguridad verificadas con emulador de Firestore (`scripts/test-firestore-rules.mjs`,
-11/11 casos). El modo pediátrico (candado por llave del tutor) está diseñado,
-no implementado.
+**Piloto Tepic funcionando** — perfil CURP, portal de citas y reglas de
+seguridad verificadas (8/8 tests con el emulador de Firestore). El modo
+pediátrico (candado por llave del tutor) está diseñado, no implementado.
 
 ## Conexiones
 

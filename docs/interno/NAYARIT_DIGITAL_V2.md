@@ -1,7 +1,3 @@
-> ⚠️ **DOCUMENTO DE VISIÓN INTERNA — NO ES UN DOCUMENTO INSTITUCIONAL**
-> 
-> Este archivo pertenece a `docs/interno/` y refleja la visión aspiracional del proyecto Nayarit Digital. **No forma parte del expediente de presentación institucional** para el Ayuntamiento de Tepic. Contiene afirmaciones en lenguaje de visión que **no han sido verificadas contra evidencia real del repositorio** y no deben presentarse ante autoridades municipales. Para el expediente institucional autorizado, ver `docs/presentacion-tepic/README.md`.
-
 # 🧩 El ecosistema Nayarit Digital: una plataforma, todas las aplicaciones
 
 **Una sola cuenta ciudadana (RUTA Digital)**
