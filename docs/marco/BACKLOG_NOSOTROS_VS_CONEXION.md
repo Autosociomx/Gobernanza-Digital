@@ -15,9 +15,9 @@ Estados: ✅ hecho · 🟡 en curso · ⬜ pendiente.
 |---|---|---|---|
 | A1 | Envolver la app en `ErrorBoundary` (antes huérfano) | ✅ | 1 |
 | A2 | Este backlog y su clasificación | ✅ | 1 |
-| A3 | Contrato de conectores (interfaz TypeScript por integración: RENAPO, catastro, SIAPA, SAT, firma) con implementación `LAB_MOCK` y bandera de apagado, mismo patrón que Context.OS | ⬜ | 2 |
-| A4 | Variables de entorno de cada conector documentadas en `.env.example` (apagadas por defecto) | ⬜ | 2 |
-| A5 | Pruebas de contrato: el mismo test corre contra el mock y, luego, contra el conector real | ⬜ | 2 |
+| A3 | Contrato de conectores (interfaz TypeScript por integración: RENAPO, catastro, SIAPA, SAT, firma) con implementación `LAB_MOCK` y bandera de apagado, mismo patrón que Context.OS | ✅ | 2 |
+| A4 | Variables de entorno de cada conector documentadas en `.env.example` (apagadas por defecto) | ✅ | 2 |
+| A5 | Pruebas de contrato: el mismo test corre contra el mock y, luego, contra el conector real | ✅ | 2 |
 | A6 | Etiquetar con `SIMULADO`/`DEMO` toda cifra sin etiqueta en las 15 maquetas (regla del semáforo) | ⬜ | 3 |
 | A7 | Accesibilidad WCAG: auditar con herramienta y corregir lo básico (foco, contraste, `aria`) | ⬜ | 3 |
 | A8 | Un trámite de punta a punta con folio sellado (candidato: alta de negocio pyme) | ⬜ | 4 |
@@ -25,6 +25,7 @@ Estados: ✅ hecho · 🟡 en curso · ⬜ pendiente.
 | A10 | Inventario de trámites en formato del Catálogo Nacional, dejando la clave nacional en "por verificar" | ⬜ | 5 |
 | A11 | Decidir qué hacer con los 6 componentes huérfanos restantes (**decide el usuario**; no se borran solos) | ⬜ | — |
 | A12 | One-pager de inversionista con cifras etiquetadas | ⬜ | 6 |
+| A14 | Auditoría autónoma con agentes abiertos (ver `docs/agentes/AUDITORIA_AUTONOMA_AGENTES_ABIERTOS.md`), fases F1–F6 | ⬜ | 8 |
 | A13 | Auditoría en `server.ts`: autenticación servicio-a-servicio en `/api/*` | ⬜ | 7 |
 
 ## B. Depende de la conexión externa (dejar apuntado, no inventar)
@@ -57,7 +58,7 @@ Estados: ✅ hecho · 🟡 en curso · ⬜ pendiente.
 ## Orden de bloques propuesto
 
 1. ✅ Backlog + `ErrorBoundary`.
-2. Conectores (A3–A5, B1–B5): lo que más cambia la jugada.
+2. ✅ Conectores (A3–A5, B1–B5): carpeta `conectores/`, `npm run test:conectores`: lo que más cambia la jugada.
 3. Honestidad de datos y accesibilidad (A6–A7).
 4. Un trámite completo (A8).
 5. Borradores legales y catálogo (A9–A10).

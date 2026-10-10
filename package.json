@@ -11,6 +11,7 @@
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
     "test": "vitest run",
+    "test:conectores": "vitest run conectores/__tests__/contrato.test.ts",
     "test:contextos": "vitest run contextos/__tests__/runtime.test.ts",
     "test:semantic-registry": "vitest run shared/semantic/__tests__/registry.test.ts",
     "test:orbe-contextos": "vitest run contextos/__tests__/runtime.test.ts src/orbe/__tests__/contextosBridge.test.ts shared/semantic/__tests__/registry.test.ts",
