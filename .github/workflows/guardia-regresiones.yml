@@ -122,7 +122,7 @@ jobs:
             echo
             find dist -type f -printf '%p %s bytes\n' | sort
           } > artifacts/ci-build-evidence.md
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: ci-build-evidence-${{ github.sha }}
