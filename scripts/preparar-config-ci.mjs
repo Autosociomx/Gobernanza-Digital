@@ -5,8 +5,6 @@ const target = 'firebase-applet-config.json';
 const example = 'firebase-applet-config.example.json';
 const secret = process.env.FIREBASE_APPLET_CONFIG;
 
-if (existsSync(target)) process.exit(0);
-
 if (secret) {
   let parsed;
   try { parsed = JSON.parse(secret); }
