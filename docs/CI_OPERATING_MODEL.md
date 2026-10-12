@@ -21,3 +21,11 @@ La CI no existe para producir un botón verde. Cada gate representa una garantí
 ## Mejora continua
 
 Después de estabilizar esta base se medirán duración, cobertura, tamaño de bundle, vulnerabilidades y accesibilidad. Los nuevos gates se incorporarán solo cuando sean reproducibles, accionables y tengan falsos positivos aceptables.
+
+
+## Dependencias y seguridad
+
+- `package-lock.json` es la fuente reproducible para `npm ci`.
+- `package.json` fija `@grpc/grpc-js` mediante override a `^1.14.6`, porque Firebase arrastra una rama transitoria anterior con avisos de seguridad.
+- La actualización se acepta únicamente si `npm audit --omit=dev --audit-level=high` pasa y la suite, TypeScript y build siguen ejecutándose.
+- No usar `npm audit fix --force` como atajo: puede degradar Firebase o introducir cambios mayores no revisados.
