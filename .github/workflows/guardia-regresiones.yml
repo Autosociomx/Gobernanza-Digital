@@ -108,13 +108,7 @@ jobs:
         run: node scripts/preparar-config-ci.mjs
       - run: npm run build
       - name: Verificar bundle del navegador
-        shell: bash
-        run: |
-          set -euo pipefail
-          if grep -RIlE '(GEMINI_API_KEY|AIza[0-9A-Za-z_-]{20,})' dist/assets/; then
-            echo "::error::Se detectó una referencia sensible en el bundle."
-            exit 1
-          fi
+        run: node scripts/verificar-bundle-secrets.mjs
       - name: Evidencia del build
         shell: bash
         run: |
