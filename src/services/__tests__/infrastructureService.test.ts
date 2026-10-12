@@ -101,7 +101,7 @@ describe('infrastructureService', () => {
       });
     });
 
-    it('should return empty array on error and log it', async () => {
+    it('should return seed assets on error and log it', async () => {
       const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       (getDocs as any).mockRejectedValueOnce(new Error('Firebase error'));
 
@@ -111,7 +111,6 @@ describe('infrastructureService', () => {
       expect(consoleWarnSpy).toHaveBeenCalledWith("Error fetching infrastructure registry, returning seed data:", expect.any(Error));
       consoleWarnSpy.mockRestore();
 
-      consoleErrorSpy.mockRestore();
     });
   });
 
@@ -127,14 +126,12 @@ describe('infrastructureService', () => {
     });
 
     it('should throw error if addDoc fails', async () => {
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const mockError = new Error('Save failed');
       (addDoc as any).mockRejectedValueOnce(mockError);
 
       await expect(saveAsset(mockAsset)).rejects.toThrow('Save failed');
       expect(handleFirestoreError).toHaveBeenCalledWith(mockError, 'write', 'infrastructure');
 
-      consoleErrorSpy.mockRestore();
     });
   });
 
@@ -153,14 +150,12 @@ describe('infrastructureService', () => {
     });
 
     it('should throw error if updateDoc fails', async () => {
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const mockError = new Error('Update failed');
       (updateDoc as any).mockRejectedValueOnce(mockError);
 
       await expect(updateAssetStatus('test-id-123', 'CRITICAL', 55)).rejects.toThrow('Update failed');
       expect(handleFirestoreError).toHaveBeenCalledWith(mockError, 'update', 'infrastructure/test-id-123');
 
-      consoleErrorSpy.mockRestore();
     });
   });
 
