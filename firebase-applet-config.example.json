@@ -1,0 +1,10 @@
+{
+  "projectId": "CI_PLACEHOLDER",
+  "appId": "CI_PLACEHOLDER",
+  "apiKey": "CI_PLACEHOLDER",
+  "authDomain": "CI_PLACEHOLDER.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "CI_PLACEHOLDER.firebasestorage.app",
+  "messagingSenderId": "CI_PLACEHOLDER",
+  "measurementId": ""
+}
