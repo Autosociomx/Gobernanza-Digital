@@ -22,4 +22,4 @@ jobs:
           bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
           ./actionlint -version
       - name: Validar workflows
-        run: ./actionlint .github/workflows/
+        run: ./actionlint .github/workflows/*.yml .github/workflows/*.yaml
