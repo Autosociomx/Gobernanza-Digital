@@ -5,6 +5,7 @@ on:
     paths:
       - "package.json"
       - "package-lock.json"
+      - ".github/workflows/dependency-remediation-preview.yml"
   workflow_dispatch:
 
 permissions:
