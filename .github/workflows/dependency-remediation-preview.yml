@@ -1,0 +1,31 @@
+name: Diagnóstico de actualización de dependencias
+
+on:
+  pull_request:
+    paths:
+      - "package.json"
+      - "package-lock.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  remediation-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Aplicar actualizaciones compatibles al lockfile
+        run: npm audit fix --package-lock-only
+      - name: Verificar auditoría tras la actualización propuesta
+        run: npm audit --omit=dev --audit-level=high
+      - name: Publicar lockfile candidato para revisión
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-lockfile-candidate
+          path: package-lock.json
+          retention-days: 7
