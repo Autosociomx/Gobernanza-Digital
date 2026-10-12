@@ -157,3 +157,8 @@ jobs:
             echo
             echo "SHA evaluado: \`${{ github.sha }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
+          test "${{ needs.preflight.result }}" = success
+          test "${{ needs.quality.result }}" = success
+          test "${{ needs.tests.result }}" = success
+          test "${{ needs.security.result }}" = success
+          test "${{ needs.build.result }}" = success
