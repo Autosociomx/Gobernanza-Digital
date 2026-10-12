@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: "22"
       - name: Normalizar lockfile contra package.json
-        run: npm install --package-lock-only --ignore-scripts --no-audit
+        run: rm -f package-lock.json && npm install --package-lock-only --ignore-scripts --no-audit
       - name: Aplicar actualizaciones compatibles al lockfile
         run: npm audit fix --package-lock-only
       - name: Verificar auditoría tras la actualización propuesta
