@@ -29,3 +29,8 @@ Después de estabilizar esta base se medirán duración, cobertura, tamaño de b
 - `package.json` fija `@grpc/grpc-js` mediante override a `^1.14.6`, porque Firebase arrastra una rama transitoria anterior con avisos de seguridad.
 - La actualización se acepta únicamente si `npm audit --omit=dev --audit-level=high` pasa y la suite, TypeScript y build siguen ejecutándose.
 - No usar `npm audit fix --force` como atajo: puede degradar Firebase o introducir cambios mayores no revisados.
+
+
+## Configuración Firebase de cliente
+
+La configuración web de Firebase es pública por diseño; su API key identifica el proyecto, no autoriza acceso por sí sola. La CI reemplaza la configuración de trabajo con un placeholder si no se proporciona el secreto de configuración. El escáner del bundle permite únicamente la API key declarada en esa configuración y rechaza otros patrones Google API y marcadores de `GEMINI_API_KEY`. Mantener restricciones de API, Firebase Security Rules y App Check; nunca incluir una clave de Gemini Developer API ni claves privadas de cuentas de servicio. Referencia: documentación oficial de Firebase sobre API keys.
