@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Firebase applet configuration is generated locally/CI and must never be committed.
+firebase-applet-config.json
