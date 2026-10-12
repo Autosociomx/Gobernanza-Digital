@@ -1,38 +1,159 @@
-name: Guardia de regresiones
-
-# Protege el repositorio de las regresiones que los pushes desde AI Studio
-# ya introdujeron cuatro veces: llave de API en el bundle del navegador,
-# metadatos genéricos, pérdida de code-splitting y borrado de archivos de
-# despliegue. Referencia: docs/marco/PROTOCOLO_SEGURIDAD.md
+name: Guardia de calidad
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: guardia-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22"
 
 jobs:
-  guardia:
+  preflight:
+    name: Preflight
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
+      - run: npm ci
+      - name: Preparar configuración efímera de Firebase
+        env:
+          FIREBASE_APPLET_CONFIG: ${{ secrets.FIREBASE_APPLET_CONFIG }}
+        run: node scripts/preparar-config-ci.mjs
+      - run: node scripts/verificar-regresiones.mjs
 
-      - name: Instalar dependencias
-        run: npm ci
+  quality:
+    name: Tipos
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - env:
+          FIREBASE_APPLET_CONFIG: ${{ secrets.FIREBASE_APPLET_CONFIG }}
+        run: node scripts/preparar-config-ci.mjs
+      - run: npm run lint
 
-      - name: Verificar regresiones (config y archivos)
-        run: node scripts/verificar-regresiones.mjs
+  tests:
+    name: Tests
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - env:
+          FIREBASE_APPLET_CONFIG: ${{ secrets.FIREBASE_APPLET_CONFIG }}
+        run: node scripts/preparar-config-ci.mjs
+      - run: npm test
 
-      - name: Compilar y verificar que la llave no esté en el bundle
+  security:
+    name: Seguridad
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
+      - name: Detectar secretos comunes versionados
+        shell: bash
         run: |
-          npx vite build
-          if grep -rl "GEMINI" dist/assets/; then
-            echo "::error::La cadena GEMINI aparece en el bundle del navegador — la llave estaría expuesta."
+          set -euo pipefail
+          if git grep -nEI '(AIza[0-9A-Za-z_-]{20,}|sk_live_[0-9A-Za-z]+|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----)' -- ':!package-lock.json'; then
+            echo "::error::Se detectó un patrón compatible con un secreto versionado."
             exit 1
           fi
-          echo "Bundle limpio: la llave no viaja al cliente."
+
+  build:
+    name: Build
+    needs: [quality, tests, security]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - env:
+          FIREBASE_APPLET_CONFIG: ${{ secrets.FIREBASE_APPLET_CONFIG }}
+        run: node scripts/preparar-config-ci.mjs
+      - run: npm run build
+      - name: Verificar bundle del navegador
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RIlE '(GEMINI_API_KEY|AIza[0-9A-Za-z_-]{20,})' dist/assets/; then
+            echo "::error::Se detectó una referencia sensible en el bundle."
+            exit 1
+          fi
+      - name: Evidencia del build
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          {
+            echo "# CI evidence"
+            echo
+            echo "- SHA: $GITHUB_SHA"
+            echo "- Node: $(node --version)"
+            echo "- npm: $(npm --version)"
+            echo
+            find dist -type f -printf '%p %s bytes\n' | sort
+          } > artifacts/ci-build-evidence.md
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ci-build-evidence-${{ github.sha }}
+          path: artifacts/ci-build-evidence.md
+          if-no-files-found: warn
+          retention-days: 30
+
+  summary:
+    name: Resultado
+    if: always()
+    needs: [preflight, quality, tests, security, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publicar resumen
+        run: |
+          {
+            echo "# Guardia de calidad"
+            echo
+            echo "| Gate | Resultado |"
+            echo "|---|---|"
+            echo "| Preflight | ${{ needs.preflight.result }} |"
+            echo "| Tipos | ${{ needs.quality.result }} |"
+            echo "| Tests | ${{ needs.tests.result }} |"
+            echo "| Seguridad | ${{ needs.security.result }} |"
+            echo "| Build | ${{ needs.build.result }} |"
+            echo
+            echo "SHA evaluado: \`${{ github.sha }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
