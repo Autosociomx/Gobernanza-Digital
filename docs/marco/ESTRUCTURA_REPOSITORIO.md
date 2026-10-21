@@ -22,6 +22,7 @@
     ├── marco/                  # GOBERNANZA (pública, parte del producto)
     │   ├── GLOSARIO_OFICIAL.md         # Vocabulario, etiquetas, regla de citación
     │   ├── BIBLIOTECA_LEGAL.md         # Base normativa por módulo, con estatus
+    │   ├── CONSTITUCION_ARQUITECTURA_v0.1.md # Autoridades, límites e invariantes
     │   ├── ACTA_005_SANEAMIENTO_REPOSITORIO.md
     │   ├── ESTRUCTURA_REPOSITORIO.md   # Este documento
     │   ├── NOTA_DE_CONTEXTO_PARA_CLAUDE.md
@@ -32,7 +33,7 @@
 
 ## Reglas
 
-1. **Todo documento de gobernanza vive en `docs/marco/`** — actas, glosario, biblioteca, fichas. La gobernanza es pública y forma parte del producto.
+1. **Todo documento normativo de gobernanza vive en `docs/marco/`** — Constitución de Arquitectura, glosario, biblioteca y fichas. Las actas históricas viven en `docs/actas/`; no se reescriben y no sustituyen el estado actual. La gobernanza es pública y forma parte del producto.
 2. **Cada módulo tiene ficha en `docs/marco/modulos/`** con: estado (META/SIMULADO/PROYECCIÓN/VERIFICADO), ley que lo sustenta (de la Biblioteca Legal), y qué parte ya opera con datos reales.
 3. **Convención de ramas:** `feat/<módulo>`, `fix/<ámbito>`, `docs/<tema>`, `chore/<tarea>`. Sin nombres de personas ni de sesiones de IA.
 4. **Conventional Commits:** `fix(oficios): …`, `docs(marco): …`, `feat(salud): …`.

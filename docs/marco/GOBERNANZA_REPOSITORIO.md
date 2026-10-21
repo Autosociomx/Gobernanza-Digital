@@ -36,11 +36,14 @@ mención explícita en la descripción del PR:
 - `docs/` completo (marco normativo, actas, agentes)
 - `scripts/verificar-regresiones.mjs`, `.github/workflows/`
 
-## 4. Órganos de decisión (sistema de gobernanza IA)
+## 4. Órganos de revisión y decisión
 
-- **Parlamento de las Sillas** — decide dirección (prompt maestro en `docs/`)
+- **Parlamento de las Sillas** — revisa, cuestiona y recomienda dirección (prompt maestro en `docs/`); no aprueba ni ejecuta cambios materiales por consenso propio.
 - **Gabinete de 15 Especialistas** — revisa por dominio y propone mejoras
   ancladas a módulos reales (`docs/agentes/GABINETE_ESPECIALISTAS.md`)
+- **Autoridad humana responsable** — aprueba decisiones materiales, cambios
+  irreversibles y adopción normativa, conforme a
+  `docs/marco/CONSTITUCION_ARQUITECTURA_v0.1.md`.
 - Toda sesión produce **acta** en `docs/actas/` con numeración consecutiva.
   Las actas son el registro institucional: no se borran; se corrigen con actas
   posteriores.
