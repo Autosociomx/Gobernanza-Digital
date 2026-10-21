@@ -18,6 +18,11 @@
 > si agregas o cambias un módulo ahí, actualiza también `cop.html` y
 > `orbe-3d.html`.
 
+> **Diseño de la experiencia ciudadana:** [`diseno/`](./diseno/) contiene la
+> especificación de la pantalla de inicio con ORBE flotante y el prompt de
+> construcción derivado de ella. Complementa el canon de arquitectura en
+> [`canon/v0.1/`](./canon/v0.1/) (congelado) sin modificarlo.
+
 > Regla de oro de este directorio: **un círculo = un módulo = un archivo.**
 > Para editar un módulo (su alcance, su estado, sus integraciones) se edita
 > únicamente su archivo en [`modulos/`](./modulos/). El registro
