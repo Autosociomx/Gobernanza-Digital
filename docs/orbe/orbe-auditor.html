@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Propuesta: el Orbe como asistente movil (Android/iOS) y motor de barrido documental que convierte PDFs oficiales dispersos en fichas auditables.">
+<meta name="robots" content="noindex">
+<title>El Orbe Auditor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+  /* ── Paleta deliberadamente no partidista ──────────────────────────────
+     Ningún azul, rojo, verde o naranja saturado que pueda leerse como
+     color de un partido. Gris frío de archivo + acento petróleo.
+     Los tres colores semánticos del semáforo están desaturados a
+     propósito: informan estado, no identidad.                            */
+
+  :root {
+    --ground:      #F1F3F4;
+    --surface:     #FFFFFF;
+    --surface-alt: #E9ECEE;
+    --ink:         #15191C;
+    --ink-muted:   #58616A;
+    --ink-faint:   #838D96;
+    --rule:        #D7DCE0;
+    --rule-soft:   #E4E8EB;
+    --accent:      #0B6470;
+    --accent-soft: #DCEAEC;
+    --accent-ink:  #084D57;
+
+    --ok:      #2F6D55;
+    --ok-bg:   #DFEAE5;
+    --warn:    #8C6520;
+    --warn-bg: #F0E8D8;
+    --crit:    #8E3A3A;
+    --crit-bg: #F1DEDE;
+    --none:    #6A737B;
+    --none-bg: #E4E7E9;
+
+    --measure: 66ch;
+    --wide: 1080px;
+
+    --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0F1215;
+      --surface:     #161A1E;
+      --surface-alt: #1D2328;
+      --ink:         #E7EBEE;
+      --ink-muted:   #9AA4AC;
+      --ink-faint:   #78838B;
+      --rule:        #2A3238;
+      --rule-soft:   #222930;
+      --accent:      #52BFC8;
+      --accent-soft: #10333A;
+      --accent-ink:  #8FD9DF;
+
+      --ok:      #6FB596;
+      --ok-bg:   #16302A;
+      --warn:    #C79B49;
+      --warn-bg: #322818;
+      --crit:    #CE8080;
+      --crit-bg: #331F1F;
+      --none:    #8A939A;
+      --none-bg: #23282C;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0F1215;
+    --surface:     #161A1E;
+    --surface-alt: #1D2328;
+    --ink:         #E7EBEE;
+    --ink-muted:   #9AA4AC;
+    --ink-faint:   #78838B;
+    --rule:        #2A3238;
+    --rule-soft:   #222930;
+    --accent:      #52BFC8;
+    --accent-soft: #10333A;
+    --accent-ink:  #8FD9DF;
+
+    --ok:      #6FB596;
+    --ok-bg:   #16302A;
+    --warn:    #C79B49;
+    --warn-bg: #322818;
+    --crit:    #CE8080;
+    --crit-bg: #331F1F;
+    --none:    #8A939A;
+    --none-bg: #23282C;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.62;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: var(--wide);
+    margin: 0 auto;
+    padding: 0 28px 120px;
+  }
+
+  /* ── Tipografía ─────────────────────────────────────────────────────── */
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+    margin: 0;
+    letter-spacing: -0.018em;
+  }
+
+  h1 { font-size: clamp(2.3rem, 5.4vw, 3.65rem); font-weight: 700; line-height: 1.04; }
+  h2 { font-size: clamp(1.55rem, 3vw, 2.05rem); font-weight: 600; line-height: 1.14; }
+  h3 { font-size: 1.16rem; font-weight: 600; line-height: 1.28; letter-spacing: -0.008em; }
+  h4 { font-size: 0.95rem; font-weight: 600; }
+
+  p { margin: 0; }
+
+  .prose { max-width: var(--measure); display: flex; flex-direction: column; gap: 1.05em; }
+  .prose a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .lead { font-size: 1.2rem; line-height: 1.55; color: var(--ink-muted); }
+
+  code, .mono { font-family: var(--font-mono); font-size: 0.845em; }
+  code {
+    background: var(--surface-alt);
+    padding: 0.12em 0.36em;
+    border-radius: 3px;
+    color: var(--ink);
+  }
+
+  /* ── Estructura de secciones ────────────────────────────────────────── */
+
+  section { padding: 76px 0 0; }
+
+  .sec-head {
+    display: grid;
+    grid-template-columns: 148px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+    border-top: 1px solid var(--rule);
+    padding-top: 22px;
+    margin-bottom: 34px;
+  }
+  .sec-head .eyebrow { padding-top: 0.5em; }
+  .sec-head .sec-title { display: flex; flex-direction: column; gap: 0.6em; max-width: var(--measure); }
+
+  @media (max-width: 720px) {
+    .sec-head { grid-template-columns: 1fr; gap: 12px; }
+    .sec-head .eyebrow { padding-top: 0; }
+  }
+
+  .body-indent { padding-left: 176px; }
+  @media (max-width: 720px) { .body-indent { padding-left: 0; } }
+
+  .stack { display: flex; flex-direction: column; gap: 26px; }
+  .stack-tight { display: flex; flex-direction: column; gap: 14px; }
+
+  /* ── Portada ────────────────────────────────────────────────────────── */
+
+  header.hero { padding: 88px 0 12px; }
+
+  .hero-grid { display: flex; flex-direction: column; gap: 30px; }
+
+  .hero h1 { max-width: 17ch; }
+  .hero .lead { max-width: 54ch; font-size: 1.3rem; }
+
+  .hero-rule {
+    height: 3px;
+    width: 72px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .standing {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-top: 6px;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .tag-prop { background: var(--warn-bg); color: var(--warn); border-color: color-mix(in srgb, var(--warn) 32%, transparent); }
+  .tag-real { background: var(--ok-bg);   color: var(--ok);   border-color: color-mix(in srgb, var(--ok) 32%, transparent); }
+  .tag-lab  { background: var(--accent-soft); color: var(--accent-ink); border-color: color-mix(in srgb, var(--accent) 34%, transparent); }
+  .tag-none { background: var(--none-bg); color: var(--none); border-color: color-mix(in srgb, var(--none) 30%, transparent); }
+  .tag-crit { background: var(--crit-bg); color: var(--crit); border-color: color-mix(in srgb, var(--crit) 32%, transparent); }
+
+  .disclaimer {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--warn);
+    border-radius: 4px;
+    padding: 18px 22px;
+    max-width: var(--measure);
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--ink-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 0.65em;
+  }
+  .disclaimer strong { color: var(--ink); font-weight: 600; }
+
+  /* ── Tesis: tres afirmaciones ───────────────────────────────────────── */
+
+  .claims {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .claim {
+    background: var(--surface);
+    padding: 26px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .claim .neg {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    text-decoration: line-through;
+    text-decoration-color: color-mix(in srgb, var(--crit) 60%, transparent);
+    text-decoration-thickness: 1.5px;
+  }
+  .claim h3 { color: var(--ink); }
+  .claim p { font-size: 0.95rem; color: var(--ink-muted); line-height: 1.55; }
+
+  /* ── Figuras ────────────────────────────────────────────────────────── */
+
+  figure {
+    margin: 0;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 26px 24px 20px;
+  }
+  .fig-scroll { overflow-x: auto; }
+  figure svg { display: block; max-width: 100%; height: auto; color: var(--ink); min-width: 620px; }
+  figcaption {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule-soft);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--ink-muted);
+    max-width: 78ch;
+  }
+  figcaption strong { color: var(--ink); font-weight: 600; }
+
+  .svg-box  { fill: var(--surface); stroke: currentColor; stroke-width: 1.25; opacity: 1; }
+  .svg-fill { fill: var(--surface-alt); stroke: currentColor; stroke-width: 1.25; }
+  .svg-accent-box { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+  .svg-line { stroke: currentColor; stroke-width: 1.25; fill: none; }
+  .svg-line-soft { stroke: currentColor; stroke-width: 1; fill: none; opacity: 0.35; }
+  .svg-accent-line { stroke: var(--accent); stroke-width: 1.5; fill: none; }
+  .svg-t  { font-family: var(--font-display); font-size: 13px; font-weight: 600; fill: currentColor; }
+  .svg-s  { font-family: var(--font-mono); font-size: 10.5px; fill: currentColor; opacity: 0.72; letter-spacing: 0.04em; }
+  .svg-lbl{ font-family: var(--font-mono); font-size: 10.5px; fill: var(--accent); letter-spacing: 0.02em; }
+  .svg-eb { font-family: var(--font-mono); font-size: 10px; fill: currentColor; opacity: 0.5; letter-spacing: 0.14em; }
+  .svg-sa { font-family: var(--font-mono); font-size: 10.5px; fill: var(--accent); letter-spacing: 0.04em; }
+  .svg-bubble { fill: var(--accent); stroke: var(--surface); stroke-width: 3; }
+  .svg-bubble-t { font-family: var(--font-display); font-size: 13px; font-weight: 700; fill: var(--surface); }
+  .svg-head-accent { fill: var(--accent); }
+
+  /* ── Tablas ─────────────────────────────────────────────────────────── */
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    background: var(--surface);
+  }
+  table { border-collapse: collapse; width: 100%; min-width: 580px; font-size: 0.93rem; }
+  th, td { text-align: left; padding: 13px 18px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  thead th {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    background: var(--surface-alt);
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td .mono { color: var(--ink-muted); }
+  .col-tight { white-space: nowrap; }
+
+  /* ── Ficha de obra ──────────────────────────────────────────────────── */
+
+  .ficha {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    overflow: hidden;
+    max-width: 760px;
+  }
+  .ficha-head {
+    background: var(--surface-alt);
+    border-bottom: 1px solid var(--rule);
+    padding: 16px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .ficha-head .t { font-family: var(--font-display); font-weight: 600; font-size: 1rem; }
+  .ficha-head .f { font-family: var(--font-mono); font-size: 0.74rem; color: var(--ink-faint); letter-spacing: 0.06em; }
+  .ficha-rows { display: flex; flex-direction: column; }
+  .frow {
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr) 128px;
+    gap: 18px;
+    padding: 12px 22px;
+    border-bottom: 1px solid var(--rule-soft);
+    align-items: center;
+  }
+  .frow:last-child { border-bottom: none; }
+  .frow .k { font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-muted); }
+  .frow .v { font-size: 0.92rem; }
+  .frow .v.empty { font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink-faint); font-style: normal; }
+  .frow .s { justify-self: start; }
+  @media (max-width: 640px) {
+    .frow { grid-template-columns: 1fr; gap: 6px; }
+  }
+
+  /* ── Listas ─────────────────────────────────────────────────────────── */
+
+  ul.plain { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  ul.plain > li {
+    padding-left: 22px;
+    position: relative;
+    font-size: 0.97rem;
+    line-height: 1.55;
+    max-width: var(--measure);
+  }
+  ul.plain > li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 9px;
+    height: 1.5px;
+    background: var(--accent);
+  }
+  ul.plain > li strong { font-weight: 600; }
+
+  .limits li::before { background: var(--crit); }
+
+  /* ── Cierre ─────────────────────────────────────────────────────────── */
+
+  .next {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 18px;
+  }
+  .next-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .next-card .n {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+  .next-card h4 { font-size: 1rem; }
+  .next-card p { font-size: 0.9rem; color: var(--ink-muted); line-height: 1.5; }
+
+  footer.colofon {
+    margin-top: 84px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.03em;
+  }
+
+  a:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══ PORTADA ══════════════════════════════════════════════════════ -->
+  <header class="hero">
+    <div class="hero-grid">
+      <div class="stack-tight">
+        <span class="eyebrow">Nayarit Digital · SOATM · Documento de trabajo</span>
+        <div class="hero-rule"></div>
+      </div>
+
+      <h1>El Orbe no sustituye al gobierno. Aprende cómo funciona.</h1>
+
+      <p class="lead">
+        Una propuesta para llevar el Orbe al bolsillo del ciudadano — Android e iOS —
+        y para convertir los cientos de PDFs que las dependencias ya publican, y que
+        nadie alcanza a leer, en fichas que una máquina sí puede revisar.
+      </p>
+
+      <div class="standing">
+        <span class="tag tag-prop">Propuesta</span>
+        <span class="tag tag-none">Sin datos de obra aún</span>
+        <span class="tag tag-lab">Piezas en laboratorio</span>
+        <span class="tag tag-real">Piezas ya desplegadas</span>
+      </div>
+
+      <div class="disclaimer">
+        <p><strong>Qué es y qué no es este documento.</strong> Describe una arquitectura
+        propuesta y el estado real de cada pieza que la sostiene. No contiene hallazgos,
+        montos, nombres de contratistas ni conclusiones sobre ninguna obra pública.</p>
+        <p>El piloto del <strong>puente Colosio</strong> aparece aquí como caso de prueba
+        del método, con su ficha <em>vacía</em>. Poblarla exige documentos oficiales
+        descargados y verificados; hasta que eso ocurra, cualquier cifra sería inventada,
+        y el semáforo del proyecto la borraría.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══ 1. LA TESIS ══════════════════════════════════════════════════ -->
+  <section id="tesis">
+    <div class="sec-head">
+      <span class="eyebrow">La tesis</span>
+      <div class="sec-title">
+        <h2>No construimos encima. Nos adaptamos por debajo.</h2>
+        <p class="lead">La razón por la que fracasan los sistemas de gobierno digital
+        no es técnica: es que le piden al gobierno que cambie para usarlos.</p>
+      </div>
+    </div>
+
+    <div class="body-indent stack">
+      <div class="claims">
+        <div class="claim">
+          <span class="neg">Reemplazar el trámite</span>
+          <h3>Aprender el trámite</h3>
+          <p>El Orbe observa cómo se hace hoy el oficio, con sus tiempos, sus formatos y
+          sus rutas entre dependencias. El sistema se moldea al proceso existente; la
+          dependencia integra lo suyo sin rehacer su operación.</p>
+        </div>
+        <div class="claim">
+          <span class="neg">Empezar de cero cada trienio</span>
+          <h3>Memoria entre administraciones</h3>
+          <p>Cada cambio de gobierno borra el conocimiento operativo del anterior. El Orbe
+          conserva el patrón: cuánto tardaba una licencia, qué dependencia la firmaba, qué
+          formato usaba. Lo que cambia es quién gobierna, no cómo se mide.</p>
+        </div>
+        <div class="claim">
+          <span class="neg">Denunciar</span>
+          <h3>Abrir expediente con evidencia</h3>
+          <p>El sistema no acusa a nadie. Señala una inconsistencia documental, la liga a
+          los PDFs públicos donde aparece, le pone checksum y folio, y la entrega a una
+          persona para que decida. La conclusión es humana.</p>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>De ahí sale la restricción de diseño que gobierna todo lo demás:
+        <strong>el Orbe tiene que sobrevivir al cambio de color.</strong> Un sistema que
+        mide bien bajo una administración y deja de medir bajo la siguiente no sirve como
+        infraestructura pública — sirve como propaganda de un trienio.</p>
+        <p>Por eso el sistema modela <em>procesos</em>, no personas. Las variables que
+        aprende son plazos, formatos, dependencias firmantes y rutas de expediente. No
+        perfila funcionarios ni partidos. Y por eso esta misma página no usa ningún color
+        que pueda leerse como el de un partido: es una decisión, no una casualidad.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 2. EL ORBE EN EL TELÉFONO ════════════════════════════════════ -->
+  <section id="movil">
+    <div class="sec-head">
+      <span class="eyebrow">Canal · Móvil</span>
+      <div class="sec-title">
+        <h2>El Orbe en el bolsillo: qué permite Android y qué no permite iOS</h2>
+        <p class="lead">La burbuja flotante que ya trae tu teléfono es una función de
+        Android. En iPhone no existe, y ninguna promesa la hace existir.</p>
+      </div>
+    </div>
+
+    <div class="body-indent stack">
+      <figure class="fig-scroll">
+        <svg viewBox="0 0 660 350" role="img" aria-label="Comparación: en Android el Orbe flota sobre cualquier aplicación como una burbuja; en iOS se invoca desde Siri, un widget o la Dynamic Island, pero no puede flotar.">
+          <!-- ANDROID -->
+          <text class="svg-eb" x="30" y="26">ANDROID 11+</text>
+          <rect class="svg-box" x="30" y="42" width="196" height="268" rx="20"/>
+          <rect class="svg-fill" x="44" y="70" width="168" height="20" rx="4"/>
+          <text class="svg-s" x="52" y="84">app de terceros</text>
+          <line class="svg-line-soft" x1="44" y1="112" x2="212" y2="112"/>
+          <line class="svg-line-soft" x1="44" y1="132" x2="212" y2="132"/>
+          <line class="svg-line-soft" x1="44" y1="152" x2="176" y2="152"/>
+          <line class="svg-line-soft" x1="44" y1="172" x2="212" y2="172"/>
+          <line class="svg-line-soft" x1="44" y1="192" x2="160" y2="192"/>
+          <line class="svg-line-soft" x1="44" y1="212" x2="212" y2="212"/>
+          <line class="svg-line-soft" x1="44" y1="232" x2="188" y2="232"/>
+          <!-- burbuja encima, rebasando el marco -->
+          <circle class="svg-bubble" cx="206" cy="252" r="30"/>
+          <text class="svg-bubble-t" x="206" y="257" text-anchor="middle">Orbe</text>
+          <path class="svg-accent-line" d="M 250 252 L 296 252" marker-end="url(#ah)"/>
+          <text class="svg-lbl" x="256" y="243">flota encima</text>
+          <text class="svg-t" x="30" y="332">Burbuja sobre cualquier app</text>
+
+          <!-- IOS -->
+          <text class="svg-eb" x="404" y="26">iOS</text>
+          <rect class="svg-box" x="404" y="42" width="196" height="268" rx="20"/>
+          <rect class="svg-fill" x="470" y="52" width="64" height="17" rx="8.5"/>
+          <text class="svg-s" x="502" y="64.5" text-anchor="middle">isla</text>
+          <line class="svg-line-soft" x1="418" y1="100" x2="586" y2="100"/>
+          <line class="svg-line-soft" x1="418" y1="120" x2="586" y2="120"/>
+          <line class="svg-line-soft" x1="418" y1="140" x2="550" y2="140"/>
+          <!-- puntos de invocación -->
+          <rect class="svg-accent-box" x="418" y="168" width="168" height="30" rx="4"/>
+          <text class="svg-sa" x="430" y="187">Siri · App Intents</text>
+          <rect class="svg-accent-box" x="418" y="206" width="168" height="30" rx="4"/>
+          <text class="svg-sa" x="430" y="225">Widget · botón Acción</text>
+          <rect class="svg-accent-box" x="418" y="244" width="168" height="30" rx="4"/>
+          <text class="svg-sa" x="430" y="263">Live Activity (folio)</text>
+          <text class="svg-t" x="404" y="332">Se invoca, no flota</text>
+
+          <!-- divisoria -->
+          <line class="svg-line-soft" x1="330" y1="42" x2="330" y2="310" stroke-dasharray="3 5"/>
+
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path class="svg-head-accent" d="M 0 0 L 10 5 L 0 10 z"/>
+            </marker>
+          </defs>
+        </svg>
+        <figcaption><strong>La diferencia es una sola:</strong> Android permite dibujar
+        sobre otras aplicaciones; el sandbox de iOS lo prohíbe por completo. En iPhone el
+        Orbe sigue siendo alcanzable en un gesto, pero desde los puntos de entrada que el
+        sistema ofrece — nunca como una burbuja persistente. Prometer paridad aquí es
+        prometer algo que Apple no concede.</figcaption>
+      </figure>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Mecanismo</th>
+              <th>Qué da</th>
+              <th>Costo real</th>
+              <th class="col-tight">Plataforma</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>VoiceInteractionService</strong><br><span class="mono">ROLE_ASSISTANT</span></td>
+              <td>Ser el asistente por defecto del teléfono: responde al mismo gesto que ya usas hoy.</td>
+              <td>El ciudadano lo elige en Ajustes → Asistente digital. Es lo más cercano a lo que pediste.</td>
+              <td class="col-tight"><span class="tag tag-real">Android</span></td>
+            </tr>
+            <tr>
+              <td><strong>Bubbles API</strong><br><span class="mono">BubbleMetadata</span></td>
+              <td>La burbuja oficial del sistema, la misma de WhatsApp: se arrastra, se colapsa, tiene ventana propia.</td>
+              <td>API pública, sin permisos especiales. Google la valida como función de <em>conversación</em>.</td>
+              <td class="col-tight"><span class="tag tag-real">Android 11+</span></td>
+            </tr>
+            <tr>
+              <td><strong>Overlay flotante</strong><br><span class="mono">SYSTEM_ALERT_WINDOW</span></td>
+              <td>Control total del diseño, sobre cualquier app, siempre visible.</td>
+              <td>Exige activar «Mostrar sobre otras apps» a mano. Play Store lo revisa con lupa y pide justificarlo.</td>
+              <td class="col-tight"><span class="tag tag-prop">Android</span></td>
+            </tr>
+            <tr>
+              <td><strong>App Intents + Siri</strong></td>
+              <td>«Oye Siri, reporta un bache en la Colosio» sin abrir la app.</td>
+              <td>Requiere declarar cada intención como tipo del sistema. No flota.</td>
+              <td class="col-tight"><span class="tag tag-lab">iOS</span></td>
+            </tr>
+            <tr>
+              <td><strong>Live Activity</strong></td>
+              <td>Seguir un folio abierto desde la pantalla de bloqueo y la Dynamic Island.</td>
+              <td>Solo para procesos en curso y acotados en el tiempo.</td>
+              <td class="col-tight"><span class="tag tag-lab">iOS</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="prose">
+        <h3>Cómo se construye sobre lo que ya existe en el repositorio</h3>
+        <p>La app ciudadana ya está escrita: <code>CitizenApp.tsx</code>, con
+        <code>useAuraChat</code> y <code>useAuraVoice</code> como asistente. El camino
+        corto es un contenedor <strong>Capacitor</strong> que reutilice esa vista, más un
+        plugin nativo en Kotlin para la burbuja y el rol de asistente. Reescribir todo en
+        nativo no compra nada que la burbuja necesite.</p>
+        <p>Dos reglas duras del proyecto se mantienen intactas, y conviene dejarlo escrito
+        antes de que alguien empuje código desde AI Studio: la app móvil
+        <strong>no lleva la llave de Gemini</strong> — sigue llamando a
+        <code>/api/ai/chat</code> en <code>server.ts</code> —, y el puente Context.OS
+        sigue en <code>LAB_MOCK</code>, así que el asistente informa y levanta reportes,
+        pero <strong>no autoriza actos administrativos</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 3. LA ARQUITECTURA DE FICHAS ═════════════════════════════════ -->
+  <section id="fichas">
+    <div class="sec-head">
+      <span class="eyebrow">Motor · Barrido documental</span>
+      <div class="sec-title">
+        <h2>Cientos de PDFs públicos que nadie tiene tiempo de leer</h2>
+        <p class="lead">La información ya es pública. El obstáculo no es el secreto: es el
+        volumen. Ese obstáculo sí se puede atacar con máquinas.</p>
+      </div>
+    </div>
+
+    <div class="body-indent stack">
+      <div class="prose">
+        <p>Las dependencias publican actas, contratos, fallos de licitación, avances de
+        obra y estados financieros en sus propios portales. Cualquier persona puede
+        descargarlos. Nadie puede <em>leerlos todos</em>: están dispersos en decenas de
+        sitios, sin formato común, y son cientos por ejercicio fiscal.</p>
+        <p>La arquitectura invierte el problema. En vez de pedirle a una persona que lea
+        un PDF a la vez, reparte el acervo entre agentes que trabajan en paralelo y
+        devuelven, cada uno, una <strong>ficha</strong>: el mismo documento reducido a
+        campos comparables. Leer mil PDFs es imposible; comparar mil fichas es una
+        consulta.</p>
+      </div>
+
+      <figure class="fig-scroll">
+        <svg viewBox="0 0 1010 400" role="img" aria-label="Pipeline de cinco etapas: portales oficiales, barrido en paralelo por agentes, ficha normalizada, análisis del modelo de lenguaje, y expediente con checksum entregado a revisión humana.">
+          <defs>
+            <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+            <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path class="svg-head-accent" d="M 0 0 L 10 5 L 0 10 z"/>
+            </marker>
+          </defs>
+
+          <!-- ── etapa 1 : portales -->
+          <text class="svg-eb" x="20" y="46">1 · FUENTE</text>
+          <rect class="svg-fill" x="20" y="98" width="150" height="34" rx="3"/>
+          <text class="svg-s" x="32" y="119">Obras Públicas</text>
+          <rect class="svg-fill" x="20" y="140" width="150" height="34" rx="3"/>
+          <text class="svg-s" x="32" y="161">Tesorería</text>
+          <rect class="svg-fill" x="20" y="182" width="150" height="34" rx="3"/>
+          <text class="svg-s" x="32" y="203">Cabildo · actas</text>
+          <text class="svg-s" x="20" y="238" opacity="0.5">+ cientos de PDFs</text>
+          <text class="svg-t" x="20" y="270">Portales oficiales</text>
+
+          <!-- 1 → 2 -->
+          <path class="svg-line" d="M 178 157 L 218 157" marker-end="url(#a2)"/>
+          <text class="svg-s" x="170" y="141">reparte</text>
+
+          <!-- ── etapa 2 : agentes -->
+          <text class="svg-eb" x="225" y="46">2 · BARRIDO</text>
+          <rect class="svg-box" x="225" y="98" width="150" height="34" rx="3"/>
+          <text class="svg-s" x="237" y="119">agente 01</text>
+          <rect class="svg-box" x="225" y="140" width="150" height="34" rx="3"/>
+          <text class="svg-s" x="237" y="161">agente 02</text>
+          <rect class="svg-box" x="225" y="182" width="150" height="34" rx="3"/>
+          <text class="svg-s" x="237" y="203">agente 03</text>
+          <rect class="svg-box" x="225" y="224" width="150" height="34" rx="3" stroke-dasharray="4 4"/>
+          <text class="svg-s" x="237" y="245">agente ×N</text>
+          <text class="svg-t" x="225" y="288">En paralelo</text>
+
+          <!-- 2 → 3 -->
+          <path class="svg-line" d="M 383 178 L 423 178" marker-end="url(#a2)"/>
+          <text class="svg-s" x="368" y="162">normaliza</text>
+
+          <!-- ── etapa 3 : ficha -->
+          <text class="svg-eb" x="430" y="46">3 · FICHA</text>
+          <rect class="svg-accent-box" x="430" y="98" width="150" height="160" rx="3"/>
+          <line class="svg-accent-line" x1="444" y1="126" x2="530" y2="126"/>
+          <line class="svg-accent-line" x1="444" y1="146" x2="566" y2="146"/>
+          <line class="svg-accent-line" x1="444" y1="166" x2="512" y2="166"/>
+          <line class="svg-accent-line" x1="444" y1="186" x2="566" y2="186"/>
+          <line class="svg-accent-line" x1="444" y1="206" x2="524" y2="206"/>
+          <line class="svg-accent-line" x1="444" y1="226" x2="548" y2="226"/>
+          <text class="svg-t" x="430" y="288">Campos comparables</text>
+          <text class="svg-s" x="430" y="308" opacity="0.55">un PDF → un registro</text>
+
+          <!-- 3 → 4 -->
+          <path class="svg-line" d="M 588 178 L 628 178" marker-end="url(#a2)"/>
+          <text class="svg-s" x="566" y="162">compara</text>
+
+          <!-- ── etapa 4 : análisis -->
+          <text class="svg-eb" x="635" y="46">4 · ANÁLISIS</text>
+          <rect class="svg-box" x="635" y="118" width="150" height="120" rx="3"/>
+          <text class="svg-s" x="647" y="146">modelo de lenguaje</text>
+          <line class="svg-line-soft" x1="647" y1="162" x2="773" y2="162"/>
+          <text class="svg-s" x="647" y="184">plazo fuera de rango</text>
+          <text class="svg-s" x="647" y="204">monto sin acta</text>
+          <text class="svg-s" x="647" y="224">firma que no aparece</text>
+          <text class="svg-t" x="635" y="288">Señala, no concluye</text>
+
+          <!-- 4 → 5 -->
+          <path class="svg-line" d="M 793 178 L 833 178" marker-end="url(#a2)"/>
+          <text class="svg-s" x="778" y="162">sella</text>
+
+          <!-- ── etapa 5 : expediente -->
+          <text class="svg-eb" x="840" y="46">5 · EVIDENCIA</text>
+          <rect class="svg-box" x="840" y="108" width="150" height="140" rx="3"/>
+          <text class="svg-s" x="852" y="134">folio</text>
+          <line class="svg-line-soft" x1="852" y1="146" x2="978" y2="146"/>
+          <text class="svg-s" x="852" y="168">SHA-256</text>
+          <text class="svg-s" x="852" y="188">correlationId</text>
+          <text class="svg-s" x="852" y="208">enlace al PDF</text>
+          <line class="svg-line-soft" x1="852" y1="220" x2="978" y2="220"/>
+          <text class="svg-s" x="852" y="240">fecha de captura</text>
+          <text class="svg-t" x="840" y="288">Expediente trazable</text>
+
+          <!-- retorno: revisión humana -->
+          <path class="svg-accent-line" d="M 915 258 L 915 330 L 505 330" marker-end="url(#a3)" stroke-dasharray="5 4"/>
+          <text class="svg-lbl" x="612" y="350">la conclusión la firma una persona</text>
+        </svg>
+        <figcaption><strong>El paralelismo está en el barrido, no en el juicio.</strong>
+        Los agentes se multiplican para vencer el volumen; el análisis ocurre una sola vez
+        y sobre fichas, no sobre PDFs crudos. Y la última flecha es la que define al
+        sistema: lo que sale de la etapa 5 es un expediente sellado que <em>entra</em> a
+        revisión humana — nunca una acusación publicada por una máquina.</figcaption>
+      </figure>
+
+      <div class="prose">
+        <h3>Por qué esto no es una idea nueva en el proyecto</h3>
+        <p>Ya hubo un ensayo real de esta mecánica.
+        <code>docs/investigacion/REPORTE_DESCARGA_FUENTES_PRIMARIAS.md</code> documenta una
+        corrida de descarga masiva de leyes desde el DOF, el Congreso de Nayarit y
+        ordenjuridico.gob.mx: <strong>6 de 7 fuentes descargadas y verificadas como PDF
+        reales</strong>, con la séptima caída por agotamiento de tiempo del sub-agente.</p>
+        <p>Ese reporte vale más por su fracaso que por su éxito: fijó por escrito que el
+        cuello de botella es el tiempo por agente, y que el nombre legal correcto de la
+        LNETB no era el que se venía usando. Esa es exactamente la clase de corrección que
+        el barrido produce a escala.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 4. LA FICHA ══════════════════════════════════════════════════ -->
+  <section id="ficha-obra">
+    <div class="sec-head">
+      <span class="eyebrow">Esquema · PublicWorks</span>
+      <div class="sec-title">
+        <h2>La ficha de obra que el repositorio ya tiene pendiente</h2>
+        <p class="lead">Esto no hay que inventarlo desde cero: es el único pendiente
+        abierto del módulo de Trazabilidad de Obras.</p>
+      </div>
+    </div>
+
+    <div class="body-indent stack">
+      <div class="prose">
+        <p><code>docs/orbe/modulos/OBRAS.md</code> describe el módulo como
+        <strong>diseñado</strong> y cierra con una sola casilla sin marcar:
+        «Esquema de datos de la ficha de obra (PublicWorks)». El barrido documental
+        necesita precisamente eso — una forma fija donde vaciar cada PDF. Las dos piezas
+        se resuelven juntas.</p>
+      </div>
+
+      <div class="ficha">
+        <div class="ficha-head">
+          <span class="t">Ficha de obra — instancia del piloto</span>
+          <span class="f">PublicWorks · v0 · sin poblar</span>
+        </div>
+        <div class="ficha-rows">
+          <div class="frow">
+            <span class="k">obra.nombre</span>
+            <span class="v">Puente Colosio, Tepic</span>
+            <span class="s"><span class="tag tag-prop">Declarado</span></span>
+          </div>
+          <div class="frow">
+            <span class="k">obra.contrato</span>
+            <span class="v empty">— sin documento fuente —</span>
+            <span class="s"><span class="tag tag-none">Vacío</span></span>
+          </div>
+          <div class="frow">
+            <span class="k">obra.montoContratado</span>
+            <span class="v empty">— sin documento fuente —</span>
+            <span class="s"><span class="tag tag-none">Vacío</span></span>
+          </div>
+          <div class="frow">
+            <span class="k">obra.montoPagado</span>
+            <span class="v empty">— sin documento fuente —</span>
+            <span class="s"><span class="tag tag-none">Vacío</span></span>
+          </div>
+          <div class="frow">
+            <span class="k">obra.contratista</span>
+            <span class="v empty">— sin documento fuente —</span>
+            <span class="s"><span class="tag tag-none">Vacío</span></span>
+          </div>
+          <div class="frow">
+            <span class="k">obra.fechaInicio / fechaFin</span>
+            <span class="v empty">— sin documento fuente —</span>
+            <span class="s"><span class="tag tag-none">Vacío</span></span>
+          </div>
+          <div class="frow">
+            <span class="k">obra.avanceReportado</span>
+            <span class="v empty">— sin documento fuente —</span>
+            <span class="s"><span class="tag tag-none">Vacío</span></span>
+          </div>
+          <div class="frow">
+            <span class="k">obra.administracion</span>
+            <span class="v empty">— sin documento fuente —</span>
+            <span class="s"><span class="tag tag-none">Vacío</span></span>
+          </div>
+          <div class="frow">
+            <span class="k">evidencia.fuenteUrl[]</span>
+            <span class="v empty">— sin documento fuente —</span>
+            <span class="s"><span class="tag tag-none">Vacío</span></span>
+          </div>
+          <div class="frow">
+            <span class="k">evidencia.checksum</span>
+            <span class="v empty">— se calcula al descargar —</span>
+            <span class="s"><span class="tag tag-lab">Derivado</span></span>
+          </div>
+          <div class="frow">
+            <span class="k">evidencia.integrityAssurance</span>
+            <span class="v mono">CHECKSUM_ONLY</span>
+            <span class="s"><span class="tag tag-lab">Fijo</span></span>
+          </div>
+          <div class="frow">
+            <span class="k">analisis.senalamientos[]</span>
+            <span class="v empty">— requiere ficha poblada —</span>
+            <span class="s"><span class="tag tag-none">Vacío</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>Una ficha vacía no es un documento fallido: es el estado honesto del piloto hoy.
+        Cada casilla que se llene tendrá que apuntar a un PDF público descargable, con su
+        URL y su checksum. <strong>El campo que no tenga fuente se queda vacío</strong>, y
+        una ficha con huecos es en sí misma un hallazgo — dice qué no está publicado.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 5. EL PILOTO ═════════════════════════════════════════════════ -->
+  <section id="piloto">
+    <div class="sec-head">
+      <span class="eyebrow">Piloto · Vertical 003</span>
+      <div class="sec-title">
+        <h2>El puente Colosio como prueba de que el sistema vive</h2>
+        <p class="lead">Un piloto no sirve para demostrar que hay una irregularidad. Sirve
+        para demostrar que la cadena completa funciona de punta a punta.</p>
+      </div>
+    </div>
+
+    <div class="body-indent stack">
+      <div class="prose">
+        <p>El valor del caso no está en lo que se encuentre. Está en que una obra concreta
+        obligue a recorrer las cinco etapas con documentos reales, y a que cada eslabón
+        deje rastro. Si el piloto termina con una ficha completa y <em>sin</em>
+        señalamientos, el sistema funcionó igual de bien.</p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-tight">Etapa</th>
+              <th>Qué prueba</th>
+              <th>Cómo se sabe que pasó</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="col-tight"><strong>1 · Fuente</strong></td>
+              <td>Que los documentos de la obra son efectivamente públicos y localizables.</td>
+              <td>Lista de URLs oficiales, con fecha de captura. Si algo no está publicado, se registra como ausencia.</td>
+            </tr>
+            <tr>
+              <td class="col-tight"><strong>2 · Barrido</strong></td>
+              <td>Que N agentes procesan el acervo sin pisarse ni agotar el tiempo.</td>
+              <td>Bitácora por agente: documentos asignados, procesados y caídos.</td>
+            </tr>
+            <tr>
+              <td class="col-tight"><strong>3 · Ficha</strong></td>
+              <td>Que el esquema <span class="mono">PublicWorks</span> aguanta un caso real sin campos improvisados.</td>
+              <td>La ficha de arriba, poblada, con cada campo ligado a su PDF.</td>
+            </tr>
+            <tr>
+              <td class="col-tight"><strong>4 · Análisis</strong></td>
+              <td>Que el modelo distingue una inconsistencia documental de un dato faltante.</td>
+              <td>Cada señalamiento cita el campo, el documento y la regla que lo dispara.</td>
+            </tr>
+            <tr>
+              <td class="col-tight"><strong>5 · Evidencia</strong></td>
+              <td>Que el expediente es reproducible por un tercero sin confiar en nosotros.</td>
+              <td>Checksum recalculable sobre los PDFs originales, como ya se hace en el ledger de Pulso Nayarit.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 6. ESTADO REAL ═══════════════════════════════════════════════ -->
+  <section id="estado">
+    <div class="sec-head">
+      <span class="eyebrow">Semáforo</span>
+      <div class="sec-title">
+        <h2>Qué existe hoy y qué todavía no</h2>
+        <p class="lead">Verificado contra el repositorio, no contra la intención.</p>
+      </div>
+    </div>
+
+    <div class="body-indent stack">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Pieza</th>
+              <th>Dónde vive</th>
+              <th class="col-tight">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ledger encadenado y auditable por terceros</td>
+              <td><span class="mono">pulso-nayarit/</span></td>
+              <td class="col-tight"><span class="tag tag-real">Desplegado</span></td>
+            </tr>
+            <tr>
+              <td>Biblioteca legal con estatus de verificación</td>
+              <td><span class="mono">docs/marco/BIBLIOTECA_LEGAL.md</span></td>
+              <td class="col-tight"><span class="tag tag-real">En uso</span></td>
+            </tr>
+            <tr>
+              <td>Evidencia con checksum SHA-256 y <span class="mono">correlationId</span></td>
+              <td><span class="mono">contextos/runtime.ts</span></td>
+              <td class="col-tight"><span class="tag tag-lab">LAB_MOCK</span></td>
+            </tr>
+            <tr>
+              <td>Contratos semánticos versionados</td>
+              <td><span class="mono">shared/semantic/</span></td>
+              <td class="col-tight"><span class="tag tag-lab">v0.1</span></td>
+            </tr>
+            <tr>
+              <td>Barrido masivo de PDFs oficiales</td>
+              <td><span class="mono">docs/investigacion/REPORTE_DESCARGA_…md</span></td>
+              <td class="col-tight"><span class="tag tag-prop">Ensayo único</span></td>
+            </tr>
+            <tr>
+              <td>Trazabilidad de Obras</td>
+              <td><span class="mono">docs/orbe/modulos/OBRAS.md</span></td>
+              <td class="col-tight"><span class="tag tag-prop">Diseñado</span></td>
+            </tr>
+            <tr>
+              <td>Arquitectura de fichas en paralelo</td>
+              <td>Descrita en sesión — sin commit</td>
+              <td class="col-tight"><span class="tag tag-none">No existe</span></td>
+            </tr>
+            <tr>
+              <td>Esquema <span class="mono">PublicWorks</span></td>
+              <td>Pendiente abierto en <span class="mono">OBRAS.md</span></td>
+              <td class="col-tight"><span class="tag tag-none">No existe</span></td>
+            </tr>
+            <tr>
+              <td>App móvil y burbuja de asistencia</td>
+              <td>—</td>
+              <td class="col-tight"><span class="tag tag-none">No existe</span></td>
+            </tr>
+            <tr>
+              <td>Piloto puente Colosio</td>
+              <td>—</td>
+              <td class="col-tight"><span class="tag tag-none">Sin datos</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 7. LÍMITES ═══════════════════════════════════════════════════ -->
+  <section id="limites">
+    <div class="sec-head">
+      <span class="eyebrow">Límites</span>
+      <div class="sec-title">
+        <h2>Lo que este sistema no hace, y no debe insinuar que hace</h2>
+      </div>
+    </div>
+
+    <div class="body-indent">
+      <ul class="plain limits">
+        <li><strong>El checksum no es firma digital.</strong> El runtime lo declara como
+        <span class="mono">integrityAssurance: 'CHECKSUM_ONLY'</span>. Prueba que un
+        archivo no cambió desde que se capturó; no prueba quién lo emitió ni que sea
+        auténtico. La documentación no debe sugerir lo contrario.</li>
+        <li><strong>Una inconsistencia documental no es un delito.</strong> Un plazo fuera
+        de rango o un monto sin acta puede ser un error de captura, una prórroga no
+        publicada o una omisión de transparencia. El sistema abre expediente; calificarlo
+        le toca a la autoridad competente.</li>
+        <li><strong>No se perfilan personas ni partidos.</strong> Las variables que el
+        sistema aprende de administraciones pasadas son de proceso — plazos, formatos,
+        dependencias, rutas. Cruzar eso con filiación política convertiría una herramienta
+        de auditoría en una de propaganda.</li>
+        <li><strong>Ningún acto administrativo se ejecuta.</strong> Los adapters del
+        Context.OS Runtime responden siempre <span class="mono">LAB_MOCK</span>. Nada aquí
+        autoriza, ordena ni resuelve un trámite municipal.</li>
+        <li><strong>Ningún dato personal real.</strong> Ni en las fichas, ni en las
+        semillas de demo, ni en las capturas de esta propuesta.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══ 8. SIGUIENTE ═════════════════════════════════════════════════ -->
+  <section id="siguiente">
+    <div class="sec-head">
+      <span class="eyebrow">Siguiente</span>
+      <div class="sec-title">
+        <h2>Cuatro pasos, en este orden</h2>
+        <p class="lead">Están ordenados por dependencia real: cada uno desbloquea al que
+        sigue.</p>
+      </div>
+    </div>
+
+    <div class="body-indent stack">
+      <div class="next">
+        <div class="next-card">
+          <span class="n">PASO 01</span>
+          <h4>Cerrar el esquema de ficha</h4>
+          <p>Definir <span class="mono">PublicWorks</span> como contrato en
+          <span class="mono">shared/semantic/</span> y marcar el pendiente de
+          <span class="mono">OBRAS.md</span>. Sin forma fija no hay dónde vaciar los PDFs.</p>
+        </div>
+        <div class="next-card">
+          <span class="n">PASO 02</span>
+          <h4>Repetir el barrido, ahora con obra</h4>
+          <p>Reusar lo aprendido en la corrida de fuentes primarias, con límite de tiempo
+          por agente y bitácora de caídas. Objetivo: inventario de URLs, no análisis.</p>
+        </div>
+        <div class="next-card">
+          <span class="n">PASO 03</span>
+          <h4>Poblar la ficha del piloto</h4>
+          <p>Llenar el puente Colosio campo por campo, cada uno con su fuente y su
+          checksum. Los huecos se dejan a la vista: son el primer resultado.</p>
+        </div>
+        <div class="next-card">
+          <span class="n">PASO 04</span>
+          <h4>Publicar la consulta en el móvil</h4>
+          <p>Contenedor Capacitor sobre <span class="mono">CitizenApp</span> y burbuja
+          nativa. Recién entonces «¿en qué va la obra del puente?» tiene una respuesta con
+          expediente detrás.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="colofon">
+    <span>Nayarit Digital · ConnectX · SOATM — Tepic, Nayarit</span>
+    <span>Documento de trabajo · propuesta sujeta a verificación documental</span>
+  </footer>
+
+</div>
+</body>
+</html>
