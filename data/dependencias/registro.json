@@ -1,0 +1,202 @@
+{
+  "schema_version": "0.1",
+  "registro_version": "0.4",
+  "fecha_corte": "2026-10-03",
+  "municipio": {
+    "nombre": "Tepic",
+    "estado": "Nayarit",
+    "pais": "México"
+  },
+  "principio": {
+    "separar_tramite_de_punto_atencion": true,
+    "descripcion": "El trámite y sus requisitos se definen por nivel de gobierno; el punto de atención corresponde al municipio."
+  },
+  "meta_nacional": {
+    "instrumento": "Pacto Nacional para implementar la Ley Nacional para Eliminar Trámites Burocráticos",
+    "catalogo_unico": {
+      "tramites_estatales": 300,
+      "tramites_municipales": 100
+    },
+    "compromisos": 10,
+    "fuente": {
+      "autoridad": "Agencia de Transformación Digital y Telecomunicaciones (ATDT)",
+      "titulo": "Estados y municipios de todo el país firman Pacto Nacional para simplificar y digitalizar trámites burocráticos",
+      "fecha_publicacion": null,
+      "nota": "La copia proporcionada no muestra la fecha de publicación."
+    }
+  },
+  "resumen": {
+    "total_registros_reportado": 238,
+    "registros_individuales_incluidos": 0,
+    "nota": "El insumo proporcionado contiene conteos agregados, pero no los nombres ni fundamentos individualizados de los 238 registros. No completar registros faltantes por inferencia."
+  },
+  "capas": [
+    {
+      "id": "federal-centralizada",
+      "nivel": "federal",
+      "tipo": "centralizada",
+      "registros_reportados": 22,
+      "estado": "verificado",
+      "fundamento": "Ley Orgánica de la Administración Pública Federal, artículo 26",
+      "fuente": {
+        "publicador": "Cámara de Diputados",
+        "documento": "Ley Orgánica de la Administración Pública Federal",
+        "ultima_reforma": "2026-05-07"
+      }
+    },
+    {
+      "id": "federal-paraestatal",
+      "nivel": "federal",
+      "tipo": "paraestatal",
+      "registros_reportados": 181,
+      "estado": "verificado",
+      "nota": "No incluye las 12 entidades en proceso de desincorporación.",
+      "fuente": {
+        "publicador": "Diario Oficial de la Federación",
+        "documento": "Relación de las Entidades Paraestatales",
+        "fecha_publicacion": "2026-08-12",
+        "apartado": "A"
+      }
+    },
+    {
+      "id": "federal-desconcentrada",
+      "nivel": "federal",
+      "tipo": "desconcentrada",
+      "registros_reportados": 0,
+      "estado": "pendiente",
+      "pendiente": "Revisar los reglamentos interiores de cada secretaría."
+    },
+    {
+      "id": "estatal-centralizada",
+      "nivel": "estatal",
+      "tipo": "centralizada",
+      "registros_reportados": 13,
+      "estado": "verificado",
+      "fundamento": "Ley Orgánica del Poder Ejecutivo del Estado de Nayarit, artículo 31",
+      "fuente": {
+        "publicador": "Congreso del Estado de Nayarit",
+        "documento": "Compilación oficial de la Ley Orgánica del Poder Ejecutivo",
+        "ultima_enmienda": "2026-02-13"
+      }
+    },
+    {
+      "id": "estatal-paraestatal",
+      "nivel": "estatal",
+      "tipo": "paraestatal",
+      "registros_reportados": 0,
+      "estado": "pendiente",
+      "pendiente": "Localizar y revisar la relación oficial de entidades paraestatales del Estado."
+    },
+    {
+      "id": "municipal-tepic",
+      "nivel": "municipal",
+      "tipo": "centralizada-desconcentrada-descentralizada",
+      "registros_reportados": 22,
+      "estado": "verificado",
+      "fundamentos": [
+        "Reglamento de la Administración Pública Municipal de Tepic, artículo 20: 11 dependencias",
+        "Reglamento de la Administración Pública Municipal de Tepic, artículo 54 bis: Juzgado Cívico",
+        "Reglamento de la Administración Pública Municipal de Tepic, artículo 54: 6 órganos desconcentrados",
+        "Reglamento de la Administración Pública Municipal de Tepic, artículo 57: 4 organismos descentralizados"
+      ],
+      "fuente": {
+        "publicador": "Gaceta Municipal de Tepic",
+        "documento": "Reglamento de la Administración Pública Municipal de Tepic",
+        "reforma_relevante": "Gaceta Municipal Extraordinaria núm. 27",
+        "fecha_reforma": "2025-12-22"
+      }
+    },
+    {
+      "id": "oficinas-federales-estatales-en-tepic",
+      "nivel": "federal-estatal",
+      "tipo": "oficinas-territoriales",
+      "registros_reportados": 0,
+      "estado": "pendiente",
+      "pendiente": "Consultar directorios oficiales de cada dependencia."
+    }
+  ],
+  "cambios_detectados": [
+    {
+      "nivel": "estatal",
+      "referencia": "Ley Orgánica del Poder Ejecutivo del Estado de Nayarit, artículo 31, fracción XI",
+      "cambio": "La Secretaría de Bienestar e Igualdad Sustantiva fue derogada.",
+      "publicacion": "Periódico Oficial del Estado de Nayarit, 2026-01-16"
+    },
+    {
+      "nivel": "estatal",
+      "referencia": "Ley Orgánica del Poder Ejecutivo del Estado de Nayarit, artículo 31, fracción VIII",
+      "cambio": "La Secretaría de Economía pasó a denominarse Secretaría de Desarrollo Económico y Social.",
+      "publicacion": "Periódico Oficial del Estado de Nayarit, 2026-02-13"
+    },
+    {
+      "nivel": "municipal",
+      "referencia": "Reglamento de la Administración Pública Municipal de Tepic, artículo 21",
+      "cambio": "Reforma relativa a la Oficina de la Presidencia; no cambió las listas de los artículos 20, 54, 54 bis y 57.",
+      "publicacion": "Gaceta Municipal, 2024-12-23"
+    },
+    {
+      "nivel": "municipal",
+      "referencia": "Reglamento de la Administración Pública Municipal de Tepic, artículos 41 a 45",
+      "cambio": "Reformas de Servicios Públicos y Obras Públicas; no cambiaron las listas de los artículos 20, 54, 54 bis y 57.",
+      "publicacion": "Gaceta Municipal Extraordinaria núm. 27, 2025-12-22"
+    },
+    {
+      "nivel": "municipal",
+      "referencia": "Ley Nacional para Eliminar Trámites Burocráticos, artículo 11",
+      "cambio": "El Reglamento municipal vigente no nombra una Autoridad Municipal de Simplificación y Digitalización. La unidad más cercana identificada es la Dirección de Innovación Gubernamental de la Tesorería.",
+      "fundamento_unidad_cercana": "Reglamento de la Administración Pública Municipal de Tepic, artículo 33, fracción III",
+      "estado": "por_verificar",
+      "pendiente": "Comprobar si existe una designación por acuerdo de Cabildo."
+    },
+    {
+      "nivel": "federal",
+      "referencia": "Relación de las Entidades Paraestatales 2025 y 2026",
+      "cambio": "Pasaron a desincorporación la Comisión Nacional de las Zonas Áridas, Aerolínea del Estado Mexicano, el Instituto Nacional para el Desarrollo de Capacidades del Sector Rural y FONATUR Tren Maya; se incorporaron la Comisión Nacional Antimonopolio, la Agencia de Trenes y Transporte Público Integrado y el Instituto Nacional de Estudios Históricos de las Revoluciones de México."
+    }
+  ],
+  "servicios_tepic": [
+    {
+      "id": "predial",
+      "servicio": "Predial",
+      "unidad_responsable": "Tesorería Municipal → Dirección de Catastro e Impuesto Predial → Departamento de Impuesto Predial",
+      "fundamento": "Reglamento de la Administración Pública Municipal de Tepic, artículo 33, fracción VI",
+      "estado": "verificado"
+    },
+    {
+      "id": "luminarias",
+      "servicio": "Luminarias",
+      "unidad_responsable": "Dirección General de Servicios Públicos Municipales → Departamento de Alumbrado Público",
+      "fundamento": "Reglamento de la Administración Pública Municipal de Tepic, artículo 42, fracción VI",
+      "estado": "verificado"
+    },
+    {
+      "id": "baches",
+      "servicio": "Baches",
+      "unidad_responsable": null,
+      "estado": "por_verificar",
+      "pendiente": "El Reglamento no asigna expresamente esta atribución."
+    },
+    {
+      "id": "acta-nacimiento",
+      "servicio": "Acta de nacimiento",
+      "unidad_responsable": "Secretaría del Ayuntamiento → Dirección del Registro Civil y sus oficialías",
+      "fundamento": "Reglamento de la Administración Pública Municipal de Tepic, artículo 29, fracción III",
+      "estado": "verificado"
+    }
+  ],
+  "reglas_mantenimiento": [
+    "No incorporar una dependencia sin fundamento (ley, artículo y fracción, o numeral de la Relación) y fuente con fecha de consulta.",
+    "Usar el estado verificado solo con una fuente oficial vigente: DOF, Periódico Oficial, Gaceta Municipal o compilación oficial del Congreso.",
+    "Revisar el registro con cada reforma publicada, cada agosto al emitirse la nueva Relación de Entidades Paraestatales y con cada cambio de administración municipal."
+  ],
+  "glosario": {
+    "LOAPF": "Ley Orgánica de la Administración Pública Federal",
+    "DOF": "Diario Oficial de la Federación",
+    "PO": "Periódico Oficial del Estado de Nayarit",
+    "GM": "Gaceta Municipal de Tepic",
+    "dependencia_centralizada": "Secretaría o dirección que depende directamente del titular del Ejecutivo.",
+    "organo_desconcentrado": "Unidad que pertenece a una dependencia, con cierta autonomía técnica.",
+    "paraestatal_paramunicipal": "Organismo descentralizado, empresa de participación pública o fideicomiso público con personalidad jurídica propia.",
+    "sectorizado": "Organismo coordinado por una secretaría (coordinadora de sector)."
+  }
+}
