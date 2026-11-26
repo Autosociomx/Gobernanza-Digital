@@ -27,3 +27,7 @@
 
 [functions]
   node_bundler = "esbuild"
+
+# Retry producción 26 nov 2026: el deploy bb04dac quedó Skipped en Netlify y el
+# botón de reintento no aparece en la interfaz; este commit (solo este comentario)
+# fuerza un build fresco de main con ORBE Sesión 21.
