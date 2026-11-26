@@ -8,8 +8,8 @@
 <meta name="description" content="ORBE Universal v0.6 — Punto único de acceso a Nayarit Digital con Mapa Vivo Territorial de código abierto (MapLibre + OpenStreetMap), Directorio de Dependencias de Tepic con horarios corregidos y Catálogo Único de 322 modelos (extracción del 7 nov 2026, desactualizada).">
 <title>ORBE · Nayarit Digital — Sesión 21 · 25 nov 2026</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2304101b'/%3E%3Crect x='10' y='10' width='12' height='12' fill='none' stroke='%2359efe0' stroke-width='2' transform='rotate(45 16 16)'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<link rel="stylesheet" href="vendor/maplibre-gl.css">
+<script src="vendor/maplibre-gl.js"></script>
 <style>
 /* ============ ORBE Universal v0.6 — Mapa Open Source Optimizado + Catálogo 322 + Nodos Tepic ============
    - Mapas 100% Open Source (MapLibre GL JS + OpenStreetMap / CARTO) con controles de escala, geolocalización
@@ -100,8 +100,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .tepic-card h2{margin:0;font-size:1.375rem}
 .tepic-card .place{color:var(--muted);font-size:0.75rem}
 .tepic-card .demo-line{font-size:0.6875rem;color:var(--muted)}
-.llave-badge{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;border:1px solid rgba(85,233,149,.4);background:rgba(26,83,63,.22);color:#a7f6c8;border-radius:999px;padding:8px 13px;font-size:0.75rem;font-weight:700}
-.llave-badge small{font-weight:400;color:#8fc9a8}
 .cat-pills{display:flex;gap:8px;flex-wrap:wrap}
 .cat-pills .pill{border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);color:var(--text-2);padding:8px 14px;font-size:0.75rem;font-weight:600}
 .cat-pills .pill:hover{border-color:var(--line-strong)}
@@ -502,7 +500,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
           <button class="chip" type="button" data-say="Ver dependencias con horarios corregidos en el mapa">Ver dependencias con horarios corregidos en el mapa</button>
         </div>
         <div class="quick">
-          <button class="quick-btn pay" type="button" data-cap="payments"><span class="ico" aria-hidden="true">💧</span><span><strong>Pagar servicios</strong><small>SIAPA, CFE y Predial por enlace oficial.</small></span></button>
+          <button class="quick-btn pay" type="button" data-cap="payments"><span class="ico" aria-hidden="true">💧</span><span><strong>Pagar servicios</strong><small>SIAPA, CFE y Predial: pago en portal oficial o en ventanilla.</small></span></button>
           <button class="quick-btn report" type="button" data-cap="territory"><span class="ico" aria-hidden="true">⚠</span><span><strong>Reportar problema</strong><small>Baches, fugas, alumbrado y basura.</small></span></button>
           <button class="quick-btn study" type="button" id="goCatalogQuickBtn"><span class="ico" aria-hidden="true">🏛</span><span><strong>Catálogo 322 y Sedes</strong><small>Dependencias en Tepic y horarios corregidos.</small></span></button>
           <button class="quick-btn human" type="button" data-cap="human"><span class="ico" aria-hidden="true">👤</span><span><strong>Hablar con alguien</strong><small>Conexión con atención humana.</small></span></button>
@@ -517,7 +515,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
           <div class="eyebrow">Nayarit · Mapa Vivo Territorial de código abierto</div>
           <h2>Tepic — Dependencias y Reportes</h2>
           <p class="place">Cartografía 100% de código abierto (MapLibre GL + OpenStreetMap) · 43 sedes (42 nodos del censo) + 322 trámites ATDT (extracción 7 nov 2026, desactualizada)</p>
-          <span class="llave-badge">🔒 Llave MX <small>· Demostración — sin conexión real</small></span>
           <p class="demo-line"><strong>Por qué importa este mapa:</strong> El Catálogo Único de la ATDT homologa 322 trámites (extracción del 7 nov 2026, desactualizada; el sitio está bloqueado con 403, verificado 10 nov 2026) pero dice genéricamente «Autoridad competente» sin dirección ni teléfono, y en Google Business hay horarios y teléfonos equivocados. Aquí cruzamos ambos en Tepic.</p>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
             <button class="primary" type="button" id="hereBtnHome">📍 Estoy aquí — reportar desde donde estoy</button>
@@ -533,7 +530,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
           <button class="primary map-link-btn go-map-btn" type="button" style="flex:1">🗺 Abrir Mapa Vivo en pantalla completa</button>
           <button class="ghost map-link-btn" type="button" id="openCatalogFromCenterBtn" style="flex:1">📚 Explorar los 322 Trámites y Horarios</button>
         </div>
-        <p class="map-link-note">Mapa de código abierto (<strong>MapLibre GL JS</strong>) con datos de <strong>OpenStreetMap</strong> y <strong>CARTO</strong>. Puedes alternar entre satélite y callejero claro.</p>
+        <p class="map-link-note">Aviso de proveedores del mapa: el callejero lo sirve <strong>OpenStreetMap</strong> (tile.openstreetmap.org) y el satélite <strong>Esri / Maxar</strong> (server.arcgisonline.com). Al cargar el mapa, tu navegador pide las imágenes a esos servidores; ORBE no les envía tu ubicación ni tus datos. Puedes alternar entre satélite y callejero claro.</p>
 
         <div class="cat-pills" role="group" aria-label="Categorías">
           <button class="pill active" type="button" data-cat="all">Todo</button>
@@ -575,16 +572,14 @@ button:disabled{opacity:.55;cursor:not-allowed}
           <div class="eyebrow">Expediente Digital · Una sola vez</div>
           <h3>Mi expediente</h3>
           <p id="expedienteStatus">Sin expediente en este dispositivo. Llena tus datos una sola vez y marIA los reutiliza en trámites y reportes, sin volver a pedírtelos.</p>
-          <p class="profile-note"><strong>Sesión de Demostración — no verificada.</strong> marIA nunca pide ni guarda tu CURP.</p>
+          <p class="profile-note">marIA nunca pide ni guarda tu CURP. No hay inicio de sesión en este prototipo.</p>
           <p style="margin-top:8px"><span class="sim-badge">Simulación — no conectado a sistemas reales</span></p>
           <div class="form-grid" style="grid-template-columns:1fr;margin-top:10px">
    <p class="profile-note">Tu expediente se guarda solo con folios. No pedimos nombre ni fecha de nacimiento.</p>
             <div class="field"><label for="expContact">Teléfono</label><input id="expContact" type="tel" autocomplete="tel" placeholder="Tu teléfono, opcional"></div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-            <button class="primary" type="button" id="llaveBtn">🔑 Entrar con Llave MX — simulación</button>
             <button class="primary" type="button" id="saveExpedienteBtn">Guardar mi expediente</button>
-            <button class="ghost" type="button" id="llaveOutBtn" hidden>Salir de Llave MX (simulación)</button>
             <button class="ghost" type="button" id="clearExpedienteBtn">Borrar mi expediente</button>
           </div>
           <ul class="exp-list" id="expedienteHistory" aria-label="Historial del expediente"></ul>
@@ -618,7 +613,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
       <div class="eyebrow">Canal único · ORBE</div>
       <h3>Un solo lugar para reportar y seguir</h3>
       <p>Tu reporte NO llega al Ayuntamiento: ORBE es un prototipo ciudadano independiente. Aquí están los canales oficiales verificados para que tú mismo lo hagas llegar.</p>
-      <p><strong>WhatsApp ORBE:</strong> <a href="https://wa.me/525522302128" target="_blank" rel="noopener">55 2230 2128</a> · <strong>Línea 24 h:</strong> 079 · <strong>Atención Ciudadana (Ayuntamiento de Tepic):</strong> 311 265 2791 · <strong>Emergencias:</strong> 911</p>
+      <p><strong>Línea 24 h:</strong> 079 · <strong>Atención Ciudadana (Ayuntamiento de Tepic):</strong> 311 265 2791 · <strong>Emergencias:</strong> 911</p>
       <p class="hint">Direccionamiento orientativo: agua y drenaje → SIAPA Tepic; luminaria y basura → Servicios Públicos (DGSPM); bache y vialidad → Obras Públicas; parques → Parques y Jardines. La dependencia exacta de cada reporte aparece en su tarjeta de Seguimiento.</p>
     </section>
     <section class="card" aria-label="Dudas ciudadanas" style="margin-top:16px">
@@ -663,7 +658,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
         <div class="catalog-stats-grid">
           <div class="cat-stat-box"><strong>322</strong><span>Modelos en Catálogo Único (214 estatales + 108 municipales · extracción 7 nov 2026, desactualizada)</span></div>
-          <div class="cat-stat-box"><strong>43</strong><span>Nodos en Tepic (1 Verificado · 38 Corregidos · 3 Por confirmar)</span></div>
+          <div class="cat-stat-box"><strong id="conteoNodos">43</strong><span id="conteoNodosNota">Nodos en Tepic (1 Verificado · 39 Corregidos · 3 Por confirmar)</span></div>
           <div class="cat-stat-box"><strong>100%</strong><span>Cobertura por materia de las 42 categorías del Catálogo</span></div>
           <div class="cat-stat-box"><strong>0</strong><span>Modelos federales en el Catálogo (SAT, CFE, IMSS, ISSSTE, SRE, INE)</span></div>
         </div>
@@ -691,8 +686,8 @@ button:disabled{opacity:.55;cursor:not-allowed}
       <div class="card" id="fichas30Section" style="margin-top:16px">
         <div class="eyebrow">Fichas prioritarias — 30 (decisión de Miguel, 10 nov 2026)</div>
         <h3>Las 30 fichas: 10 municipales · 10 estatales · 10 federales</h3>
-        <p style="color:var(--muted);font-size:0.75rem;line-height:1.6;margin:4px 0 0">Elegidas por dependencia: las más solicitadas o frecuentes, las de más complejidad, y donde la gente tiene problemas para entrar a los canales oficiales. No se prometen 200–300 de inicio. Solo 3 tienen algún grado de verificación hoy; 7 más están en borrador (lote 1, 15 nov 2026) y el resto está <strong>por confirmar</strong> en campo. Las 10 federales no están en el Catálogo Único (0 federales): se verifican contra portales <code>.gob.mx</code>.</p>
-        <div class="catalog-stats-grid" style="margin-top:12px"><div class="cat-stat-box"><strong id="fichasVerificadasCount">2</strong><span>Fichas verificadas de 30 (método Sesión 04, no publicables como están)</span></div><div class="cat-stat-box"><strong>1</strong><span>Parcialmente verificada (Licencia de Funcionamiento)</span></div><div class="cat-stat-box"><strong>20</strong><span>Por confirmar en campo</span></div><div class="cat-stat-box"><strong>7</strong><span>En borrador (lote 1, 15 nov 2026)</span></div><div class="cat-stat-box"><strong>10+10+10</strong><span>Municipales · Estatales · Federales</span></div></div>
+        <p style="color:var(--muted);font-size:0.75rem;line-height:1.6;margin:4px 0 0">Elegidas por dependencia: las más solicitadas o frecuentes, las de más complejidad, y donde la gente tiene problemas para entrar a los canales oficiales. No se prometen 200–300 de inicio. Solo 1 tiene algún grado de verificación hoy (parcial: Licencia de Funcionamiento); el resto está <strong>por confirmar</strong> en campo. M2 y E2 pasaron a por confirmar en Sesión 23: su nota dice "no publicable" y el nombre de E2 no existe así en ventanilla. Las 10 federales no están en el Catálogo Único (0 federales): se verifican contra portales <code>.gob.mx</code>.</p>
+        <div class="catalog-stats-grid" style="margin-top:12px"><div class="cat-stat-box"><strong id="fichasVerificadasCount">0</strong><span>Fichas verificadas de 30</span></div><div class="cat-stat-box"><strong id="fichasParcialCount">1</strong><span>Parcialmente verificada (Licencia de Funcionamiento)</span></div><div class="cat-stat-box"><strong id="fichasPorConfirmarCount">29</strong><span>Por confirmar en campo</span></div><div class="cat-stat-box"><strong>10+10+10</strong><span>Municipales · Estatales · Federales</span></div></div>
         <div id="fichas30Grid"></div>
       </div>
 
@@ -757,6 +752,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
         <div class="card layers-card">
           <div class="eyebrow">Capas del mapa (código abierto)</div>
           <h3>Control de capas del mapa</h3>
+          <p style="font-size:0.6875rem;color:var(--muted);margin:0 0 8px">Aviso: callejero de OpenStreetMap; satélite de Esri / Maxar. Tu navegador pide los mosaicos a esos servidores.</p>
           <div class="layer-row"><span>🏛 Dependencias y horarios corregidos</span><label class="switch"><input type="checkbox" id="layerDeps" checked><span class="track"></span><span class="visually-hidden">Mostrar dependencias</span></label></div>
           <div class="layer-row"><span>📍 Reportes ciudadanos</span><label class="switch"><input type="checkbox" id="layerReports" checked><span class="track"></span><span class="visually-hidden">Mostrar reportes</span></label></div>
           <div class="layer-row"><span>◉ Mapa de calor (densidad)</span><label class="switch"><input type="checkbox" id="layerHeat"><span class="track"></span><span class="visually-hidden">Mostrar densidad</span></label></div>
@@ -784,7 +780,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
         <div id="subpanelIncidents" hidden>
           <div class="stats"><div class="stat"><strong id="statTotal">0</strong><span>abiertas</span></div><div class="stat"><strong id="statHigh">0</strong><span>alta/crítica</span></div><div class="stat"><strong id="statResolved">0</strong><span>resueltas</span></div></div>
           <div class="filters" id="filters"></div>
-          <div class="filters" id="statusFilters" aria-label="Filtrar por estado"><button class="filter active" type="button" data-status="">Todos los estados</button><button class="filter" type="button" data-status="pending">Pendiente</button><button class="filter" type="button" data-status="progress">En proceso</button><button class="filter" type="button" data-status="resolved">Resuelto</button></div>
+          <div class="filters" id="statusFilters" aria-label="Filtrar por estado"><button class="filter active" type="button" data-status="">Todos los estados</button><button class="filter" type="button" data-status="pending">Recibido</button><button class="filter" type="button" data-status="progress">En proceso</button><button class="filter" type="button" data-status="resolved">Atendido o cerrado</button></div>
           <div class="incident-list" id="incidentList"></div>
         </div>
       </aside>
@@ -854,7 +850,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
        <button class="ghost" type="button" id="pickOnMapBtn">🗺 Elegir en el mapa</button>
      </div>
      <p class="loc-status" id="locStatus" role="status" aria-live="polite">Sin ubicación detectada. Toca «Usar mi ubicación» y el mapa, la latitud, la longitud y la dirección se llenan solos.</p>
-     <p class="hint">La dirección se busca en OpenStreetMap (Nominatim): al usar tu ubicación, tus coordenadas se envían a ese servicio solo para obtener la dirección. El reporte y la foto se quedan en este dispositivo.</p>
+     <p class="hint">Aviso de proveedores: al usar tu ubicación, tus coordenadas se envían a Nominatim (OpenStreetMap) solo para obtener calle y colonia, sin número de casa. La foto y el reporte se quedan en este dispositivo salvo que marques publicar en el tablero. Puedes escribir la dirección a mano sin usar tu ubicación.</p>
    </div>
    <p class="loc-status" id="expedienteNote" hidden>✓ Datos tomados de tu expediente — no se te vuelven a pedir.</p>
    <div class="quick-box" aria-label="Reporte rápido">
@@ -869,10 +865,12 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <div class="field full"><label for="descInput">Descripción</label><textarea id="descInput" placeholder="Describe qué ocurre."></textarea><button class="ghost" type="button" id="dictDescBtn" style="margin-top:8px;align-self:flex-start">🎙 Dictar descripción</button></div>
     <div class="field"><label for="latInput">Latitud</label><input id="latInput" inputmode="decimal" placeholder="21.507"></div>
     <div class="field"><label for="lngInput">Longitud</label><input id="lngInput" inputmode="decimal" placeholder="-104.895"></div>
-    <div class="field full"><label for="addressInput">Dirección / referencia opcional</label><input id="addressInput" placeholder="Calle, cruce o punto de referencia"></div>
+    <div class="field full"><label for="addressInput">Dirección / referencia opcional (calle y colonia, sin número de casa)</label><input id="addressInput" placeholder="Calle y colonia, sin número de casa"></div>
     <div class="field full"><label for="evidenceInput">Evidencia del ciudadano — foto (opcional)</label><input id="evidenceInput" type="file" accept="image/*" capture="environment"><span class="hint" id="evidenceHint">Toma una foto del problema o elige una de tu galería. Solo se guarda en este dispositivo, en tamaño reducido.</span><div class="evidence-preview" id="evidencePreview" aria-live="polite"></div></div>
     <div class="field"><label for="reporterName">Nombre (opcional)</label><input id="reporterName" autocomplete="name" placeholder="Solo si quieres dejarlo"></div>
     <div class="field"><label for="reporterContact">Contacto (opcional)</label><input id="reporterContact" autocomplete="tel" placeholder="Teléfono o correo, opcional"></div>
+    <div class="field"><label for="reportPhone">Teléfono para que te contacten (opcional)</label><input id="reportPhone" type="tel" autocomplete="tel" placeholder="Solo si quieres que te contacten por este reporte"></div>
+    <div class="field full"><label class="check"><input type="checkbox" id="consentContactCheck"><span>Autorizo que la dependencia me contacte a ese teléfono solo por este reporte. Sin esta casilla, el teléfono no se guarda ni se comparte.</span></label></div>
     <div class="field full profile-box">
       <label class="check"><input type="checkbox" id="saveProfileCheck"><span>Guardar estos datos solo en este dispositivo para no volver a pedirlos (una sola vez).</span></label>
       <p class="profile-note"><button class="ghost" type="button" id="clearProfileBtn" style="padding:4px 8px">Borrar mis datos guardados</button></p>
@@ -882,7 +880,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
       <div class="ruco"><div><strong id="rucoR">2</strong><span>Riesgo</span></div><div><strong id="rucoU">2</strong><span>Urgencia</span></div><div><strong id="rucoC">Municipal</strong><span>Competencia</span></div><div><strong id="rucoO">2</strong><span>Operabilidad</span></div></div>
     </div>
     <div class="field full"><label class="check"><input type="checkbox" id="consentCheck"><span>Autorizo usar esta ubicación y la evidencia elegida exclusivamente para preparar este reporte.</span></label></div>
-    <div class="field full"><label class="check"><input type="checkbox" id="publishShared" checked><span>Publicar también en el tablero compartido de ORBE (visible para todos, con folio y estado). Sin CURP ni datos personales.</span></label></div>
+    <div class="field full"><label class="check"><input type="checkbox" id="publishShared"><span>Publicar también en el tablero compartido (opcional, desmarcado por defecto). Si lo marcas, se publica: folio, tipo de problema, descripción, foto, estado y ubicación aproximada (GPS redondeado a 3 decimales, ~100 m; dirección sin número de casa). Tu nombre solo aparece si lo escribiste arriba; tu teléfono nunca se publica. Puedes pedir que se retire con tu código de autor.</span></label></div>
    </div>
    <div class="dialog-actions"><button class="ghost" type="button" data-close="reportModal">Cancelar</button><button class="primary" type="button" id="saveReport">Crear reporte</button></div>
   </div>
@@ -898,7 +896,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
    <p class="loc-status" id="closureFolioLine" role="status"></p>
    <div class="form-grid">
     <div class="field full"><label for="closureEvidenceInput">Evidencia de cierre — foto del trabajo terminado (opcional)</label><input id="closureEvidenceInput" type="file" accept="image/*" capture="environment"><span class="hint" id="closureEvidenceHint">Solo se guarda en este dispositivo.</span><div class="evidence-preview" id="closureEvidencePreview" aria-live="polite"></div></div>
-    <div class="field full"><label for="closureNoteInput">Nota de cierre (opcional)</label><textarea id="closureNoteInput" placeholder="Ej. Se reparó la fuga y se repavimentó la zona. (Texto de demostración)"></textarea></div>
+    <div class="field full"><label for="closureNoteInput">Nota de cierre (opcional)</label><textarea id="closureNoteInput" placeholder="Ej. Se reparó la fuga y se repavimentó la zona."></textarea></div>
    </div>
    <div class="dialog-actions"><button class="ghost" type="button" data-close="closureModal">Cancelar</button><button class="primary" type="button" id="confirmClosureBtn">Marcar como resuelto (simulación)</button></div>
   </div>
@@ -935,6 +933,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
      </div>
      <p id="ratingStarsText" style="margin-top:8px">Sin calificación todavía. Elige de 1 a 5 estrellas.</p>
      <div class="field full" style="margin-top:8px"><label for="ratingComment">Comentario (opcional)</label><textarea id="ratingComment" placeholder="Ej. Quedó bien y avisaron cuando terminaron."></textarea></div>
+     <div class="field full" style="margin-top:8px"><label for="ratingAuthorCode">Código de autor (obligatorio si el reporte está publicado)</label><input id="ratingAuthorCode" autocomplete="off" placeholder="AUT-XXXXX-XXXXX-XXXXX-X"><span class="hint">Es el código que recibiste al publicar. Sin él no se puede calificar en el tablero.</span></div>
    </div>
    <div class="dialog-actions"><button class="ghost" type="button" data-close="ratingModal">Cancelar</button><button class="primary" type="button" id="saveRatingBtn">Guardar calificación</button></div>
   </div>
@@ -976,6 +975,32 @@ button:disabled{opacity:.55;cursor:not-allowed}
    </form>
    <div class="triage-result" id="triageResult" hidden></div>
    <div class="dialog-actions"><button class="ghost" type="button" data-close="triageModal">Cancelar</button><button class="primary" type="button" id="triageResultBtn">Ver orientación (simulación)</button></div>
+  </div>
+ </div>
+</div>
+
+<!-- MODAL CONSTANCIA CÓDIGO DE AUTOR (Sesión 23: se muestra UNA vez, no se guarda) -->
+<div class="modal" id="authorCodeModal" role="dialog" aria-modal="true" aria-labelledby="authorCodeTitle">
+ <div class="dialog">
+  <div class="dialog-head"><div><div class="eyebrow">Constancia · Código de autor</div><h3 id="authorCodeTitle">Tu reporte quedó publicado</h3></div><button class="ghost" type="button" data-close="authorCodeModal" aria-label="Cerrar">✕</button></div>
+  <div class="dialog-body">
+   <p class="loc-status" id="authorCodeFolioLine" role="status"></p>
+   <p style="font-size:0.9375rem"><strong>Código de autor:</strong> <code id="authorCodeValue" style="font-size:1.0625rem;letter-spacing:.06em"></code></p>
+   <p class="profile-note"><strong>Guarda este código: es tu llave para calificar, reabrir o borrar tu reporte.</strong> Solo se muestra esta vez y no se guarda en este teléfono: apúntalo o cópialo ahora. Sin él no podrás calificar ni borrar tu reporte publicado.</p>
+   <div class="dialog-actions"><button class="ghost" type="button" id="authorCodeCopyBtn">Copiar código</button><button class="primary" type="button" data-close="authorCodeModal">Entendido, lo guardé</button></div>
+  </div>
+ </div>
+</div>
+
+<!-- MODAL ACCIÓN CON CÓDIGO DE AUTOR (no atendido / borrar) -->
+<div class="modal" id="codeActionModal" role="dialog" aria-modal="true" aria-labelledby="codeActionTitle">
+ <div class="dialog">
+  <div class="dialog-head"><div><div class="eyebrow">Código de autor</div><h3 id="codeActionTitle">Confirmar con tu código de autor</h3></div><button class="ghost" type="button" data-close="codeActionModal" aria-label="Cerrar">✕</button></div>
+  <div class="dialog-body">
+   <p class="loc-status" id="codeActionFolioLine" role="status"></p>
+   <p class="profile-note" id="codeActionDesc"></p>
+   <div class="field full"><label for="codeActionInput">Código de autor (el que recibiste al publicar)</label><input id="codeActionInput" autocomplete="off" placeholder="AUT-XXXXX-XXXXX-XXXXX-X"></div>
+   <div class="dialog-actions"><button class="ghost" type="button" data-close="codeActionModal">Cancelar</button><button class="primary" type="button" id="codeActionConfirmBtn">Confirmar</button></div>
   </div>
  </div>
 </div>
@@ -1036,7 +1061,7 @@ const DEPENDENCIAS_TEPIC = [
     lat:21.50085, lng:-104.89812, hasPin:true,
     phone:"311 213 5580 / 073",
     hours:"Lun–Vie 8:00–15:30, Sáb 8:00–13:00 (Módulo en Seguridad Pública: Lun–Vie 8:00–15:00)",
-    fixNote:"CORREGIDO: No confundir con CEAPA estatal (Nodo 35). SIAPA es quien cobra recibos domésticos en Tepic. El portal de pago en línea devolvió error 404 el 8 nov 2026.",
+    fixNote:"CORREGIDO: No confundir con CEAPA estatal (Nodo 35). SIAPA es quien cobra recibos domésticos en Tepic.",
     url:"https://www.siapa.tepic.gob.mx",
     modelsCount:7, categoryName:"Agua Potable municipal (7)",
     models:[
@@ -1855,7 +1880,7 @@ const CAT_SERVICE={pothole:"bache",water_leak:"agua",streetlight:"luminaria",gar
 const ROUTING={pothole:"Obras Públicas — Vialidad (Ayuntamiento de Tepic)",water_leak:"SIAPA Tepic",streetlight:"Alumbrado Público — DGSPM",garbage:"Limpieza y Recolección — DGSPM",drainage:"Drenaje y Alcantarillado — SIAPA Tepic",tree:"Parques y Jardines — DGSPM",road_risk:"Protección Civil / Obras Públicas",mobility:"Movilidad — Dirección de Tránsito",semaforo:"Movilidad — Semáforos",auto_abandonado:"Tránsito Municipal",escombro:"Limpieza — DGSPM",enjambre:"Protección Civil",pozo:"SIAPA Tepic — Drenaje",socavon:"Obras Públicas",invasion:"Inspección — Ayuntamiento de Tepic",falta_agua:"SIAPA Tepic",banqueta:"Obras Públicas",construccion_ilicita:"Dirección de Desarrollo Urbano",tala:"Parques y Jardines / Medio Ambiente",juegos:"Parques y Jardines",ruido:"Inspección / Seguridad Pública",rejilla:"SIAPA Tepic — Drenaje"};
 /* Ciclo de reporte de 6 estados (Sesión 21). Claves viejas se mapean en statusLabel. */
 const ORBE_REPORT_STATES={recibido:"Recibido",derivado:"Derivado",en_proceso:"En proceso",atendido:"Atendido — pendiente de calificación",cerrado:"Cerrado",no_atendido:"No atendido / Reabierto"};
-const REPORT_STATE_NEXT={recibido:["derivado","en_proceso","atendido"],derivado:["en_proceso","atendido"],en_proceso:["atendido","no_atendido"],atendido:["cerrado","no_atendido"],cerrado:["no_atendido"],no_atendido:["en_proceso","derivado","atendido"]};
+const REPORT_STATE_NEXT={recibido:["derivado","en_proceso","atendido"],derivado:["en_proceso","atendido"],en_proceso:["atendido","no_atendido"],atendido:["cerrado","no_atendido"],cerrado:[],no_atendido:["en_proceso","derivado","atendido"]};
 const STATES=[
  ["idle","Listo","marIA está lista para recibir una necesidad sin obligarte a conocer dependencias o sistemas."],
  ["listening","Escuchando","La persona expresa su necesidad en voz o texto."],
@@ -1868,19 +1893,26 @@ const STATES=[
  ["human_handoff","Atención humana","marIA prepara una derivación sin obligarte a continuar con IA."]
 ];
 
-const KEY_REPORTS="orbe.v05.reports",KEY_CONTEXT="orbe.v05.context",KEY_PROFILE="orbe.v05.profile",KEY_EXPEDIENTE="orbe.v05.expediente",KEY_LLAVE="orbe.v05.llave_demo";
-let reports=load(KEY_REPORTS,[
- {folio:"ORBE-DEMO-20261107-080141",category:"pothole",description:"Bache profundo frente a una escuela.",lat:21.51135,lng:-104.89558,address:"Av. Insurgentes, Tepic",priority:"HIGH",status:"derivado",signals:14,createdAt:new Date(Date.now()-7200000).toISOString(),ruco:{risk:4,urgency:3,competence:"Municipal",operability:3}},
- {folio:"ORBE-DEMO-20261107-080142",category:"water_leak",description:"Fuga continua sobre avenida principal.",lat:21.5048,lng:-104.90105,address:"Tepic Centro",priority:"CRITICAL",status:"en_proceso",signals:9,createdAt:new Date(Date.now()-4200000).toISOString(),ruco:{risk:5,urgency:5,competence:"Municipal / organismo operador",operability:4}},
- {folio:"ORBE-DEMO-20261107-080137",category:"streetlight",description:"Luminaria reportada y atendida.",lat:21.51642,lng:-104.88672,address:"Col. Centro",priority:"MEDIUM",status:"atendido",signals:5,createdAt:new Date(Date.now()-86400000).toISOString(),ruco:{risk:2,urgency:2,competence:"Municipal",operability:2}}
-]);
-reports.forEach((r,i)=>{if(!r.internalId)r.internalId="orbe-demo-semilla-"+(i+1)});
+const KEY_REPORTS="orbe.v05.reports",KEY_CONTEXT="orbe.v05.context",KEY_PROFILE="orbe.v05.profile",KEY_EXPEDIENTE="orbe.v05.expediente";
+let reports=load(KEY_REPORTS,[]);
+/* Sesión 23 (U-5): sin reportes DEMO en la vista ciudadana. Los reportes
+   viejos guardados en este teléfono con folio ORBE-DEMO-* se retiran al
+   cargar: nunca fueron reportes reales. */
+reports=(reports||[]).filter(r=>r&&r.folio&&String(r.folio).indexOf("ORBE-DEMO-")!==0);
+reports.forEach((r,i)=>{if(!r.internalId)r.internalId="orbe-local-"+(i+1)});
+saveReportsSafe();
 let contextBlocks=load(KEY_CONTEXT,[]);
-let map=null,sourceReady=false,activeCat=null,heat=false,depsVisible=true,reportsVisible=true,showResolved=true,selected={lat:21.5089,lng:-104.8935},statusFilter="",depScopeFilter="",mapSearchQuery="",state="idle";
+let map=null,sourceReady=false,activeCat=null,heat=false,depsVisible=true,reportsVisible=true,showResolved=true,selected={lat:null,lng:null},statusFilter="",depScopeFilter="",mapSearchQuery="",state="idle";
 let currentMapStyle="sat"; // "light" | "sat" — la apertura es satélite (el oscuro CARTO se quitó: pide API KEY)
 let locReady=false,locAddress="",reportMarker=null,profile=load(KEY_PROFILE,{});
-let expediente=load(KEY_EXPEDIENTE,{}),llaveSession=load(KEY_LLAVE,null);
+let expediente=load(KEY_EXPEDIENTE,{});
 let pendingEvidence=null,pendingEvidenceFile=null,closureTargetFolio=null,closureEvidence=null,closureEvidenceFile=null;
+/* Sesión 23: códigos de autor SOLO en memoria (nunca en localStorage).
+   Se entregan una vez al publicar y se piden en cada acción sensible. */
+let authorCodes={};
+let codeActionPending=null;
+let unansweredQuestions=load("orbe.v05.unanswered",[]);
+function recordUnanswered(q){const t=String(q||"").trim();if(!t)return;unansweredQuestions.unshift({q:t,at:new Date().toISOString()});unansweredQuestions=unansweredQuestions.slice(0,50);save("orbe.v05.unanswered",unansweredQuestions)}
 let pickOnMap=false;
 let catalogLevelFilter="all",catalogSearchQuery="";let catalogTopicFilter="all";
 try{const _cl=localStorage.getItem("orbe.v05.catalogLevel");if(_cl){catalogLevelFilter=_cl;document.querySelectorAll("#catalogLevelPills .pill").forEach(x=>x.classList.toggle("active",x.dataset.level===_cl))}}catch(e){}
@@ -2638,6 +2670,22 @@ function findMatchingDependencia(query){
  return null;
 }
 
+function findCatalogMatch(text){
+ /* Sesión 23 (U-25): ¿la pregunta nombra algo real del Catálogo o de las
+    fichas? Las palabras genéricas (permiso, trámite, licencia...) no bastan:
+    hace falta una palabra distintiva que aparezca en un modelo, ficha o
+    dependencia. Así "permiso inventado de globos aerostáticos" no salta al
+    Catálogo en silencio. */
+ const q=normStr(text||"");
+ if(findMatchingDependencia(text))return true;
+ const genericas=new Set(["tramite","tramites","permiso","permisos","licencia","licencias","acta","actas","constancia","constancias","pago","pagos","servicio","servicios","registro","certificado","solicitud","donde","tepic","quiero","necesito","saber","hacer"]);
+ const words=q.split(/[^a-z0-9]+/).filter(w=>w.length>=4&&!genericas.has(w));
+ if(!words.length)return false;
+ const hay=[];
+ (DEPENDENCIAS_TEPIC||[]).forEach(d=>{(d.models||[]).forEach(m=>hay.push(m));hay.push(d.name||"",d.short||"")});
+ (ORBE_FICHAS_30||[]).forEach(f=>hay.push(f.nombre||""));
+ return hay.some(h=>{const n=normStr(h);return words.some(w=>n.indexOf(w)!==-1)});
+}
 function infer(text){
  const n=normStr(text);
  if(/\b(estoy aqui|aqui estoy)\b/.test(n))return{cap:"here"};
@@ -2685,7 +2733,7 @@ function routeCapability(cap,payload={}){
  if(cap==="territory"){setState("clarifying");openReport({category:payload.cat,description:payload.utterance});addContext("Territorio","solicitud territorial","requiere ubicación/consentimiento");return}
  if(cap==="payments"){setState("understanding");setTimeout(()=>{if(_rt!==handleToken)return;setState("resolved");showCapability("payments");addContext("Pagos","consulta/pago","capacidad abierta en demo")},350);return}
  if(cap==="support"){setState("understanding");setTimeout(()=>{if(_rt!==handleToken)return;setState("resolved");showCapability("support");addContext("Apoyos","orientación","programas demostrativos mostrados")},350);return}
- if(cap==="procedures"){setState("understanding");setTimeout(()=>{if(_rt!==handleToken)return;setState("resolved");showView("services");setTimeout(()=>{const el=$("catalogExplorerSection");if(el)el.scrollIntoView({behavior:"smooth"})},120);addContext("Trámites","Catálogo 322","explorador de 322 trámites abierto")},350);return}
+ if(cap==="procedures"){const q=payload.utterance||"";if(q&&!findCatalogMatch(q)){setState("clarifying");capabilityResult("homeResult","No encontré ese trámite en el Catálogo","No encontré «"+q+"» en el Catálogo Único ni en las fichas de ORBE. Tu pregunta quedó registrada para alimentar el Catálogo. Puedes buscarlo en el explorador o preguntar por una dependencia de Tepic.");recordUnanswered(q);addContext("marIA","sin respuesta","pregunta registrada: "+q);return}setState("understanding");setTimeout(()=>{if(_rt!==handleToken)return;setState("resolved");showView("services");setTimeout(()=>{const el=$("catalogExplorerSection");if(el)el.scrollIntoView({behavior:"smooth"})},120);addContext("Trámites","Catálogo 322","explorador de 322 trámites abierto")},350);return}
  if(cap==="health"){setState("clarifying");showCapability("health");addContext("Salud","orientación","sin diagnóstico autónomo");return}
  if(cap==="human"){setState("human_handoff");showCapability("human");addContext("Atención humana","handoff","solicitud preparada en demo");return}
  if(cap==="passport"){setState("resolved");capabilityResult("homeResult","Pasaporte — SRE (Ficha F5 · POR CONFIRMAR)","La oficina de pasaportes en Tepic es de la Secretaría de Relaciones Exteriores. La ficha F5 de ORBE está POR CONFIRMAR: requisitos, costo y plazo no están verificados, así que marIA no los afirma. No se te pide CURP ni datos personales.");const sre=DEPENDENCIAS_TEPIC.find(d=>/relaciones exteriores|sre/i.test(d.name||""));if(sre&&sre.hasPin)focusDepOnMap(sre.id,false);addContext("Pasaporte","SRE","ficha F5 por confirmar");return}
@@ -2695,8 +2743,12 @@ function routeCapability(cap,payload={}){
  fallbackCount++;
  if(fallbackCount>=3){setState("human_handoff");capabilityResult("homeResult","Te paso con una persona","No logré entender tu necesidad después de tres intentos. Puedes reportar un problema en el mapa o llamar a Atención Ciudadana: 311 265 2791 (Lun–Vie 9:00–15:00) o a la línea 079. marIA no guarda lo que dijiste.");fallbackCount=0;addContext("marIA","salida segura","3 intentos sin entender");return}
  if(fallbackCount===2){setState("clarifying");capabilityResult("homeResult","¿Me ayudas con una palabra más?","Puedes decirme, por ejemplo: «Reportar un bache», «Mi NSS» o «Ver el mapa».");addContext("marIA","intención ambigua","segundo intento");return}
- setState("clarifying");capabilityResult("homeResult","Cuéntame un poco más para ayudarte","Puedes preguntarme por cualquier dependencia de Tepic (ej. SSN, SEMOVI, SIAPA, SEDER, IPROVINAY), buscar entre los 322 trámites del Catálogo Único (extracción 7 nov 2026) o reportar un problema en el mapa.");
- addContext("marIA","intención ambigua","se solicita aclaración");
+ /* Sesión 23 (U-25): a pregunta libre sin respuesta, marIA responde POR
+    ESCRITO que no lo encontró — nunca salta al Catálogo en silencio — y la
+    pregunta queda registrada en una lista local para alimentar el Catálogo. */
+ setState("clarifying");capabilityResult("homeResult","No encontré ese trámite en el Catálogo","No encontré eso en el Catálogo Único ni en las fichas de ORBE. Tu pregunta quedó registrada para alimentar el Catálogo. Puedes preguntarme por una dependencia de Tepic (ej. SSN, SEMOVI, SIAPA, SEDER, IPROVINAY) o reportar un problema en el mapa.");
+ recordUnanswered(payload.utterance||"");
+ addContext("marIA","sin respuesta","pregunta registrada");
 }
 
 function showCapability(cap){
@@ -2704,9 +2756,9 @@ function showCapability(cap){
  const cfg={
  payments:{ey:"Pagos y servicios · Enlaces externos",title:"Pagar fuera de ORBE, en el portal oficial",items:[
   ["💧 Agua — SIAPA Tepic (Nodo 3)","Gustavo Baz No. 68, Fray Junípero Serra · Lun–Vie 8:00–15:30, Sáb 8:00–13:00 · Tel. 311 213 5580. Nota: CEAPA (Nodo 35) NO cobra recibos domésticos."],
-  ["⚡ Luz — CFE (Nodo 16)","Av. Independencia No. 107, Centro · Ventanilla Lun–Vie 8:00–15:30 · Teléfono CFE: 071."],
-  ["🏠 Predial — Tesorería Tepic (Nodo 2)","Palacio Municipal, Puebla esq. Amado Nervo · Cajas Lun–Vie 8:00–15:00."]
- ],note:"Aviso: el pago en línea de SIAPA mostró un error (página no encontrada) el 8 nov 2026; verifica antes de pagar o acude a ventanilla. marIA no procesa dinero.",links:[["SIAPA Tepic — sitio oficial","https://www.siapa.tepic.gob.mx"],["CFE — pago en línea","https://www.cfe.gob.mx/vun/Paginas/PagoReciboEnLinea.aspx"]]},
+  ["⚡ Luz — CFE (Nodo 16)","Av. Independencia No. 107, Centro · Ventanilla Lun–Vie 8:00–15:30 · Teléfono CFE: 071. Pago en línea: sin pago en línea verificado — usa el portal oficial de CFE o llama al 071."],
+  ["🏠 Predial — Tesorería Tepic (Nodo 2)","Palacio Municipal, Puebla esq. Amado Nervo · Cajas Lun–Vie 8:00–15:00. Pago en línea: sin pago en línea verificado."]
+ ],note:"marIA no procesa dinero: los pagos se hacen en el portal oficial de cada dependencia.",links:[["SIAPA Tepic — pago en línea","https://www.siapa.tepic.gob.mx/pago-en-linea/"]]},
  support:{ey:"Apoyos, Educación, Cultura y Deporte",title:"Dependencias verificadas en Tepic",items:[
   ["🎓 Secretaría de Educación (Nodo 23a — 19 modelos)","Av. del Parque esq. España S/N, Ciudad del Valle · Tel. oficial (311) 180 6782 (en Business aparece por error el de SEPEN)."],
   ["🎭 Cultura: CECAN (Nodo 33 — 5 modelos) e IMAC (Nodo 39b)","CECAN: Av. México 115 Nte. (Tel. 311 217 9328). IMAC: Ciudad de las Artes Indígenas, 2º piso (no usar el pin viejo de Los Sauces)."],
@@ -2723,7 +2775,6 @@ function showCapability(cap){
  human:{ey:"Atención humana",title:"Hablar con una persona",items:[
   ["💬 Atención Ciudadana — Ayuntamiento de Tepic","311 265 2791 · Lun–Vie 9:00–15:00. Es el canal oficial para reportes y trámites municipales."],
   ["📞 Línea 24 h — 079","Línea de atención 24 horas. Emergencias: 911."],
-  ["💚 WhatsApp ORBE","55 2230 2128 · Canal del prototipo ciudadano (no es un canal oficial de gobierno)."]
  ],note:"En esta demostración no se inicia una llamada real."}
  }[cap];
  if(!cfg)return;
@@ -2862,7 +2913,7 @@ function depsGeoJSON(){
 function geo(){
  return{
    type:"FeatureCollection",
-   features:reports.map(r=>({
+   features:reports.filter(r=>Number.isFinite(r.lat)&&Number.isFinite(r.lng)).map(r=>({
      type:"Feature",
      geometry:{type:"Point",coordinates:[r.lng,r.lat]},
      properties:{
@@ -2872,8 +2923,7 @@ function geo(){
        color:CATS[r.category]?.color||"#fff",
        priority:r.priority,
        status:r.status,
-       statusGroup:statusGroup(r.status),
-       signals:r.signals
+       statusGroup:statusGroup(r.status)
      }
    }))
  };
@@ -2973,7 +3023,7 @@ function initMap(){
    map.addLayer({id:"clusters",type:"circle",source:"incidents",filter:["has","point_count"],paint:{"circle-color":"#163b4f","circle-radius":["step",["get","point_count"],16,10,22,25,28],"circle-stroke-color":"#57efe0","circle-stroke-width":1.2}});
    map.addLayer({id:"cluster-count",type:"symbol",source:"incidents",filter:["has","point_count"],layout:{"text-field":["get","point_count_abbreviated"],"text-size":11},paint:{"text-color":"#eaffff"}});
    map.addLayer({id:"points",type:"circle",source:"incidents",filter:["!",["has","point_count"]],paint:{"circle-color":["get","color"],"circle-radius":["case",["==",["get","priority"],"CRITICAL"],9,["==",["get","priority"],"HIGH"],8,6.5],"circle-stroke-width":2,"circle-stroke-color":"#04101b","circle-opacity":["case",["==",["get","status"],"resolved"],.45,.95]}});
-   map.addLayer({id:"heat",type:"heatmap",source:"incidents",maxzoom:16,layout:{visibility:"none"},paint:{"heatmap-weight":["interpolate",["linear"],["get","signals"],0,0,15,1],"heatmap-intensity":2,"heatmap-radius":28,"heatmap-opacity":.75}});
+   map.addLayer({id:"heat",type:"heatmap",source:"incidents",maxzoom:16,layout:{visibility:"none"},paint:{"heatmap-weight":1,"heatmap-intensity":2,"heatmap-radius":28,"heatmap-opacity":.75}});
 
    /* Fuente 2: Dependencias públicas de Tepic (42 nodos, 34 con coordenadas) */
    map.addSource("dependencias",{type:"geojson",data:depsGeoJSON()});
@@ -3139,7 +3189,7 @@ function renderPanel(){
  if(!list.length){const d=document.createElement("div");d.className="empty";d.style.padding="16px";d.textContent="No hay reportes para este filtro.";host.appendChild(d);return}
  list.forEach(r=>{const d=document.createElement("button");d.className="incident";d.type="button";
  const bar=document.createElement("div");bar.className="bar";bar.style.background=CATS[r.category]?.color||"#fff";
- const mid=document.createElement("div"),h=document.createElement("h4");h.textContent=`${CATS[r.category]?.label||r.category} · ${r.folio}`;const p=document.createElement("p");p.textContent=`${r.description} · ${statusLabel(r.status)} · ${r.signals} ${r.signals===1?"señal ciudadana":"señales ciudadanas"}`;mid.append(h,p);
+ const mid=document.createElement("div"),h=document.createElement("h4");h.textContent=`${CATS[r.category]?.label||r.category} · ${r.folio}`;const p=document.createElement("p");p.textContent=`${r.description} · ${statusLabel(r.status)}`;mid.append(h,p);
  const badge=document.createElement("span");badge.className=badgeClass(r.priority);badge.textContent=r.priority;
  d.append(bar,mid,badge);
  d.onclick=()=>{selected={lat:r.lat,lng:r.lng};if(map)map.easeTo({center:[r.lng,r.lat],zoom:15})};
@@ -3152,32 +3202,28 @@ function fillProfileFields(){const src=profile;const n=$("reporterName"),c=$("re
 function updateProfileUI(){const has=!!(profile.name||profile.contact);const hb=$("clearProfileHomeBtn");if(hb)hb.hidden=!has;const cb=$("clearProfileBtn");if(cb)cb.disabled=!has}
 function clearProfile(){profile={};try{localStorage.removeItem(KEY_PROFILE)}catch(e){}fillProfileFields();toast("Tus datos guardados se borraron de este dispositivo.")}
 function setLocStatus(html){const el=$("locStatus");if(el)el.innerHTML=html;const h=$("homeLocStatus");if(h)h.textContent=el?el.textContent:""}
-function syncLocationUI(){const la=$("latInput"),lo=$("lngInput");if(la)la.value=selected.lat;if(lo)lo.value=selected.lng;const q=$("quickSaveBtn");if(q)q.disabled=!locReady;const qh=$("quickHint");if(qh)qh.textContent=locReady?"Ubicación lista: puedes confirmar el reporte rápido.":"Toca «Usar mi ubicación» para activar el reporte rápido.";updateReportMarker()}
-function updateReportMarker(){if(!map||!window.maplibregl)return;try{if(!reportMarker){reportMarker=new maplibregl.Marker({color:"#ff2e88",draggable:true});reportMarker.setLngLat([selected.lng,selected.lat]).addTo(map);reportMarker.on("dragend",()=>{const ll=reportMarker.getLngLat();selected={lat:+ll.lat.toFixed(6),lng:+ll.lng.toFixed(6)};locReady=true;syncLocationUI();reverseGeocode(selected.lat,selected.lng)})}else{reportMarker.setLngLat([selected.lng,selected.lat])}}catch(e){}}
-function reverseGeocode(lat,lng){const addr=$("addressInput");if(!addr)return;const ctrl=new AbortController();const t=setTimeout(()=>ctrl.abort(),6000);fetch("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat="+encodeURIComponent(lat)+"&lon="+encodeURIComponent(lng)+"&zoom=18&addressdetails=1",{signal:ctrl.signal,headers:{Accept:"application/json"}}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(d=>{clearTimeout(t);if(d&&d.display_name){locAddress=d.display_name;if(!addr.value)addr.value=locAddress;setLocStatus("<strong>Ubicación detectada:</strong> "+esc(locAddress)+" · "+lat+", "+lng)}}).catch(()=>{clearTimeout(t);setLocStatus("<strong>Ubicación detectada:</strong> "+lat+", "+lng)})}
+function syncLocationUI(){const la=$("latInput"),lo=$("lngInput");if(la){la.value=selected.lat==null?"":selected.lat;la.disabled=!locReady}if(lo){lo.value=selected.lng==null?"":selected.lng;lo.disabled=!locReady}const q=$("quickSaveBtn");if(q)q.disabled=!locReady;const qh=$("quickHint");if(qh)qh.textContent=locReady?"Ubicación lista: puedes confirmar el reporte rápido.":"Toca «Usar mi ubicación» para activar el reporte rápido.";updateReportMarker()}
+function updateReportMarker(){if(!map||!window.maplibregl)return;if(selected.lat==null||selected.lng==null)return;try{if(!reportMarker){reportMarker=new maplibregl.Marker({color:"#ff2e88",draggable:true});reportMarker.setLngLat([selected.lng,selected.lat]).addTo(map);reportMarker.on("dragend",()=>{const ll=reportMarker.getLngLat();selected={lat:+ll.lat.toFixed(6),lng:+ll.lng.toFixed(6)};locReady=true;syncLocationUI();reverseGeocode(selected.lat,selected.lng)})}else{reportMarker.setLngLat([selected.lng,selected.lat])}}catch(e){}}
+function reverseGeocode(lat,lng){const addr=$("addressInput");if(!addr)return;const ctrl=new AbortController();const t=setTimeout(()=>ctrl.abort(),6000);fetch("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat="+encodeURIComponent(lat)+"&lon="+encodeURIComponent(lng)+"&zoom=16&addressdetails=1",{signal:ctrl.signal,headers:{Accept:"application/json"}}).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(d=>{clearTimeout(t);if(d&&d.address){const a=d.address;/* Sesión 23: solo calle + colonia, NUNCA el número de casa. */locAddress=[a.road,a.suburb||a.neighbourhood||a.quarter,a.city||a.town||a.village||a.municipality].filter(Boolean).join(", ");if(!addr.value&&locAddress)addr.value=locAddress;setLocStatus("<strong>Ubicación detectada:</strong> "+esc(locAddress||("coordenadas "+lat+", "+lng))+" · "+lat+", "+lng)}}).catch(()=>{clearTimeout(t);setLocStatus("<strong>Ubicación detectada:</strong> "+lat+", "+lng)})}
 function locateUser(opts={}){
  if(!navigator.geolocation){setLocStatus("<span class=\"warn\">Geolocalización no disponible en este navegador.</span>");toast("Geolocalización no disponible.");return Promise.resolve(false)}
  setLocStatus("Buscando tu ubicación…");
- return new Promise(resolve=>{navigator.geolocation.getCurrentPosition(p=>{selected={lat:+p.coords.latitude.toFixed(6),lng:+p.coords.longitude.toFixed(6)};locReady=true;if(map)map.flyTo({center:[selected.lng,selected.lat],zoom:15,speed:1.1});syncLocationUI();setLocStatus("<strong>Ubicación detectada:</strong> "+selected.lat+", "+selected.lng);reverseGeocode(selected.lat,selected.lng);if(opts.openReport){if(map){let __op=false;const __openOnce=()=>{if(!__op){__op=true;openReport({});}};map.once("moveend",__openOnce);setTimeout(__openOnce,2600);}else{openReport({});}}resolve(true)},err=>{locReady=false;syncLocationUI();toast("No se pudo obtener tu ubicación automáticamente.");resolve(false)},{enableHighAccuracy:true,timeout:15000,maximumAge:30000})});
+ return new Promise(resolve=>{navigator.geolocation.getCurrentPosition(p=>{selected={lat:+p.coords.latitude.toFixed(6),lng:+p.coords.longitude.toFixed(6)};locReady=true;if(map)map.flyTo({center:[selected.lng,selected.lat],zoom:15,speed:1.1});syncLocationUI();setLocStatus("<strong>Ubicación detectada:</strong> "+selected.lat+", "+selected.lng);reverseGeocode(selected.lat,selected.lng);if(opts.openReport){if(map){let __op=false;const __openOnce=()=>{if(!__op){__op=true;openReport({});}};map.once("moveend",__openOnce);setTimeout(__openOnce,2600);}else{openReport({});}}resolve(true)},err=>{locReady=false;syncLocationUI();toast("No se pudo obtener tu ubicación automáticamente.");resolve(false)},{timeout:15000,maximumAge:30000})});
 }
 
 function saveExpedienteData(){try{localStorage.setItem(KEY_EXPEDIENTE,JSON.stringify(expediente))}catch(e){}}
-function saveLlaveData(){try{if(llaveSession)localStorage.setItem(KEY_LLAVE,JSON.stringify(llaveSession));else localStorage.removeItem(KEY_LLAVE)}catch(e){}}
 function renderExpediente(){
- const st=$("expedienteStatus"),hist=$("expedienteHistory"),lb=$("llaveBtn"),lo=$("llaveOutBtn");
+ const st=$("expedienteStatus"),hist=$("expedienteHistory");
  if(!st)return;
  if(expediente&&(expediente.name||expediente.dob)){delete expediente.name;delete expediente.dob;saveExpedienteData()}
  if($("expContact")&&document.activeElement!==$("expContact"))$("expContact").value=expediente.contact||"";
  const _n=(expediente.history||[]).length;
- if(llaveSession){st.textContent="Sesión de Demostración activa.";if(lb)lb.hidden=true;if(lo)lo.hidden=false}
- else{st.textContent=_n?("Expediente con "+_n+" folio"+(_n===1?"":"s")+" guardado en este dispositivo. Sin nombre ni fecha de nacimiento."):("Sin expediente en este dispositivo. Se guarda solo con folios.");if(lb)lb.hidden=false;if(lo)lo.hidden=true}
+ st.textContent=_n?("Expediente con "+_n+" folio"+(_n===1?"":"s")+" guardado en este dispositivo. Sin nombre ni fecha de nacimiento."):("Sin expediente en este dispositivo. Se guarda solo con folios.");
  hist.textContent="";
  const h=expediente.history||[];
  if(!h.length){const li=document.createElement("li");li.textContent="Sin folios en tu expediente todavía.";hist.appendChild(li)}
  else h.slice(0,10).forEach(f=>{const li=document.createElement("li");li.textContent="Folio "+f;hist.appendChild(li)});
 }
-function llaveSignIn(){llaveSession={demo:true,provider:"Llave MX (simulación)",at:new Date().toISOString()};saveLlaveData();renderExpediente();toast("Sesión de demostración activa.")}
-function llaveSignOut(){llaveSession=null;saveLlaveData();renderExpediente();toast("Sesión de demostración de Llave MX cerrada.")}
 function saveExpediente(){
  const ct=($("expContact").value||"").trim();
  expediente={contact:ct,history:expediente.history||[],updatedAt:new Date().toISOString()};
@@ -3185,11 +3231,11 @@ function saveExpediente(){
  saveExpedienteData();renderExpediente();
  toast("Expediente guardado solo en este dispositivo, solo con folios.");
 }
-function clearExpediente(){expediente={};try{localStorage.removeItem(KEY_EXPEDIENTE)}catch(e){}llaveSession=null;saveLlaveData();profile={};try{localStorage.removeItem(KEY_PROFILE)}catch(e){}renderExpediente();fillProfileFields();toast("Tu expediente se borró de este dispositivo.")}
+function clearExpediente(){expediente={};try{localStorage.removeItem(KEY_EXPEDIENTE)}catch(e){}profile={};try{localStorage.removeItem(KEY_PROFILE)}catch(e){}renderExpediente();fillProfileFields();toast("Tu expediente se borró de este dispositivo.")}
 function addFolioToExpediente(folio){expediente.history=[folio,...(expediente.history||[]).filter(f=>f!==folio)].slice(0,20);saveExpedienteData();renderExpediente()}
 
 function openReport(pref={}){
- $("catSelect").value=pref.category||"pothole";$("descInput").value=pref.description||"";$("latInput").value=selected.lat;$("lngInput").value=selected.lng;$("addressInput").value=pref.address||locAddress||"";$("evidenceInput").value="";pendingEvidence=null;pendingEvidenceFile=null;renderPhotoPreview($("evidencePreview"),null,null);$("consentCheck").checked=false;
+ $("catSelect").value=pref.category||"pothole";$("descInput").value=pref.description||"";$("latInput").value=selected.lat==null?"":selected.lat;$("lngInput").value=selected.lng==null?"":selected.lng;$("addressInput").value=pref.address||locAddress||"";$("evidenceInput").value="";pendingEvidence=null;pendingEvidenceFile=null;renderPhotoPreview($("evidencePreview"),null,null);$("consentCheck").checked=false;const _pc=$("consentContactCheck");if(_pc)_pc.checked=false;const _rp=$("reportPhone");if(_rp)_rp.value="";const _ps=$("publishShared");if(_ps)_ps.checked=false;
  fillProfileFields();
  const q=$("quickSaveBtn");if(q)q.disabled=!locReady;
  updateRuco();openModal("reportModal");syncLocationUI();
@@ -3228,15 +3274,17 @@ async function saveReport(quick=false){
   return;
  }
  const nm=($("reporterName")?.value||"").trim(),ct=($("reporterContact")?.value||"").trim();
+ const consentPublish=!!$("publishShared")?.checked,consentContact=!!$("consentContactCheck")?.checked;
+ const phoneInput=($("reportPhone")?.value||"").trim();
  if($("saveProfileCheck")?.checked&&(nm||ct)){profile={name:nm,contact:ct};saveProfileData();updateProfileUI()}
  setState("executing");
  const near=reports.find(r=>r.category===cat&&r.status!=="atendido"&&r.status!=="cerrado"&&hav(lat,lng,r.lat,r.lng)<.18);
- if(near){near.signals=(near.signals||1)+1;near.updatedAt=new Date().toISOString();if(pendingEvidence&&!near.evidence)near.evidence=pendingEvidence;near.evidenceSeal=await EvidenceOS.sealReport(near);saveReportsSafe();addFolioToExpediente(near.folio);closeModal("reportModal");renderMapData();renderTracking();setState("resolved");toast(`Tu reporte se sumó al folio ${near.folio}.`);return}
+ if(near){near.updatedAt=new Date().toISOString();if(pendingEvidence&&!near.evidence)near.evidence=pendingEvidence;near.evidenceSeal=await EvidenceOS.sealReport(near);saveReportsSafe();addFolioToExpediente(near.folio);closeModal("reportModal");renderMapData();renderTracking();setState("resolved");toast(`Tu reporte se sumó al folio ${near.folio}.`);return}
  const _f=nextFolio();const folio=_f.folio;
  const rr=rucoFor(cat,$("prioritySelect").value);
- const r={folio,internalId:_f.internalId,category:cat,description:desc,lat,lng,address:$("addressInput").value.trim(),priority:$("prioritySelect").value,status:"recibido",signals:1,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),ruco:rr,quick:!!quick,reporterName:nm||"",reporterContact:ct||"",consent:{location:true,quick:!!quick,evidence:!!pendingEvidence,at:new Date().toISOString()},evidence:pendingEvidence||null,closure:null};
+ const r={folio,internalId:_f.internalId,category:cat,description:desc,lat,lng,address:$("addressInput").value.trim(),priority:$("prioritySelect").value,status:"recibido",createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),ruco:rr,quick:!!quick,reporterName:nm||"",reporterContact:ct||"",phone:consentContact?phoneInput:"",consent:{location:true,quick:!!quick,evidence:!!pendingEvidence,publish:consentPublish,contact:consentContact,at:new Date().toISOString(),version:"2026-11-26"},evidence:pendingEvidence||null,closure:null};
  r.evidenceSeal=await EvidenceOS.sealReport(r);
- reports.unshift(r);saveReportsSafe();addFolioToExpediente(folio);if($("publishShared")?.checked)shareToBoard(r);closeModal("reportModal");renderMapData();renderTracking();setState("resolved");addContext("Territorio","reporte",folio);toast(`Reporte ${folio} creado como demostración.`);showView("tracking");
+ reports.unshift(r);saveReportsSafe();addFolioToExpediente(folio);if($("publishShared")?.checked)shareToBoard(r);closeModal("reportModal");renderMapData();renderTracking();setState("resolved");addContext("Territorio","reporte",folio);toast(`Reporte ${folio} creado.`);showView("tracking");
 }
 
 function evidenceFigure(ev,label){
@@ -3261,9 +3309,9 @@ function confirmClosure(){
  const r=reports.find(x=>x.folio===closureTargetFolio);if(!r){closeModal("closureModal");return}
  const note=($("closureNoteInput").value||"").trim();
  r.closure={photo:closureEvidence||null,note:note,simulated:true,at:new Date().toISOString()};
- r.status="atendido";r.updatedAt=new Date().toISOString();if(r.sharedId)postEvidenceToBoard(r);
+ r.status="atendido";r.updatedAt=new Date().toISOString();/* Sesión 23 (M-2/U-6): la app ciudadana NUNCA llama a add-evidence. Este cierre queda SOLO local, con etiqueta SIMULADO; la evidencia real la sube la dependencia con su código. */
  saveReportsSafe();closeModal("closureModal");renderMapData();renderTracking();setState("resolved");
- toast("Cierre de demostración: "+r.folio+" ahora aparece como Atendido — pendiente de calificación.");
+ toast("Cierre guardado solo en este teléfono (SIMULADO): la dependencia aún no ha confirmado el trabajo en el tablero.");
  openRating(r.folio);
 }
 
@@ -3274,13 +3322,36 @@ function normFolio(s){return String(s||"").toUpperCase().replace(/[^A-Z0-9]/g,""
 function folioMatches(folio,q){const f=normFolio(folio),n=normFolio(q);return !!n&&f.includes(n)}
 function modelosLinea(d){const n=(d.models||[]).length,c=d.modelsCount||n;return c===n?String(c):c+" en catálogo · "+n+" con nombre"}
 function depModelsCatalogo(d){return d.modelsCount||(d.models||[]).length}
+/* Sesión 23 (U-21): UNA sola fuente de verdad. Los conteos se calculan
+   desde DEPENDENCIAS_TEPIC / ORBE_FICHAS_30, nunca escritos a mano en dos
+   sitios (el héroe decía 39 corregidas y el Catálogo 38: el dato real es 39). */
+function computeConteos(){
+ const nodos=DEPENDENCIAS_TEPIC||[];
+ const ver=nodos.filter(d=>d.status==="Verificado").length;
+ const corr=nodos.filter(d=>d.status==="Corregido").length;
+ const por=nodos.filter(d=>d.status==="Por confirmar").length;
+ const modelos=nodos.reduce((a,d)=>a+(d.modelsCount||0),0);
+ const nombrados=nodos.reduce((a,d)=>a+(d.models||[]).length,0);
+ return{sedes:nodos.length,verificadas:ver,corregidas:corr,porConfirmar:por,modelos,nombrados};
+}
 function renderConteos(){
- const sedes=DEPENDENCIAS_TEPIC.length;
- const modelos=DEPENDENCIAS_TEPIC.reduce((a,d)=>a+(d.modelsCount||0),0);
- const nombrados=DEPENDENCIAS_TEPIC.reduce((a,d)=>a+(d.models||[]).length,0);
- const e=$("conteoSedes");if(e)e.textContent=String(sedes);
- const n=$("conteoSedesNota");if(n)n.textContent="sedes listadas · 1 verificada, 39 corregidas, 3 por confirmar · censo 42 nodos (el 39 se lista en dos sedes)";
- const m=$("conteoModelosNota");if(m)m.textContent="trámites del Catálogo Único vinculados ("+nombrados+" con nombre en la lista; "+modelos+" en los conteos del catálogo) · extracción 7 nov 2026";
+ const c=computeConteos();
+ const e=$("conteoSedes");if(e)e.textContent=String(c.sedes);
+ const n=$("conteoSedesNota");if(n)n.textContent="sedes listadas · "+c.verificadas+" verificada"+(c.verificadas===1?"":"s")+", "+c.corregidas+" corregidas, "+c.porConfirmar+" por confirmar · censo 42 nodos (el 39 se lista en dos sedes)";
+ const m=$("conteoModelosNota");if(m)m.textContent="trámites del Catálogo Único vinculados ("+c.nombrados+" con nombre en la lista; "+c.modelos+" en los conteos del catálogo) · extracción 7 nov 2026";
+ const cn=$("conteoNodos");if(cn)cn.textContent=String(c.sedes);
+ const cnn=$("conteoNodosNota");if(cnn)cnn.textContent="Nodos en Tepic ("+c.verificadas+" Verificado · "+c.corregidas+" Corregidos · "+c.porConfirmar+" Por confirmar)";
+}
+function renderFichasConteos(){
+ /* Sesión 23 (U-21): conteos de fichas calculados desde ORBE_FICHAS_30.
+    M2 y E2 pasan a "por confirmar" mientras su nota diga "no publicable":
+    ya no se muestran como verificadas (verificadas: 0 de 30). */
+ const f=ORBE_FICHAS_30||[];
+ const ver=f.filter(x=>x.estado==="verificada").length;
+ const par=f.filter(x=>x.estado==="parcial").length;
+ const por=f.filter(x=>x.estado==="por confirmar").length;
+ const set=(id,v)=>{const el=$(id);if(el)el.textContent=String(v)};
+ set("fichasVerificadasCount",ver);set("fichasParcialCount",par);set("fichasPorConfirmarCount",por);
 }
 function focusReportOnMap(r){showView("map");if(r.lat&&r.lng){selected={lat:r.lat,lng:r.lng};renderMapData()}if(map)setTimeout(()=>{try{map.easeTo({center:[r.lng,r.lat],zoom:15})}catch(e){}},150);toast("Reporte "+r.folio+" en el mapa.")}
 function wireFolioSearch(){
@@ -3295,35 +3366,112 @@ function wireFolioSearch(){
   else toast("No hay un reporte con ese folio en este teléfono ni en el tablero compartido.");
  });
 }
-async function fetchSharedByFolio(q){try{const res=await fetch("/.netlify/functions/get-report?folio="+encodeURIComponent(normFolio(q)));if(!res.ok)return null;const j=await res.json();return j&&j.report?j.report:null}catch(e){return null}}
+async function fetchSharedByFolio(q){try{const folio=String(q||"").trim().toUpperCase();if(!folio)return null;const res=await fetch("/.netlify/functions/get-report?folio="+encodeURIComponent(folio));if(!res.ok)return null;const j=await res.json();return j&&j.report?j.report:null}catch(e){return null}}
 function cacheSharedReport(sr){
  if(!sr||!sr.folio)return null;
  let r=reports.find(x=>x.folio===sr.folio);if(r)return r;
  const SERVICE_TO_CAT={bache:"pothole",agua:"water_leak",luminaria:"streetlight",basura:"garbage",drenaje:"drainage",riesgo_vial:"road_risk",parques:"tree"};
- r={folio:sr.folio,internalId:sr.id||("shared-"+sr.folio),category:SERVICE_TO_CAT[sr.service]||"road_risk",description:sr.description||"",lat:sr.lat,lng:sr.lng,address:sr.address||"",priority:"MEDIUM",status:sr.status||"recibido",signals:1,createdAt:sr.createdAt||new Date().toISOString(),updatedAt:sr.updatedAt||sr.createdAt||new Date().toISOString(),ruco:{risk:2,urgency:2,competence:sr.dependencia||"Por definir",operability:2},shared:true,sharedId:sr.id||null,evidence:sr.photoUrl?{dataUrl:sr.photoUrl,note:"Foto del tablero compartido.",stored:"shared"}:null,closure:null,rating:sr.rating?{stars:sr.rating.stars,comment:sr.rating.comment||"",at:sr.rating.at||""}:null};
+ r={folio:sr.folio,internalId:sr.id||("shared-"+sr.folio),category:SERVICE_TO_CAT[sr.service]||"road_risk",description:sr.description||"",lat:sr.lat,lng:sr.lng,address:sr.address||"",priority:"MEDIUM",status:sr.status||"recibido",sealValid:sr.sealValid,createdAt:sr.createdAt||new Date().toISOString(),updatedAt:sr.updatedAt||sr.createdAt||new Date().toISOString(),ruco:{risk:2,urgency:2,competence:sr.dependencia||"Por definir",operability:2},shared:true,sharedId:sr.id||null,evidence:sr.photoUrl?{dataUrl:sr.photoUrl,note:"Foto del tablero compartido.",stored:"shared"}:null,closure:null,rating:sr.rating?{stars:sr.rating.stars,comment:sr.rating.comment||"",at:sr.rating.at||""}:null};
  reports.unshift(r);saveReportsSafe();return r;
 }
 async function shareToBoard(r){
+ /* Sesión 23 (M-2/U-6, P-1): el servidor responde {ok, report, authorCode}.
+    El folio COMPARTIDO lo manda el servidor: el folio local de nextFolio()
+    solo vale para borradores nunca compartidos. Sin 200 no se cambia nada. */
+ const consentPublish=!!(r.consent&&r.consent.publish);
+ const consentContact=!!(r.consent&&r.consent.contact);
  try{
-  const res=await fetch("/.netlify/functions/create-report",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({service:CAT_SERVICE[r.category]||"riesgo_vial",description:r.description,lat:r.lat,lng:r.lng,address:r.address,reporterName:"",photoDataUrl:r.evidence&&r.evidence.dataUrl?r.evidence.dataUrl:null,compartidoDesdeApp:true,folioOrigen:r.folio})});
-  if(!res.ok)throw new Error("HTTP "+res.status);
-  const j=await res.json();r.sharedId=j.id||null;r.status="derivado";r.updatedAt=new Date().toISOString();saveReportsSafe();renderTracking();
-  toast("Publicado en el tablero compartido: "+r.folio+" → derivado a "+(j.dependencia||"la dependencia que le toca")+".");
- }catch(e){toast("Sin conexión al tablero compartido: tu reporte quedó guardado en este teléfono con el folio "+r.folio+".")}
+  const res=await fetch("/.netlify/functions/create-report",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({service:CAT_SERVICE[r.category]||"riesgo_vial",description:r.description,lat:r.lat,lng:r.lng,address:r.address,reporterName:consentPublish?(r.reporterName||""):"",photoDataUrl:r.evidence&&r.evidence.dataUrl?r.evidence.dataUrl:null,consentPublish,consentContact,phone:consentContact?(r.phone||""):null})});
+  if(!res.ok){let msg="HTTP "+res.status;try{const ej=await res.json();if(ej&&ej.error)msg=ej.error}catch(e){}throw new Error(msg)}
+  const j=await res.json();
+  if(!j||!j.report||!j.report.id||!j.report.folio)throw new Error("El tablero no devolvió folio del servidor.");
+  const folioLocal=r.folio;
+  r.sharedId=j.report.id;r.folio=j.report.folio;
+  if(j.report.status)r.status=j.report.status;
+  r.shared=true;r.updatedAt=new Date().toISOString();
+  if(folioLocal!==r.folio){expediente.history=(expediente.history||[]).filter(f=>f!==folioLocal);addFolioToExpediente(r.folio)}
+  saveReportsSafe();renderTracking();
+  if(j.authorCode){authorCodes[r.folio]=j.authorCode;showAuthorCodeConstancia(r)}
+  else toast("Publicado en el tablero compartido: "+r.folio+".");
+ }catch(e){toast("No se pudo publicar en el tablero compartido ("+(e&&e.message?e.message:"sin conexión")+"): tu reporte quedó guardado solo en este teléfono con el folio "+r.folio+".")}
 }
-async function postEvidenceToBoard(r){
- if(!r.sharedId)return;
- try{await fetch("/.netlify/functions/add-evidence",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:r.sharedId,photoDataUrl:r.closure&&r.closure.photo&&r.closure.photo.dataUrl?r.closure.photo.dataUrl:null,note:r.closure?r.closure.note:""})})}catch(e){}
+function showAuthorCodeConstancia(r){
+ const code=authorCodes[r.folio];if(!code)return;
+ const fl=$("authorCodeFolioLine");if(fl)fl.textContent="Folio del tablero: "+r.folio+" · Estado: "+statusLabel(r.status);
+ const cv=$("authorCodeValue");if(cv)cv.textContent=code;
+ openModal("authorCodeModal");
 }
-async function postRatingToBoard(r){
- if(!r.sharedId||!r.rating)return;
- try{await fetch("/.netlify/functions/add-rating",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:r.sharedId,stars:r.rating.stars,comment:r.rating.comment||"",photoDataUrl:r.closure&&r.closure.photo&&r.closure.photo.dataUrl?r.closure.photo.dataUrl:null})})}catch(e){}
+async function postRatingToBoard(r,authorCode){
+ /* Sesión 23 (M-2/U-6): camino A de add-rating. Manda afterPhotoDataUrl
+    (la foto del después = foto de cierre) + Authorization Bearer con el
+    código de autor. Devuelve true solo con 200; el estado local NO cambia
+    hasta entonces (lo hace quien llama). */
+ if(!r.sharedId||!r.rating)return false;
+ const afterPhoto=r.closure&&r.closure.photo&&r.closure.photo.dataUrl?r.closure.photo.dataUrl:null;
+ if(!afterPhoto){toast("Para calificar un reporte publicado necesitas la foto del después: primero marca el cierre con su foto.");return false}
+ try{
+  const res=await fetch("/.netlify/functions/add-rating",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+authorCode},body:JSON.stringify({id:r.sharedId,stars:r.rating.stars,comment:r.rating.comment||"",afterPhotoDataUrl:afterPhoto})});
+  if(!res.ok){let msg="HTTP "+res.status;try{const ej=await res.json();if(ej&&ej.error)msg=ej.error}catch(e){}toast("El tablero no aceptó la calificación ("+msg+"). Tu calificación quedó guardada solo en este teléfono.");return false}
+  return true;
+ }catch(e){toast("Sin conexión al tablero: tu calificación quedó guardada solo en este teléfono.");return false}
+}
+function openCodeAction(action,folio){
+ const r=reports.find(x=>x.folio===folio);if(!r)return;
+ codeActionPending={action,folio};
+ const t=$("codeActionTitle");
+ if(t)t.textContent=action==="delete"?"Borrar mi reporte":"Marcar como no atendido";
+ const fl=$("codeActionFolioLine");if(fl)fl.textContent="Reporte "+folio+" — "+(CATS[r.category]?.label||r.category);
+ const d=$("codeActionDesc");
+ if(d)d.textContent=action==="delete"?"Se borra tu reporte publicado del tablero (fotos incluidas). Esta acción no se puede deshacer.":"Se avisa al tablero que el trabajo no se hizo. Solo puedes hacerlo antes de calificar y con tu código de autor.";
+ const inp=$("codeActionInput");if(inp){inp.value=authorCodes[folio]||"";setTimeout(()=>inp.focus(),50)}
+ openModal("codeActionModal");
+}
+async function confirmCodeAction(){
+ if(!codeActionPending)return;
+ const folio=codeActionPending.folio,action=codeActionPending.action;
+ const r=reports.find(x=>x.folio===folio);if(!r){closeModal("codeActionModal");return}
+ const code=($("codeActionInput").value||"").trim();
+ if(!code){toast("Escribe tu código de autor.");return}
+ if(action==="no_atendido"){
+  if(r.rating){toast("Este reporte ya fue calificado: ya no se puede marcar como no atendido.");return}
+  /* Camino B de add-rating, solo antes de calificar. Sin 200 no cambia nada. */
+  try{
+   const res=await fetch("/.netlify/functions/add-rating",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+code},body:JSON.stringify({id:r.sharedId,folio:r.folio,noAtendido:true})});
+   if(!res.ok){let msg="HTTP "+res.status;try{const ej=await res.json();if(ej&&ej.error)msg=ej.error}catch(e){}toast("El tablero no aceptó el marcaje ("+msg+").");return}
+  }catch(e){toast("Sin conexión al tablero: el marcaje no se envió.");return}
+  r.status="no_atendido";r.updatedAt=new Date().toISOString();saveReportsSafe();closeModal("codeActionModal");renderTracking();renderMapData();
+  toast("Reporte "+folio+" marcado como No atendido en el tablero.");
+  return;
+ }
+ if(action==="delete"){
+  try{
+   const res=await fetch("/.netlify/functions/delete-report",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+code},body:JSON.stringify({folio:r.folio})});
+   if(!res.ok){let msg="HTTP "+res.status;try{const ej=await res.json();if(ej&&ej.error)msg=ej.error}catch(e){}toast("El tablero no aceptó el borrado ("+msg+").");return}
+  }catch(e){toast("Sin conexión al tablero: el borrado no se envió.");return}
+  delete authorCodes[folio];
+  reports=reports.filter(x=>x.folio!==folio);saveReportsSafe();closeModal("codeActionModal");renderTracking();renderMapData();
+  toast("Reporte "+folio+" borrado del tablero.");
+ }
 }
 function markNoAtendido(folio,btn){
  const r=reports.find(x=>x.folio===folio);if(!r)return;
- if(!btn.dataset.armed){btn.dataset.armed="1";btn.textContent="Toca de nuevo para confirmar: no se hizo";setTimeout(()=>{if(btn){btn.dataset.armed="";btn.textContent="No se hizo el trabajo"}},4000);return}
- r.status="no_atendido";r.updatedAt=new Date().toISOString();saveReportsSafe();renderTracking();renderMapData();
- toast("Reporte "+folio+" marcado como No atendido. Queda visible hasta que llegue evidencia del trabajo.");
+ if(r.rating){toast("Este reporte ya fue calificado: ya no se puede marcar como no atendido.");return}
+ if(!r.sharedId){
+  /* Solo en este teléfono: marcaje local con doble toque. */
+  if(!btn.dataset.armed){btn.dataset.armed="1";btn.textContent="Toca de nuevo para confirmar: no se hizo";setTimeout(()=>{if(btn){btn.dataset.armed="";btn.textContent="No se hizo el trabajo"}},4000);return}
+  r.status="no_atendido";r.updatedAt=new Date().toISOString();saveReportsSafe();renderTracking();renderMapData();
+  toast("Reporte "+folio+" marcado como No atendido en este teléfono.");
+  return;
+ }
+ openCodeAction("no_atendido",folio);
+}
+function deleteOwnReport(folio,btn){
+ const r=reports.find(x=>x.folio===folio);if(!r)return;
+ if(!r.sharedId){
+  if(!btn||!btn.dataset.armed){if(btn){btn.dataset.armed="1";btn.textContent="Toca de nuevo para borrar de este teléfono";setTimeout(()=>{if(btn){btn.dataset.armed="";btn.textContent="Borrar mi reporte"}},4000)}return}
+  reports=reports.filter(x=>x.folio!==folio);saveReportsSafe();renderTracking();renderMapData();toast("Reporte "+folio+" borrado de este teléfono.");return;
+ }
+ openCodeAction("delete",folio);
 }
 function wireBoardFilters(){
  const sf=$("boardServiceFilter"),tf=$("boardStatusFilter");
@@ -3340,7 +3488,7 @@ async function loadBoard(force){
  host.textContent="";
  const loading=document.createElement("div");loading.className="card empty";loading.textContent="Cargando tablero compartido…";host.appendChild(loading);
  try{
-  const res=await fetch("/.netlify/functions/list-reports?limit=100");
+  const res=await fetch("/.netlify/functions/list-reports?limit=50");
   if(!res.ok)throw new Error("HTTP "+res.status);
   const j=await res.json();boardReports=(j&&j.reports)||[];boardLoaded=true;renderBoard();
  }catch(e){
@@ -3349,6 +3497,12 @@ async function loadBoard(force){
   d.textContent="No se pudo cargar el tablero compartido (sin conexión o funciones no desplegadas). Los reportes de este teléfono siguen en Seguimiento.";
   host.appendChild(d);
  }
+}
+function sealText(sealValid){if(sealValid===true)return"Sello del servidor: Verificado.";if(sealValid===false)return"Sello del servidor: No verificado (el sello no coincide).";return"Sello: No verificado (sin sello)."}
+async function reportAbuse(sr){
+ const reason=window.prompt("¿Por qué reportas este contenido? (opcional)","")||"";
+ try{await fetch("/.netlify/functions/report-abuse",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({folio:sr.folio,reason})})}catch(e){}
+ toast("Gracias: tu reporte de contenido quedó registrado para revisión.");
 }
 function renderBoard(){
  const host=$("boardList");if(!host)return;host.textContent="";
@@ -3362,15 +3516,17 @@ function renderBoard(){
   const h=document.createElement("h3");h.textContent=((CATS[{bache:"pothole",agua:"water_leak",luminaria:"streetlight",basura:"garbage",drenaje:"drainage",riesgo_vial:"road_risk",parques:"tree"}[sr.service]]||{}).label||sr.service)+" · "+(sr.folio||sr.id);a.appendChild(h);
   const p=document.createElement("p");p.textContent=sr.description||"";a.appendChild(p);
   const p2=document.createElement("p");p2.textContent=(sr.address||"Ubicación georreferenciada")+" · "+fechaHoraCorta(sr.createdAt)+" · Estado: "+statusLabel(sr.status)+" · Destino: "+(sr.dependencia||"Por definir");a.appendChild(p2);
+  const origin=document.createElement("p");origin.textContent="Origen: En el tablero compartido";a.appendChild(origin);
+  const seal=document.createElement("p");seal.textContent=sealText(sr.sealValid);a.appendChild(seal);
   if(sr.photoUrl){const img=document.createElement("img");img.src=sr.photoUrl;img.alt="Evidencia del reporte "+(sr.folio||"");img.style.cssText="max-width:100%;border-radius:10px;margin-top:8px";a.appendChild(img)}
   if(sr.rating&&sr.rating.stars){const rl=document.createElement("p");rl.className="rating-line";rl.textContent="★".repeat(sr.rating.stars)+"☆".repeat(5-sr.rating.stars)+" Calificación ciudadana: "+sr.rating.stars+" de 5.";a.appendChild(rl)}
   const btn=document.createElement("button");btn.className="ghost";btn.type="button";btn.textContent="Ver en mapa";btn.onclick=()=>{const r=cacheSharedReport(sr);if(r)focusReportOnMap(r)};b.appendChild(btn);
   const det=document.createElement("button");det.className="ghost";det.type="button";det.style.marginTop="8px";det.textContent="Ver detalle";det.onclick=()=>openBoardDetail(sr);b.appendChild(det);
-  const sum=document.createElement("button");sum.className="gold";sum.type="button";sum.style.marginTop="8px";sum.textContent="Sumarme a este reporte";sum.onclick=()=>{const r=cacheSharedReport(sr);if(r){r.signals=(r.signals||1)+1;r.updatedAt=new Date().toISOString();saveReportsSafe();toast("Te sumaste al folio "+r.folio+". Señales: "+r.signals+".")}};b.appendChild(sum);
+  const abuse=document.createElement("button");abuse.className="ghost";abuse.type="button";abuse.style.marginTop="8px";abuse.textContent="Reportar contenido inapropiado";abuse.onclick=()=>reportAbuse(sr);b.appendChild(abuse);
   d.append(a,b);host.appendChild(d);
  });
 }
-function openBoardDetail(sr){
+function openBoardDetail(sr,opts){
  const r=cacheSharedReport(sr);if(!r)return;
  $("capEyebrow").textContent="Tablero compartido · "+(sr.folio||sr.id);
  $("capTitle").textContent=(CATS[r.category]?.label||sr.service)+" — "+statusLabel(sr.status);
@@ -3379,8 +3535,12 @@ function openBoardDetail(sr){
  const p=document.createElement("p");p.textContent=(sr.description||"")+" — "+(sr.address||"Ubicación georreferenciada")+" · "+fechaHoraCorta(sr.createdAt)+" · Destino: "+(sr.dependencia||"Por definir");
  d.appendChild(p);body.appendChild(d);
  if(sr.photoUrl){const img=document.createElement("img");img.src=sr.photoUrl;img.alt="Evidencia";img.style.cssText="max-width:100%;border-radius:10px";body.appendChild(img)}
+ const seal=document.createElement("p");seal.className="capability-note";seal.textContent=sealText(sr.sealValid);body.appendChild(seal);
+ if(sr.history&&sr.history.length){const hh=document.createElement("h4");hh.textContent="Historial público";hh.style.marginTop="12px";body.appendChild(hh);sr.history.forEach(h=>{const hp=document.createElement("p");hp.className="capability-note";hp.textContent=fechaHoraCorta(h.at)+" · "+(h.from||"")+" → "+(h.to||"")+" ("+(h.actor||"")+")";body.appendChild(hp)})}
  const note=document.createElement("p");note.className="capability-note";note.textContent="Prototipo independiente: este reporte es ciudadano y no es un canal oficial de gobierno. La calificación cierra el reporte como Cerrado.";body.appendChild(note);
- const cal=document.createElement("button");cal.className="primary";cal.type="button";cal.textContent="Calificar el trabajo";cal.style.marginTop="8px";cal.onclick=()=>{closeModal("capabilityModal");openRating(r.folio)};body.appendChild(cal);
+ if(!opts||!opts.readOnly){const cal=document.createElement("button");cal.className="primary";cal.type="button";cal.textContent="Calificar el trabajo";cal.style.marginTop="8px";cal.onclick=()=>{closeModal("capabilityModal");openRating(r.folio)};body.appendChild(cal)}
+ else{const ro=document.createElement("p");ro.className="capability-note";ro.textContent="Vista de solo lectura por folio compartido.";body.appendChild(ro)}
+ try{history.replaceState(null,"","#reporte="+encodeURIComponent(sr.folio))}catch(e){}
  openModal("capabilityModal");
 }
 async function renderDudas(){
@@ -3410,15 +3570,19 @@ function renderTracking(){
  const host=$("trackingList");if(!host)return;host.textContent="";
  const _q=normFolio(trackingSearchQuery);
  const list=_q?reports.filter(r=>folioMatches(r.folio,_q)):reports;
- if(!list.length){const d=document.createElement("div");d.className="card empty";d.textContent=_q?("No hay un reporte con ese folio en este teléfono. Prueba el botón «Buscar folio» para buscarlo en el tablero compartido."):("Todavía no hay reportes.");host.appendChild(d);return}
- const vb=document.createElement("button");vb.className="ghost";vb.type="button";vb.textContent="Verificar cadena de evidencia";vb.style.marginBottom="12px";vb.onclick=async()=>{const v=await EvidenceOS.verifyChain();toast(v.ok?("Cadena íntegra: "+v.checked+" sellos verificados."):("Cadena rota en el eslabón "+(v.brokenAt+1)+" de "+v.checked+"."))};host.appendChild(vb);
+ if(!list.length){const d=document.createElement("div");d.className="card empty";d.textContent=_q?("No hay un reporte con ese folio en este teléfono. Prueba el botón «Buscar folio» para buscarlo en el tablero compartido."):("Todavía no hay reportes.");host.appendChild(d);
+  if(_q){const vb=document.createElement("button");vb.className="ghost";vb.type="button";vb.textContent="Ver todos";vb.style.marginTop="10px";vb.onclick=()=>{trackingSearchQuery="";const inp=$("folioSearchInput");if(inp)inp.value="";renderTracking()};host.appendChild(vb)}
+  return}
+ const vb=document.createElement("button");vb.className="ghost";vb.type="button";vb.textContent="Verificar cadena de evidencia";vb.style.marginBottom="12px";vb.onclick=async()=>{const v=await EvidenceOS.verifyChain();if(!v.ok){toast("Cadena rota en el eslabón "+(v.brokenAt+1)+" de "+v.checked+".");return}toast(v.checked?("Cadena verificada: "+v.checked+" sellos locales."):("No verificado: no hay sellos en este dispositivo."))};host.appendChild(vb);
  list.forEach(r=>{const d=document.createElement("article");d.className="card track-card";d.id="track-"+r.folio;const a=document.createElement("div"),b=document.createElement("div");
  const h=document.createElement("h3");h.textContent=`${CATS[r.category]?.label||r.category} · ${r.folio}`;a.appendChild(h);
  const p=document.createElement("p");p.textContent=r.description;a.appendChild(p);
- const p2=document.createElement("p");p2.textContent=`${r.address||"Ubicación georreferenciada"} · ${fechaHoraCorta(r.createdAt)} · ${r.signals||1} ${(r.signals||1)===1?"señal ciudadana":"señales ciudadanas"} · Estado: ${statusLabel(r.status)} · Destino: ${ROUTING[r.category]||((r.ruco&&r.ruco.competence)||"Municipal")}`;a.appendChild(p2);
+ const p2=document.createElement("p");p2.textContent=`${r.address||"Ubicación georreferenciada"} · ${fechaHoraCorta(r.createdAt)} · Estado: ${statusLabel(r.status)} · Destino: ${ROUTING[r.category]||((r.ruco&&r.ruco.competence)||"Municipal")}`;a.appendChild(p2);
+ const origin=document.createElement("p");origin.textContent=r.sharedId?"Origen: En el tablero compartido":"Origen: Solo en este teléfono";a.appendChild(origin);
  const stp=document.createElement("p");stp.textContent="Paso "+reportStep(r)+" de 6: "+REPORT_STEPS[reportStep(r)-1][1];a.appendChild(stp);
  const seal=document.createElement("p");seal.className="seal-line";
- seal.textContent=r.evidenceSeal&&r.evidenceSeal.hash?("Sello Evidence.OS: "+r.evidenceSeal.hash.slice(0,12)+"… · SHA-256 · cadena de custodia"):("Sello Evidence.OS: no disponible en este navegador (sin contexto seguro).");
+ if(r.sharedId&&r.sealValid!==undefined){seal.textContent=sealText(r.sealValid)}
+ else seal.textContent=r.evidenceSeal&&r.evidenceSeal.hash?("Sello local Evidence.OS: "+r.evidenceSeal.hash.slice(0,12)+"… · SHA-256 · solo en este dispositivo, no es verificación del servidor."):("Sello: No verificado (sin sello en este dispositivo).");
  a.appendChild(seal);
  if(r.evidence||r.closure){
   const pair=document.createElement("div");pair.className="evidence-pair";
@@ -3426,12 +3590,14 @@ function renderTracking(){
   pair.appendChild(evidenceFigure(r.closure?r.closure.photo:null,"Después — evidencia de cierre (simulación)"));
   a.appendChild(pair);
  }
+ if(r.closure&&r.closure.simulated){const sim=document.createElement("p");const sb=document.createElement("span");sb.className="sim-badge";sb.textContent="SIMULADO — solo en este teléfono, ninguna dependencia hizo este trabajo";sim.appendChild(sb);a.appendChild(sim)}
  if(r.rating){const rl=document.createElement("p");rl.className="rating-line";const rs=document.createElement("span");rs.className="stars";rs.textContent="★".repeat(r.rating.stars)+"☆".repeat(5-r.rating.stars);rl.appendChild(rs);rl.appendChild(document.createTextNode(" Calificación ciudadana: "+r.rating.stars+" de 5."));a.appendChild(rl)}
  const pr=document.createElement("div");pr.className="progress";const i=document.createElement("i");i.style.width=progress(r.status)+"%";pr.appendChild(i);a.appendChild(pr);
  const btn=document.createElement("button");btn.className="ghost";btn.type="button";btn.textContent="Ver en mapa";btn.onclick=()=>focusReportOnMap(r);b.appendChild(btn);
  const closeBtn=document.createElement("button");closeBtn.className="gold";closeBtn.type="button";closeBtn.style.marginTop="8px";closeBtn.textContent=r.closure?"Editar cierre (simulación)":"Simular cierre por dependencia";closeBtn.onclick=()=>openClosure(r.folio);b.appendChild(closeBtn);
  if(r.status==="atendido"||r.status==="cerrado"||r.status==="resolved"||r.status==="closed"){const rateBtn=document.createElement("button");rateBtn.className="primary";rateBtn.type="button";rateBtn.style.marginTop="8px";rateBtn.textContent=r.rating?"⭐ Editar calificación":"⭐ Calificar el trabajo";rateBtn.onclick=()=>openRating(r.folio);b.appendChild(rateBtn)}
  const naBtn=document.createElement("button");naBtn.className="ghost";naBtn.type="button";naBtn.style.marginTop="8px";naBtn.textContent="No se hizo el trabajo";naBtn.onclick=()=>markNoAtendido(r.folio,naBtn);b.appendChild(naBtn);
+ const delBtn=document.createElement("button");delBtn.className="ghost";delBtn.type="button";delBtn.style.marginTop="8px";delBtn.textContent="Borrar mi reporte";delBtn.onclick=()=>deleteOwnReport(r.folio,delBtn);b.appendChild(delBtn);
  d.append(a,b);host.appendChild(d);
  })
 }
@@ -3446,9 +3612,15 @@ function badgeClass(p){return p==="CRITICAL"?"badge badge--critical":p==="HIGH"?
 
 function buildInteropPayload(r){
  const cat=CATS[r.category]||{};
+ /* Sesión 23 (U-26): sin sello válido, sin GPS real o sin dependencia
+    confirmada por el servidor, el paquete es "borrador no probatorio".
+    Nunca se exporta "sin sello" como valor válido ni señales locales. */
+ const conSello=!!(r.evidenceSeal&&r.evidenceSeal.hash);
+ const conGps=Number.isFinite(r.lat)&&Number.isFinite(r.lng);
+ const probatorio=conSello&&conGps&&!!r.sharedId;
  return {
-  formato:"ATDT / Open311 — borrador de evaluación",
-  folio_demostracion:r.folio,
+  formato:probatorio?"ATDT / Open311 — intercambio":"ATDT / Open311 — borrador no probatorio",
+  folio:r.folio,
   categoria:cat.label||r.category,
   dominio:cat.domain||"",
   descripcion:r.description||"",
@@ -3457,9 +3629,9 @@ function buildInteropPayload(r){
   fecha_hora_iso:r.createdAt||new Date().toISOString(),
   estado:statusLabel(r.status),
   prioridad:r.priority||"",
-  senales:r.signals||1,
   dependencia_destino_propuesta:(r.ruco&&r.ruco.competence)||"Por definir",
-  sello_evidence_os:(r.evidenceSeal&&r.evidenceSeal.hash)||"sin sello"
+  sello_evidence_os:conSello?r.evidenceSeal.hash:null,
+  nota_probatoria:probatorio?"":"Borrador no probatorio: falta sello válido, GPS real o publicación en el tablero compartido."
  };
 }
 function renderInterop(){
@@ -3483,18 +3655,46 @@ function initFilters(){
 let ratingTargetFolio=null,ratingStars=0;
 function starsText(n){return n?("★".repeat(n)+"☆".repeat(5-n)+" — "+n+" de 5 estrellas"):"Sin calificación todavía."}
 function renderStars(){document.querySelectorAll("#ratingStars .star-btn").forEach(b=>{const n=+b.dataset.stars;b.setAttribute("aria-pressed",n<=ratingStars?"true":"false");b.style.color=n<=ratingStars?"#ffc700":"#8a9aa5"});const t=$("ratingStarsText");if(t)t.textContent=starsText(ratingStars)}
-function openRating(folio){const r=reports.find(x=>x.folio===folio);if(!r)return;ratingTargetFolio=folio;ratingStars=(r.rating&&r.rating.stars)||0;const c=$("ratingComment");if(c)c.value=(r.rating&&r.rating.comment)||"";const line=$("ratingFolioLine");if(line)line.textContent="Reporte "+folio;renderStars();openModal("ratingModal")}
-function saveRating(){const r=reports.find(x=>x.folio===ratingTargetFolio);if(!r){closeModal("ratingModal");return}if(!ratingStars){toast("Elige de 1 a 5 estrellas.");return}r.rating={stars:ratingStars,comment:($("ratingComment").value||"").trim(),at:new Date().toISOString()};r.status="cerrado";saveReportsSafe();if(r.sharedId)postRatingToBoard(r);closeModal("ratingModal");renderTracking();toast("Calificación guardada: "+ratingStars+" de 5 estrellas.")}
+function openRating(folio){const r=reports.find(x=>x.folio===folio);if(!r)return;ratingTargetFolio=folio;ratingStars=(r.rating&&r.rating.stars)||0;const c=$("ratingComment");if(c)c.value=(r.rating&&r.rating.comment)||"";const rc=$("ratingAuthorCode");if(rc)rc.value=authorCodes[folio]||"";const line=$("ratingFolioLine");if(line)line.textContent="Reporte "+folio;renderStars();openModal("ratingModal")}
+async function saveRating(){
+ const r=reports.find(x=>x.folio===ratingTargetFolio);if(!r){closeModal("ratingModal");return}
+ if(!ratingStars){toast("Elige de 1 a 5 estrellas.");return}
+ const comment=($("ratingComment").value||"").trim();
+ if(r.sharedId){
+  /* Reporte publicado: la calificación exige el código de autor y la foto
+     del después, y solo se marca cerrado con el 200 del servidor. */
+  const code=($("ratingAuthorCode")?$("ratingAuthorCode").value:"").trim();
+  if(!code){toast("Escribe tu código de autor (el que recibiste al publicar) para calificar este reporte.");return}
+  if(!r.closure||!r.closure.photo||!r.closure.photo.dataUrl){toast("Para calificar un reporte publicado necesitas la foto del después: primero marca el cierre con su foto.");return}
+  const pending={stars:ratingStars,comment,at:new Date().toISOString()};
+  const ok=await postRatingToBoard(Object.assign({},r,{rating:pending}),code);
+  if(!ok)return;
+  r.rating=pending;r.status="cerrado";r.updatedAt=new Date().toISOString();
+  saveReportsSafe();closeModal("ratingModal");renderTracking();
+  toast("Calificación enviada al tablero: "+ratingStars+" de 5 estrellas. Reporte cerrado.");
+  return;
+ }
+ r.rating={stars:ratingStars,comment,at:new Date().toISOString()};r.status="cerrado";saveReportsSafe();closeModal("ratingModal");renderTracking();toast("Calificación guardada: "+ratingStars+" de 5 estrellas.");
+}
 
 function speak(text){try{if(!("speechSynthesis" in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="es-MX";window.speechSynthesis.speak(u)}catch(e){}}
 function voiceAvailable(){return !!(window.SpeechRecognition||window.webkitSpeechRecognition)}
+let voiceNoticeShown=false;
 function startVoice(target){
  if(!voiceAvailable()){toast("La voz no está disponible en este navegador o dispositivo (por ejemplo, en iPhone o Safari). Puedes escribir arriba.");const inp=$("orbeInput");if(inp)inp.focus();return}
+ /* Sesión 23 (B-6): aviso visible ANTES de usar la voz: qué se manda y a
+    quién. La primera vez solo se muestra el aviso; el segundo toque escucha. */
+ if(!voiceNoticeShown){
+  voiceNoticeShown=true;
+  const vs=$("voiceStatus");
+  if(vs)vs.textContent="Aviso de voz: al tocar el micrófono, tu audio se envía al reconocimiento de voz de tu navegador o dispositivo (según el navegador, a Google o a Apple) para convertirlo en texto. ORBE no guarda el audio. Toca de nuevo el micrófono para hablar.";
+  toast("Aviso de voz: tu audio se envía al reconocimiento de voz de tu navegador o dispositivo para convertirlo en texto. ORBE no guarda el audio. Toca de nuevo para hablar.");
+  return;
+ }
  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
  const rec=new SR();rec.lang="es-MX";rec.interimResults=false;
  rec.onstart=()=>{setState("listening");const b=$("voiceHeroBtn");if(b)b.setAttribute("aria-pressed","true")};
- rec.onerror=()=>{var __escBtn=$("escudoVerifyBtn");if(__escBtn)__escBtn.addEventListener("click",runVerificacion);
-setState("idle");const b=$("voiceHeroBtn");if(b)b.setAttribute("aria-pressed","false");toast("No se pudo escuchar tu voz. Inténtalo de nuevo o escribe tu mensaje.")};
+ rec.onerror=()=>{setState("idle");const b=$("voiceHeroBtn");if(b)b.setAttribute("aria-pressed","false");toast("No se pudo escuchar tu voz. Inténtalo de nuevo o escribe tu mensaje.")};
  rec.onend=()=>{if(state==="listening")setState("idle");const b=$("voiceHeroBtn");if(b)b.setAttribute("aria-pressed","false")};
  rec.onresult=e=>{const text=e.results[0][0].transcript;
   if(target==="desc"){const d=$("descInput");if(d){d.value=(d.value?d.value+" ":"")+text;d.focus()}return}
@@ -3512,6 +3712,7 @@ function initVoice(){
 
 function updateOfflineNote(){const n=$("mapOfflineNote");if(n)n.hidden=navigator.onLine!==false}
 window.addEventListener("online",updateOfflineNote);window.addEventListener("offline",updateOfflineNote);
+window.addEventListener("hashchange",()=>{if((location.hash||"").indexOf("#reporte=")===0)openSharedReportRoute()});
 
 /* Eventos UI */
 document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
@@ -3553,8 +3754,6 @@ $("cardGoCatalogBtn").addEventListener("click",()=>routeCapability("catalog"));
 
 $("clearProfileBtn").addEventListener("click",clearProfile);
 $("clearProfileHomeBtn").addEventListener("click",clearProfile);
-$("llaveBtn").addEventListener("click",llaveSignIn);
-$("llaveOutBtn").addEventListener("click",llaveSignOut);
 $("saveExpedienteBtn").addEventListener("click",saveExpediente);
 $("clearExpedienteBtn").addEventListener("click",clearExpediente);
 $("fallbackReport").addEventListener("click",()=>openReport());
@@ -3639,6 +3838,9 @@ document.querySelectorAll(".go-map-btn").forEach(b=>b.addEventListener("click",(
 $("triageSimBtn").addEventListener("click",openTriage);
 document.querySelectorAll("#ratingStars .star-btn").forEach(b=>b.addEventListener("click",()=>{ratingStars=+b.dataset.stars;renderStars()}));
 $("saveRatingBtn").addEventListener("click",saveRating);
+$("codeActionConfirmBtn").addEventListener("click",confirmCodeAction);
+$("authorCodeCopyBtn").addEventListener("click",()=>{const v=$("authorCodeValue").textContent;try{if(navigator.clipboard)navigator.clipboard.writeText(v);toast("Código copiado.")}catch(e){toast("Copia el código a mano: "+v)}});
+$("escudoVerifyBtn").addEventListener("click",runVerificacion); /* Sesión 23 (U-32): cableado en la inicialización, fuera de rec.onerror. */
 $("inclusionPhotoBtn").addEventListener("click",()=>openReport());
 $("inclusionHereBtn").addEventListener("click",()=>locateUser({openReport:true}));
 $("triageResultBtn").addEventListener("click",runTriage);
@@ -3649,7 +3851,7 @@ $("triageResultBtn").addEventListener("click",runTriage);
    Estados: verificada (método Sesión 04, no publicable como está) · parcial · por confirmar. */
 const ORBE_FICHAS_30=[
  {id:"M1",nombre:"Licencia de Funcionamiento",nivel:"Municipal",dep:"DIDECO (nodo 26)",estado:"parcial",nota:"Requisitos, 5 dictámenes previos, plazo hasta 25 días hábiles, costo por giro en UMA 2026. Faltan ventanilla, teléfono directo y formato."},
- {id:"M2",nombre:"Aviso de Anuncios Publicitarios",nivel:"Municipal",dep:"DGDUE (nodo 24)",estado:"verificada",nota:"5 días hábiles, 4 requisitos. Método Sesión 04, no publicable como está."},
+ {id:"M2",nombre:"Aviso de Anuncios Publicitarios",nivel:"Municipal",dep:"DGDUE (nodo 24)",estado:"por confirmar",nota:"5 días hábiles, 4 requisitos. Método Sesión 04, no publicable como está: pasa a por confirmar hasta verificar ventanilla y formato."},
  {id:"M3",nombre:"Licencia Única de Construcción",nivel:"Municipal",dep:"DGDUE (nodo 24)",estado:"por confirmar",nota:"Por verificar en campo (Tanda 5)."},
  {id:"M4",nombre:"Pago y consulta de impuesto predial",nivel:"Municipal",dep:"Tesorería Municipal (nodo 2)",estado:"por confirmar",nota:"Por verificar en campo (Tanda 5)."},
  {id:"M5",nombre:"Pago de multas de tránsito",nivel:"Municipal",dep:"Tesorería Municipal (nodo 2)",estado:"por confirmar",nota:"Por verificar en campo (Tanda 5)."},
@@ -3659,7 +3861,7 @@ const ORBE_FICHAS_30=[
  {id:"M9",nombre:"Protección Civil — visto bueno",nivel:"Municipal",dep:"Protección Civil",estado:"por confirmar",nota:"Por verificar en campo (Tanda 5)."},
  {id:"M10",nombre:"Constancia de Residencia / Vecindad",nivel:"Municipal",dep:"Ayuntamiento de Tepic",estado:"por confirmar",nota:"Por verificar en campo (Tanda 5)."},
  {id:"E1",nombre:"Copia certificada de acta (nacimiento, matrimonio, defunción)",nivel:"Estatal",dep:"Registro Civil estatal (nodos 5 y 10)",estado:"por confirmar",nota:"Por verificar en campo (Tanda 5)."},
- {id:"E2",nombre:"Aclaración Administrativa de Actas",nivel:"Estatal",dep:"Registro Civil estatal (nodo 10)",estado:"verificada",nota:"Método Sesión 04. El nombre NO existe así en ventanilla en Nayarit (es rectificación/modificación/nulidad): confirmar nombre local."},
+ {id:"E2",nombre:"Aclaración Administrativa de Actas",nivel:"Estatal",dep:"Registro Civil estatal (nodo 10)",estado:"por confirmar",nota:"Método Sesión 04. El nombre NO existe así en ventanilla en Nayarit (es rectificación/modificación/nulidad): por confirmar hasta verificar el nombre local."},
  {id:"E3",nombre:"Catastro",nivel:"Estatal",dep:"Catastro estatal (nodo 7)",estado:"por confirmar",nota:"Por verificar en campo (Tanda 5)."},
  {id:"E4",nombre:"Registro Público de la Propiedad",nivel:"Estatal",dep:"RPPC (nodo 21)",estado:"por confirmar",nota:"Por verificar en campo (Tanda 5)."},
  {id:"E5",nombre:"Licencia para Conducir y placas",nivel:"Estatal",dep:"SEMOVI (nodo 8)",estado:"por confirmar",nota:"Por verificar en campo (Tanda 5)."},
@@ -3697,9 +3899,9 @@ function orbeIndexInput(){
  const nodos=DEPENDENCIAS_TEPIC||[];
  const conf=nodos.filter(function(d){return d.status==="Verificado"||d.status==="Corregido"}).length;
  return {
-  fichasVerificadas:{verificadas:ver,total:ORBE_FICHAS_30.length,nota:"Verificadas por el método Sesión 04, no publicables como están; la Licencia de Funcionamiento está solo parcialmente verificada."},
+  fichasVerificadas:{verificadas:ver,total:ORBE_FICHAS_30.length,nota:"M2 y E2 pasaron a por confirmar (Sesión 23): su nota dice no publicable y el nombre de E2 no existe así en ventanilla; solo la Licencia de Funcionamiento está parcialmente verificada."},
   nodosConfirmados:{confirmados:conf,total:nodos.length,nota:"Nodos con estado Verificado o Corregido en el censo del 10 nov 2026."},
-  reportesConSello:{conSello:0,total:3,nota:"Los 3 reportes semilla son anteriores a Evidence.OS; los reportes nuevos sí llevan sello."},
+  reportesConSello:{conSello:reports.filter(r=>r.evidenceSeal&&r.evidenceSeal.hash).length,total:reports.length,nota:"Sin reportes DEMO desde Sesión 23: el total es de reportes reales de este teléfono; los nuevos llevan sello local."},
   catalogoVigente:{extraccion:"2026-11-07",bloqueado:true},
   honestidadDemo:{todoSimuladoMarcado:true},
   licenciaPublicada:{publicada:false}
@@ -3736,7 +3938,20 @@ function runVerificacion(){
  });
  renderEscudo();
 }
-initFilters();renderStateFlow();renderContext();renderTracking();renderPanel();renderMapDepsPanel();renderCatalogExplorer();renderConteos();renderEscudo();renderFichas30();initMap();dockMap("home");setTimeout(()=>{if(map)map.resize()},120);initVoice();fillProfileFields();renderExpediente();wireFolioSearch();wireBoardFilters();wireExtraButtons();renderDudas();updateOfflineNote();setState("idle");
+/* Sesión 23 (U-22): ruta compartible por folio: #reporte=<folio> o
+   /orbe/reporte/<folio>, con vista de solo lectura del reporte. */
+function openSharedReportRoute(){
+ let folio="";
+ const m=window.location.pathname.match(/\/orbe\/reporte\/([^/?#]+)/);
+ if(m)folio=decodeURIComponent(m[1]);
+ if(!folio){const hm=window.location.hash.match(/#reporte=([^&]+)/);if(hm)folio=decodeURIComponent(hm[1])}
+ if(!folio)return;
+ fetchSharedByFolio(folio).then(sr=>{
+  if(!sr){toast("No hay un reporte publicado con el folio "+folio+".");return}
+  showView("board");openBoardDetail(sr,{readOnly:true});
+ }).catch(()=>{});
+}
+initFilters();renderStateFlow();renderContext();renderTracking();renderPanel();renderMapDepsPanel();renderCatalogExplorer();renderConteos();renderEscudo();renderFichas30();renderFichasConteos();initMap();dockMap("home");setTimeout(()=>{if(map)map.resize()},120);initVoice();fillProfileFields();renderExpediente();wireFolioSearch();wireBoardFilters();wireExtraButtons();renderDudas();openSharedReportRoute();updateOfflineNote();setState("idle");
 })();
 </script>
 <footer style="padding:18px 16px 26px;text-align:center;color:var(--muted);font-size:0.6875rem;line-height:1.7">Fuente: código <a href="https://github.com/Autosociomx/Gobernanza-Digital" target="_blank" rel="noopener noreferrer">AGPL-3.0</a> · contenido CC BY 4.0 — Copyright (C) 2026 Miguel Alexis Pérez Aguilar · ORBE · Sesión 21 (25 nov 2026) · Prototipo demostrativo independiente, sin conexión oficial con ninguna dependencia.</footer>

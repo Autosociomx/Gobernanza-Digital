@@ -101,7 +101,7 @@ export const PlatformLanding = ({ onNavigate }: PlatformLandingProps) => {
              </button>
              <button onClick={() => onNavigate('executive')} className="text-xs font-bold text-[#F5A623] hover:text-white transition-colors uppercase tracking-widest flex items-center gap-1.5 bg-[#F5A623]/10 px-3.5 py-2 rounded-xl border border-[#F5A623]/30 shadow-sm">
                <Sparkles size={14} className="text-[#F5A623]" />
-               <span>Carpeta Presidencial 🇲🇽</span>
+               <span>Prototipo independiente 🇲🇽</span>
              </button>
              <button onClick={() => onNavigate('citizen')} className="text-xs font-bold text-[#a0aec0] hover:text-[#0FA3B1] transition-colors uppercase tracking-widest">Portal Ciudadano</button>
              <button onClick={() => onNavigate('c5')} className="text-xs font-bold text-[#a0aec0] hover:text-[#0FA3B1] transition-colors uppercase tracking-widest">C5 de Mando</button>
@@ -146,7 +146,7 @@ export const PlatformLanding = ({ onNavigate }: PlatformLandingProps) => {
                 className="w-full text-left p-3 rounded-xl bg-[#F5A623]/10 border border-[#F5A623]/30 text-[#F5A623] flex items-center gap-2"
               >
                 <Sparkles size={16} />
-                <span>Carpeta Presidencial 🇲🇽</span>
+                <span>Prototipo independiente 🇲🇽</span>
               </button>
               
               <button 
@@ -162,7 +162,7 @@ export const PlatformLanding = ({ onNavigate }: PlatformLandingProps) => {
                 className="w-full text-left p-3 rounded-xl bg-slate-850 border border-slate-800 text-slate-200 flex items-center gap-2"
               >
                 <Monitor size={16} className="text-[#F5A623]" />
-                <span>C5 Mando Territorial</span>
+                <span>Tablero territorial (prototipo)</span>
               </button>
 
               <button 
@@ -198,7 +198,7 @@ export const PlatformLanding = ({ onNavigate }: PlatformLandingProps) => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-4xl md:text-6xl lg:text-[4.5rem] font-serif font-black leading-[1.1] tracking-tight mb-8 max-w-5xl"
           >
-             Gobernanza Digital Certificada por Ley.<br/>
+             Prototipo independiente: publicar aquí no es un canal oficial de gobierno.<br/>
              <em aria-hidden="true" className="italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#0FA3B1] via-[#F5A623] to-[#4C9F70]">Código Operativo Real,</em> Cero Ficción.
           </motion.h1>
           
@@ -219,7 +219,7 @@ export const PlatformLanding = ({ onNavigate }: PlatformLandingProps) => {
              className="flex flex-wrap justify-center gap-2.5 max-w-4xl mb-12"
           >
              <span className="px-3.5 py-1.5 rounded-full text-[11px] font-extrabold tracking-wider bg-[#0FA3B1]/20 text-[#7ee8f2] border border-[#0FA3B1]/40 uppercase">SOATM Núcleo Operativo</span>
-             <span className="px-3.5 py-1.5 rounded-full text-[11px] font-extrabold tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 uppercase">Llave Infantil MX (SINISI)</span>
+             <span className="px-3.5 py-1.5 rounded-full text-[11px] font-extrabold tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 uppercase">Prototipo de identidad infantil (sin conexión oficial)</span>
              <span className="px-3.5 py-1.5 rounded-full text-[11px] font-extrabold tracking-wider bg-[#F5A623]/20 text-[#ffc96a] border border-[#F5A623]/40 uppercase">Gabinete IA 15 Agentes</span>
              <span className="px-3.5 py-1.5 rounded-full text-[11px] font-extrabold tracking-wider bg-[#D81E5B]/20 text-[#ff8ab8] border border-[#D81E5B]/40 uppercase">Parlamento 5 Sillas</span>
              <span className="px-3.5 py-1.5 rounded-full text-[11px] font-extrabold tracking-wider bg-[#4C9F70]/20 text-[#7de3a8] border border-[#4C9F70]/40 uppercase">Cero Biometría Privada</span>
@@ -247,7 +247,7 @@ export const PlatformLanding = ({ onNavigate }: PlatformLandingProps) => {
               onClick={() => onNavigate('c5')} 
               className="bg-[#1e2d4a] hover:bg-[#25375c] text-[#F8F6F1] border border-slate-700 px-8 py-4 rounded-xl text-xs font-extrabold tracking-widest uppercase transition-all hover:-translate-y-0.5 flex items-center gap-2.5"
              >
-               <Monitor className="w-5 h-5 text-[#F5A623]" /> C5 Mando Territorial
+               <Monitor className="w-5 h-5 text-[#F5A623]" /> Tablero territorial (prototipo)
              </button>
              <button 
               onClick={() => onNavigate('citizen', 'soberania_infantil')} 
@@ -297,7 +297,7 @@ export const PlatformLanding = ({ onNavigate }: PlatformLandingProps) => {
                 { id: 'gabinete', label: '2. Gabinete IA (16 Especialistas)', icon: Bot, desc: 'Cámara de Trabajo' },
                 { id: 'diseno', label: '3. Agentes de Diseño (6 Especialistas)', icon: Palette, desc: 'UI/UX & Tokens WCAG' },
                 { id: 'parlamento', label: '4. Parlamento Digital (5 Sillas)', icon: Landmark, desc: 'Cámara de Decisión' },
-                { id: 'sinisi', label: '5. Llave Infantil MX (SINISI)', icon: ShieldCheck, desc: 'Doble Anonimato' }
+                { id: 'sinisi', label: '5. Prototipo de identidad infantil (sin conexión oficial)', icon: ShieldCheck, desc: 'Doble Anonimato' }
               ].map((tab) => {
                 const Icon = tab.icon;
                 const active = selectedAgentTab === tab.id;
@@ -330,7 +330,7 @@ export const PlatformLanding = ({ onNavigate }: PlatformLandingProps) => {
                   </div>
                   <h3 className="font-extrabold text-base text-slate-900">Ventanilla Única Ciudadana</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Trámites 100% digitales con acuse con validez jurídica. Expediente digital del ciudadano que elimina la necesidad de presentar copias físicas repetidas.
+                    Prototipo independiente: publicar aquí no es un canal oficial de gobierno. Expediente digital en prototipo, sin acuse oficial, que muestra cómo se evitarían copias físicas repetidas.
                   </p>
                   <button 
                     onClick={() => onNavigate('citizen')}
@@ -344,7 +344,7 @@ export const PlatformLanding = ({ onNavigate }: PlatformLandingProps) => {
                   <div className="p-3 bg-[#F5A623]/10 text-[#8F5E06] rounded-xl inline-block">
                     <Monitor size={22} />
                   </div>
-                  <h3 className="font-extrabold text-base text-slate-900">C5 Mando Territorial</h3>
+                  <h3 className="font-extrabold text-base text-slate-900">Tablero territorial (prototipo)</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     Tablero de control para alcaldes y directores. Sincronización geoespacial de infraestructura pública, recaudación en tiempo real y atención de incidencias.
                   </p>
@@ -433,7 +433,7 @@ export const PlatformLanding = ({ onNavigate }: PlatformLandingProps) => {
                         className="bg-[#0FA3B1] hover:bg-[#0FA3B1]/90 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold flex items-center gap-1.5 transition"
                       >
                         <Sparkles size={12} />
-                        <span>Ver en Carpeta Presidencial</span>
+                        <span>Ver en Prototipo independiente</span>
                       </button>
                       <button 
                         onClick={() => onNavigate('dev')}
